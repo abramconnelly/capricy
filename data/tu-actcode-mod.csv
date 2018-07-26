@@ -1,0 +1,126 @@
+#code|short_name|long_name
+
+020100|Housework|Housework
+050101|Work|Working, main job
+120307|Games|Playing games
+600058|Video Games|Playing games and computer use for leisure
+600025|TV|Watching TV
+160100|Phone|Telephone calls (to or from)
+
+060100|Class|Attending class
+120308|Computer|Computer use for leisure (excluding games)
+120400|Arts|Arts and entertainment (other than sports)
+130000|Sports|Sports, exercise, and recreation
+130100|Playing Sports|Participating in sports, exercise, or recreation
+
+600016|School|Educational activities (includes travel)
+600018|Shopping|Purchasing goods and services (includes travel)
+
+120312|Reading|Reading for personal interest
+130131|Walking|Walking
+130200|Sports Event|Attending sporting or recreational events
+140000|Religion|Religious and spiritual activities
+140101|Religious Services|Attending religious services
+140102|Religious Practices|Participation in religious practices
+150000|Volunteer|Volunteer activities
+
+010100|Sleep|Sleeping
+010200|Grooming|Grooming
+020102|Laundry|Laundry
+020201|Food Preparation|Food and drink preparation
+020203|Food Cleanup|Kitchen and food cleanup
+020101|House Cleaning|Interior cleaning
+010300|Self-care|Health-related self care
+020500|Lawn Care|Lawn and garden care
+020601|Animal Care|Care for animals and pets (not veterinary care)
+020602|Exercise|Walking, exercising, and playing with animals
+020904|E-Mail|Household and personal e-mail and messages
+030100|Babysitting|Caring for and helping household children (except activities related to education and health)
+030101|Child Care|Physical care for household children
+060300|Research|Homework and research
+070000|Shopping|Consumer goods purchases
+070101|Grocery Shopping|Grocery shopping
+090000|House Chores|Household services
+110100|Eating/Drinking|Eating and drinking
+120000|Leisure|Socializing, relaxing, and leisure
+120100|Socializing|Socializing and communicating (except social events)
+120300|Relaxing|Relaxing and leisure
+
+010400|Personal Work|Personal activities
+020104|Storage|Storing interior household items, including food
+020200|Food Preparation/Cleanup|Food preparation and cleanup
+020300|House Repair|Interior maintenance, repair, and decoration
+020400|Lawn/Property Maintenance|Exterior maintenance, repair, and decoration
+020600|Pet Care|Animal and pet care
+020700|Car Repair|Vehicle care (by self)
+020800|Appliance Repair|Appliance, tool, and toy maintenance (by self)
+020901|Finances|Financial management
+020902|Planning|Household and personal organization and planning
+020903|Mail|Household and personal mail and messages
+030102|Reading to Child|Reading to/with household children
+030103|Playing with Children|Playing with household children, not sports
+030106|Conversation with Children|Talking with/listening to household children
+030110|Child Event|Attending household children's events
+030200|Child Education|Activities related to household children's education
+030201|Child Homework Help|Helping household children with homework
+030300|Child Health|Activities related to household children's health
+030400|Household Adult Care|Caring for household adults
+030401|Adult Physical Care|Physical care for household adults
+030500|Adult Help|Helping household adults
+040400|Adult Care|Caring for nonhousehold adults
+040500|Adult Help|Helping nonhousehold adults
+050100|Work (Misc.)|Working
+050200|Work Related|Work-related activities
+050300|Alternate Income|Other income-generating activities
+050400|Job Search/Interview|Job search and interviewing
+060101|Certification Class|Taking class for degree, certification, or licensure
+
+080000|Personal/Professional Care|Professional and personal care services
+080200|Banking|Financial services and banking
+080400|Medical|Medical and care services
+080500|Personal Care|Personal care services
+090200|Home Contracting Work|Home maintenance, repair, decoration, and construction (not done by self)
+090500|Car Shop Repair|Vehicle maintenance and repair services (not done by self)
+100200|Civic Duty|Civic obligations and participation
+120200|Social|Attending or hosting social events
+120301|Thinking|Relaxing and thinking
+
+150100|Volunteer Support|Administrative and support activities (volunteering)
+150200|Social Service|Social service and care activities (volunteering)
+150300|Volunteer Maintenance|Indoor and outdoor maintenance, building, and cleanup activities (volunteering)
+150400|Volunteer Performance|Participating in performance and cultural activities (volunteering)
+150500|Volunteer Training|Attending meetings, conferences, and training (volunteering)
+180000|Traveling|Traveling
+180100|Personal Care Travel|Travel related to personal care
+180200|Household Travel|Travel related to household activities
+180300|Household Member Travel|Travel related to caring for and helping household members
+180400|Travel Companion|Travel related to caring for and helping nonhousehold members
+180500|Work Travel|Travel related to work
+180600|Education Travel|Travel related to education
+181100|Eating/Drinking Travel|Travel related to eating and drinking
+181600|Phone Travel|Travel related to telephone calls
+600001|Car Travel|Personal care activities (includes travel)
+600003|Household Activity|Household activities (includes travel)
+600005|Household Management|Household management
+600007|Household Member Care|Caring for and helping household members (includes travel)
+600008|Household Child Care|Caring for and helping household children under 18
+600009|Household Adult Care|Caring for and helping household adults
+600010|Person Care|Caring for and helping nonhousehold members (includes travel)
+600011|Child Care|Caring for and helping nonhousehold children
+600012|Adult Care|Caring for and helping nonhousehold adults
+600013|Work Related|Working and work-related activities (includes travel)
+600021|Shopping Trip|Travel related to purchasing goods and services
+600022|Eating/Drinking Trip|Eating and drinking (includes travel)
+600023|Sports Trip|Leisure and sports (includes travel)
+600024|Social|Socializing and communicating
+600027|Sports|Participating in sports, exercise, and recreation (includes related waiting and security)
+600029|Leisure Travel|Travel related to leisure and sports
+600030|Activity|Organizational, civic, and religious activities
+600032|Volunteering|Volunteering (organizational and civic activities)
+600033|Mail|Telephone calls, mail, and e-mail (includes travel)
+600034|Other|Other activities, not elsewhere classified (includes misc. travel and data codes)
+600059|Other Leisure|Other leisure and sports activities, including travel
+600066|Religious Travel|Travel related to organizational, civic, and religious activities
+600069|Government Services|Government services
+600072|Messaging|Household and personal messages
+600083|Caring for Others|Caring for and helping others

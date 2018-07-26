@@ -1,0 +1,41 @@
+#!/bin/bash
+
+echo "<html>"
+echo "  <body>"
+echo "    <table>"
+
+first=0
+ele=0
+row=0
+col="5"
+
+for x in `find . -maxdepth 1 -mindepth 1 -name '*.svg'` ; do
+
+  if [[ "$ele" -eq 0 ]] ; then
+    if [[ ! "$first" -eq 0 ]] ; then
+      echo "      </tr>"
+    fi
+    echo "      <tr>"
+  fi
+
+  echo "        <td> <img src='"$x"'></img> <td>"
+
+
+  ele=`expr $ele + 1`
+  first=1
+
+  if [[ $ele -eq $col ]] ; then
+    ele=`expr $ele - $col`
+  fi
+
+done
+
+if [[ $first -eq 1 ]] ; then
+  echo "      </tr>"
+fi
+
+echo "    </table>"
+echo "  </body>"
+echo "</html>"
+
+
