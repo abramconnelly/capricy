@@ -1,0 +1,20 @@
+<html>
+  <!-- jsCalendar style -->
+  <link rel="stylesheet" type="text/css" href="jsCalendar.css">
+  <!-- jsCalendar script -->
+  <script type="text/javascript" src="jsCalendar.js"></script>
+
+  <body>
+
+    <!-- my calendar -->
+    <div id='default_calendar' class="auto-jsCalendar" zeroFill="true" data-month-format="month YYYY" data-day-format='DD' ></div>
+
+    <div id='calendar'></div>
+  </body>
+
+  <script>
+    var ele = document.getElementById("calendar");
+    var c = jsCalendar.new(ele);
+    console.log("ok..");
+  </script>
+</html>
