@@ -11,6 +11,26 @@
 // 420
 // medication
 
+// https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
+//
+function b64enc(str) {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+    function toSolidBytes(match, p1) {
+      return String.fromCharCode('0x' + p1);
+  }));
+}
+
+function b64dec(str) {
+  return decodeURIComponent(atob(str).split('').map(function(c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+}
+
+
+var uiData = {
+  "calendar" : {}
+};
+
 var appData = {
   "data" : {
 
@@ -301,11 +321,114 @@ function populateActivityGrid_grid() {
   old_grid_ad.parentNode.replaceChild(grid_ad, old_grid_ad);
 }
 
+
+function processCalendarClick(ev, dt) {
+  console.log(">>>", ev, dt);
+  console.log(">>>>", dt, "<<<<<");
+}
+
+function querySQLiteDatabase(query,inp) {
+  var r = g_db.run(query, inp);
+
+  // var res = db.exec("SELECT * FROM hello");
+  // /*
+  // [
+  //  {columns:['a','b'], values:[[0,'hello'],[1,'world']]}
+  //  ]
+  //  */
+  //
+
+
+}
+
+function initSQLiteDatabase() {
+  var default_activity = [
+		{ "id": "activity-050101",  "name": "work" },
+		{ "id": "activity-120300",  "name": "relax" },
+		{ "id": "activity-120000",  "name": "friends" },
+		{ "id": "activity-120100",  "name": "date" },
+		{ "id": "activity-120312",  "name": "reading" },
+		{ "id": "activity-600058",  "name": "gaming" },
+		{ "id": "activity-070000",  "name": "shopping" },
+		{ "id": "activity-180000",  "name": "travel" },
+		{ "id": "activity-110100",  "name": "meal" },
+		{ "id": "activity-020101",  "name": "cleaning" },
+		{ "id": "activity-600016", "name": "school" },
+
+		{ "id": "custom-show",    "name": "show" },
+		{ "id": "custom-internet","name": "internet" },
+		{ "id": "activity-music", "name": "music" },
+		{ "id": "activity-010100","name": "sleep" },
+
+		{ "id": "activity-020102",  "name": "laundry" },
+		{ "id": "activity-600025",  "name": "tv" },
+		{ "id": "custom-movie",     "name": "movie" },
+		{ "id": "custom-medication","name": "medication" }
+	];
+	var db = new SQL.Database();
+
+  db.run("create table moodlog           (id integer, uuid text, " +
+                                         "entry_utc_ms integer, mood_code integer, " +
+                                         "activity text, note text)");
+  db.run("create table moodloghistory    (id integer, " +
+                                         "parent_id integer, modified_utc_ms integer, "+
+                                         "uuid text, entry_utc_ms integer, mood_code integer, " +
+                                         "activity text, note text)");
+
+  db.run("create table mood(id integer, name text, description text)");
+  db.run("create table activity(id integer, name text, description text, type text)");
+
+  db.run("create table customdata        (id integer, entry_utc_ms integer, uuid text, " +
+                                        "name text, description text, type text, data text)");
+  db.run("create table customdatahistory (id integer, parent_id integer, " +
+                                         "modified_utc_ms integer, entry_utc_ms integer, " +
+                                         "uuid text, name text, description text, type text, " + 
+                                         "data text)");
+
+  db.run("create index moodlog_idx on moodlog (id);")
+  db.run("create index moodlog_uuid_idx on moodlog (uuid);")
+  db.run("create index moodlog_time_idx on moodlog (entry_utc_ms);")
+
+  db.run("create index moodloghistory_idx  on moodloghistory (id);")
+  db.run("create index moodloghistory_parent_idx on moodloghistory (parent_id);")
+
+  for (var ii=0; ii<default_activity.length; ii++) {
+    db.run("insert into activity values (?, ?, ?, ?)", [ii+1, default_activity[ii].id, default_activity[ii].name, "default"]);
+  }
+
+
+  return db;
+}
+
+var g_db;
+
 function initApp() {
+
+  var db = localStorage.getItem("sqliteDB");
+  if (db === null) {
+    //db = initSQLiteDatabase();
+  }
+  g_db = db;
+
+
+  var ele = document.getElementById("calendar");
+  //uiData.calendar = jsCalendar.new(ele);
+  uiData.calendar = jsCalendar.new({
+    "target":ele,
+    "dayFormat":"DD",
+    "monthFormat":"month YYYY"
+  });
+  uiData.calendar.showCurrentDay(false);
+  uiData.calendar.onDateClick( processCalendarClick );
+
+  //$('.calendar').pignoseCalendar();
+
 
   //var hammer = Hammer(document.body);
   //hammer.on("swipe", function(x) { console.log("dragging...", x); });
 
+  // stop dragable images from ruining experience
+  //
   $('#mood-0').on('dragstart', function(event) { event.preventDefault(); });
   $('#mood-1').on('dragstart', function(event) { event.preventDefault(); });
   $('#mood-2').on('dragstart', function(event) { event.preventDefault(); });
@@ -313,6 +436,7 @@ function initApp() {
   $('#mood-4').on('dragstart', function(event) { event.preventDefault(); });
 
   $('#confirm-activity-daily').on('dragstart', function(event) { event.preventDefault(); });
+  $('#add-activity-daily').on('dragstart', function(event) { event.preventDefault(); });
 
   var ae = appData.data.activeEntry;
   ae.state = "mood-daily";
@@ -383,7 +507,7 @@ function initApp() {
         $(".screen").page().transition(page, trans);
     });
 
-    var pageTrans = function(ev) {
+    var pageTrans = function(ev, cb) {
       var page  = $(ev.target).attr("data-page-name");
       var trans = $(ev.target).attr("data-page-trans");
       if ($(".screen").page().fetch(page) === null) {
@@ -391,6 +515,8 @@ function initApp() {
       } else {
         $(".screen").page().transition(page, trans);
       }
+
+      if (typeof cb !== "undefined") { cb(); }
     };
 
     $(".screen .page .navigate-delay").click(function (ev) {
@@ -426,19 +552,24 @@ function initApp() {
 
     $(".screen .page .navigate-activity-daily").click(function (ev) {
 
-      console.log(ev);
-      console.log(ev.currentTarget.id);
-
       var id = ev.currentTarget.id;
-      var ele = appData.icon.action["confirm"];
 
       if (id == "confirm-activity-daily") {
+        var ele = appData.icon.action["confirm"];
         $("#confirm-activity-daily").attr("src", ele.img.active);
+        setTimeout( (function(x) { return function() { return pageTrans(x) }; })(ev), 200);
+      }
+      else if (id == "add-activity-daily") {
+        var ele = appData.icon.action["add"];
+        $("#add-activity-daily").attr("src", ele.img.active);
+        setTimeout(
+            (function(x, inactive) {
+              return function() {
+                return pageTrans(x, function() { setTimeout( function() { $("#add-activity-daily").attr("src", inactive); }, 200); } );
+              };
+            })(ev, ele.img.inactive), 200);
       }
 
-      console.log(id);
-
-      setTimeout( (function(x) { return function() { return pageTrans(x) }; })(ev), 200);
 
       /*
       var page  = $(ev.target).attr("data-page-name");
@@ -451,6 +582,11 @@ function initApp() {
       */
 
     });
+
+    $(".screen .page .add-activity-daily").click(function (ev) {
+      console.log("add activity daily...", ev);
+    });
+
 
     //$(".screen").page().transition("11", "none");
     $(".screen").page().transition("mood-daily", "none");

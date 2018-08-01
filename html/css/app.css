@@ -5,6 +5,7 @@
   --main-bg-color: #ffffff;
 }
 
+
 html, body {
     /* background-color: #999999; */
     background-color: var(--main-bg-color);
@@ -17,6 +18,7 @@ html, body {
     width:  550px;
     /* height: 500px; */
     height: 650px;
+    /* height: 750px; */
     /* height: 800px; */
     /* background-color: #333333; */
     background-color: var(--main-bg-color);
@@ -39,8 +41,9 @@ html, body {
     height: 100%;
     /* color:  white; */
     font-family: sans-serif;
+		overflow-x: hidden;
+		overflow-y: auto;
 }
-
 
 .device .screen .page[data-jquery-page-name='mood-daily'] {
     background-color: var(--main-bg-color);
