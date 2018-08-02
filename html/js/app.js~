@@ -222,8 +222,10 @@ logApp.prototype.editEntry = function(uuid, mood, activity, entryDate, modifiedD
 
 
 
-function onClickDailyActivity(activityId) {
-  console.log("daily activity click", activityId);
+//function onClickDailyActivity(activityId) {
+function onClickActivity(activityId, uiSubId) {
+  if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
+  console.log("activity click", activityId, uiSubId);
 
   var ae = appData.data.activeEntry;
 
@@ -247,17 +249,21 @@ function onClickDailyActivity(activityId) {
       var ele = aicon[ii];
 
       console.log("found>>>", ele, icon_state)
-      $("#" + activityId + "-daily").attr("src", ele.img[icon_state]);
+      //$("#" + activityId + "-daily").attr("src", ele.img[icon_state]);
+      $("#" + activityId + "-" + uiSubId).attr("src", ele.img[icon_state]);
     }
   }
 
   console.log(">>>", ae);
 }
 
-function populateActivityGrid() {
+function populateActivityGrid_table(grid_id, uiSubId) {
+  if (typeof grid_id === "undefined") { grid_id = "activity-table"; }
+  if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
   var sztxt = '80%';
 
-  old_table_ad = document.getElementById('activity-table');
+  //old_table_ad = document.getElementById('activity-table');
+  old_table_ad = document.getElementById(grid_id);
   table_ad = document.createElement('table');
   table_ad.align = "center";
   table_ad.style = "width:400px; ";
@@ -273,9 +279,12 @@ function populateActivityGrid() {
 
     var img = document.createElement('img');
     img.src = appData.icon.activity.main[ii].img.inactive;
-    img.id = appData.icon.activity.main[ii].id + "-daily";
-    img.onclick = (function(x) { return function() { onClickDailyActivity(x); }; })(appData.icon.activity.main[ii].id);
-    img.ondragstart = (function(x) { return function() { onClickDailyActivity(x); return false; }; })(appData.icon.activity.main[ii].id);
+    //img.id = appData.icon.activity.main[ii].id + "-daily";
+    img.id = appData.icon.activity.main[ii].id + "-" + uiSubId;
+    //img.onclick = (function(x) { return function() { onClickDailyActivity(x); }; })(appData.icon.activity.main[ii].id);
+    //img.ondragstart = (function(x) { return function() { onClickDailyActivity(x); return false; }; })(appData.icon.activity.main[ii].id);
+    img.onclick = (function(x,y) { return function() { onClickActivity(x,y); }; })(appData.icon.activity.main[ii].id, uiSubId);
+    img.ondragstart = (function(x,y) { return function() { onClickActivity(x,y); return false; }; })(appData.icon.activity.main[ii].id, uiSubId);
     img.style = "width:" + sztxt + "; height:" + sztxt + ";";
 
     pdiv.appendChild(img);
@@ -287,35 +296,55 @@ function populateActivityGrid() {
   old_table_ad.parentNode.replaceChild(table_ad, old_table_ad);
 }
 
-function populateActivityGrid_grid() {
+function populateActivityGrid(grid_id, uiSubId) {
+  if (typeof grid_id === "undefined") { grid_id = "activity-grid"; }
+  if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
+
   var sztxt = '80%';
 
-  old_grid_ad = document.getElementById('activity-grid');
+  var row = null;
+
+  //old_grid_ad = document.getElementById('activity-grid');
+  old_grid_ad = document.getElementById(grid_id);
   grid_ad = document.createElement('div');
-  grid_ad.className = "";
+  grid_ad.className = "ui five column grid";
   grid_ad.align = "center";
   grid_ad.style = "width:400px; ";
-  var tr = undefined;
+  var row_ele_count=0;
   for (var ii=0; ii<appData.icon.activity.main.length; ii++) {
 
-    if ( (ii%5) == 0 ) { tr = grid_ad.insertRow(); }
-    var td = tr.insertCell();
-    td.style = 'text-align:center;';
-    var pdiv = document.createElement('div');
-    var div = document.createElement('div');
-    div.innerHTML= appData.icon.activity.main[ii].name;
+
+    if ( (ii%5) == 0 ) {
+      if (ii>0) { grid_ad.appendChild(row); }
+      row = document.createElement("div");
+      row.className = "row";
+      row_ele_count=0;
+    }
 
     var img = document.createElement('img');
     img.src = appData.icon.activity.main[ii].img.inactive;
-    img.id = appData.icon.activity.main[ii].id + "-daily";
-    img.onclick = (function(x) { return function() { onClickDailyActivity(x); }; })(appData.icon.activity.main[ii].id);
-    img.ondragstart = (function(x) { return function() { onClickDailyActivity(x); return false; }; })(appData.icon.activity.main[ii].id);
-    img.style = "width:" + sztxt + "; height:" + sztxt + ";";
+    //img.id = appData.icon.activity.main[ii].id + "-daily";
+    img.id = appData.icon.activity.main[ii].id + "-" + uiSubId;
+    //img.onclick = (function(x) { return function() { onClickDailyActivity(x); }; })(appData.icon.activity.main[ii].id);
+    //img.ondragstart = (function(x) { return function() { onClickDailyActivity(x); return false; }; })(appData.icon.activity.main[ii].id);
+    img.onclick = (function(x,y) { return function() { onClickActivity(x,y); }; })(appData.icon.activity.main[ii].id,uiSubId);
+    img.ondragstart = (function(x,y) { return function() { onClickActivity(x,y); return false; }; })(appData.icon.activity.main[ii].id,uiSubId);
+    //img.style = "width:" + sztxt + "; height:" + sztxt + ";";
 
-    pdiv.appendChild(img);
-    pdiv.appendChild(div);
+    txtdiv = document.createElement("div");
+    txtdiv.innerHTML= appData.icon.activity.main[ii].name;
 
-    td.appendChild(pdiv);
+    var celldiv = document.createElement("div");
+    celldiv.className = "column";
+    celldiv.appendChild(img);
+    celldiv.appendChild(txtdiv);
+
+    row.appendChild(celldiv);
+    row_ele_count++;
+  }
+
+  if ((row_ele_count) && (row)) {
+    grid_ad.appendChild(row);
   }
 
   old_grid_ad.parentNode.replaceChild(grid_ad, old_grid_ad);
@@ -444,6 +473,9 @@ function initApp() {
   ae.activity = [];
 
   populateActivityGrid();
+
+  populateActivityGrid("edit-grid-1", "1");
+  populateActivityGrid("edit-grid-0", "0");
 
   /*
   var sztxt = '80%';
