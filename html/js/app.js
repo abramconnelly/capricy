@@ -221,6 +221,20 @@ logApp.prototype.editEntry = function(uuid, mood, activity, entryDate, modifiedD
 }
 
 
+function onClickMood(moodId, uiSubId) {
+  if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
+  console.log("mood click", moodId , uiSubId);
+
+  var micon = appData.icon.mood;
+  if (moodId in appData.icon.mood) {
+    var ele = micon[moodId];
+
+    console.log("found>>>", ele, "(", uiSubId, ")")
+    //$("#" + activityId + "-daily").attr("src", ele.img[icon_state]);
+    $("#" + moodId + "-" + uiSubId).attr("src", ele.img["active"]);
+  }
+
+}
 
 //function onClickDailyActivity(activityId) {
 function onClickActivity(activityId, uiSubId) {
@@ -257,47 +271,53 @@ function onClickActivity(activityId, uiSubId) {
   console.log(">>>", ae);
 }
 
-function populateActivityGrid_table(grid_id, uiSubId) {
-  if (typeof grid_id === "undefined") { grid_id = "activity-table"; }
+function populateMoodGrid(grid_id, uiSubId) {
+  if (typeof grid_id === "undefined") { grid_id = "mood-grid"; }
   if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
-  var sztxt = '80%';
 
-  //old_table_ad = document.getElementById('activity-table');
-  old_table_ad = document.getElementById(grid_id);
-  table_ad = document.createElement('table');
-  table_ad.align = "center";
-  table_ad.style = "width:400px; ";
-  var tr = undefined;
-  for (var ii=0; ii<appData.icon.activity.main.length; ii++) {
+  old_grid_ad = document.getElementById(grid_id);
+  grid_ad = document.createElement('div');
+  grid_ad.className = "ui five column grid";
+  grid_ad.align = "center";
+  grid_ad.style = "width:400px; ";
+  grid_ad.id = old_grid_ad.id;
 
-    if ( (ii%5) == 0 ) { tr = table_ad.insertRow(); }
-    var td = tr.insertCell();
-    td.style = 'text-align:center;';
-    var pdiv = document.createElement('div');
-    var div = document.createElement('div');
-    div.innerHTML= appData.icon.activity.main[ii].name;
+  console.log("old_grid_ad.id:", old_grid_ad.id);
+
+  var row = document.createElement("div");
+  row.className = "row";
+  for (var ii=0; ii<5; ii++) {
+
+    var mood_id = 'mood-' + ii.toString();
 
     var img = document.createElement('img');
-    img.src = appData.icon.activity.main[ii].img.inactive;
-    //img.id = appData.icon.activity.main[ii].id + "-daily";
-    img.id = appData.icon.activity.main[ii].id + "-" + uiSubId;
-    //img.onclick = (function(x) { return function() { onClickDailyActivity(x); }; })(appData.icon.activity.main[ii].id);
-    //img.ondragstart = (function(x) { return function() { onClickDailyActivity(x); return false; }; })(appData.icon.activity.main[ii].id);
-    img.onclick = (function(x,y) { return function() { onClickActivity(x,y); }; })(appData.icon.activity.main[ii].id, uiSubId);
-    img.ondragstart = (function(x,y) { return function() { onClickActivity(x,y); return false; }; })(appData.icon.activity.main[ii].id, uiSubId);
-    img.style = "width:" + sztxt + "; height:" + sztxt + ";";
+    //img.src = appData.icon.mood[ii].img.inactive;
+    //img.id = appData.icon.mood[ii].id + "-" + uiSubId;
+    //img.onclick = (function(x,y) { return function() { onClickMood(x,y); }; })(appData.icon.mood[ii].id,uiSubId);
+    //img.ondragstart = (function(x,y) { return function() { onClickMood(x,y); return false; }; })(appData.icon.mood[ii].id,uiSubId);
+    img.src = appData.icon.mood[mood_id].img.inactive;
+    img.id = appData.icon.mood[mood_id].id + "-" + uiSubId;
+    img.onclick = (function(x,y) { return function() { onClickMood(x,y); }; })(appData.icon.mood[mood_id].id,uiSubId);
+    img.ondragstart = (function(x,y) { return function() { onClickMood(x,y); return false; }; })(appData.icon.mood[mood_id].id,uiSubId);
 
-    pdiv.appendChild(img);
-    pdiv.appendChild(div);
+    var txtdiv = document.createElement("div");
+    txtdiv.innerHTML= appData.icon.mood[mood_id].name;
 
-    td.appendChild(pdiv);
+    var celldiv = document.createElement("div");
+    celldiv.className = "column";
+    celldiv.appendChild(img);
+    celldiv.appendChild(txtdiv);
+
+    console.log(">>>", img, txtdiv, celldiv);
+
+    row.appendChild(celldiv);
+
   }
 
-  old_table_ad.parentNode.replaceChild(table_ad, old_table_ad);
+  grid_ad.appendChild(row);
+  old_grid_ad.parentNode.replaceChild(grid_ad, old_grid_ad);
 }
 
-function populateMoodGrid(grid_id, uiSubId) {
-}
 
 function populateActivityGrid(grid_id, uiSubId) {
   if (typeof grid_id === "undefined") { grid_id = "activity-grid"; }
@@ -334,7 +354,7 @@ function populateActivityGrid(grid_id, uiSubId) {
     img.ondragstart = (function(x,y) { return function() { onClickActivity(x,y); return false; }; })(appData.icon.activity.main[ii].id,uiSubId);
     //img.style = "width:" + sztxt + "; height:" + sztxt + ";";
 
-    txtdiv = document.createElement("div");
+    var txtdiv = document.createElement("div");
     txtdiv.innerHTML= appData.icon.activity.main[ii].name;
 
     var celldiv = document.createElement("div");
@@ -375,29 +395,29 @@ function querySQLiteDatabase(query,inp) {
 
 function initSQLiteDatabase() {
   var default_activity = [
-		{ "id": "activity-050101",  "name": "work" },
-		{ "id": "activity-120300",  "name": "relax" },
-		{ "id": "activity-120000",  "name": "friends" },
-		{ "id": "activity-120100",  "name": "date" },
-		{ "id": "activity-120312",  "name": "reading" },
-		{ "id": "activity-600058",  "name": "gaming" },
-		{ "id": "activity-070000",  "name": "shopping" },
-		{ "id": "activity-180000",  "name": "travel" },
-		{ "id": "activity-110100",  "name": "meal" },
-		{ "id": "activity-020101",  "name": "cleaning" },
-		{ "id": "activity-600016", "name": "school" },
+    { "id": "activity-050101",  "name": "work" },
+    { "id": "activity-120300",  "name": "relax" },
+    { "id": "activity-120000",  "name": "friends" },
+    { "id": "activity-120100",  "name": "date" },
+    { "id": "activity-120312",  "name": "reading" },
+    { "id": "activity-600058",  "name": "gaming" },
+    { "id": "activity-070000",  "name": "shopping" },
+    { "id": "activity-180000",  "name": "travel" },
+    { "id": "activity-110100",  "name": "meal" },
+    { "id": "activity-020101",  "name": "cleaning" },
+    { "id": "activity-600016", "name": "school" },
 
-		{ "id": "custom-show",    "name": "show" },
-		{ "id": "custom-internet","name": "internet" },
-		{ "id": "activity-music", "name": "music" },
-		{ "id": "activity-010100","name": "sleep" },
+    { "id": "custom-show",    "name": "show" },
+    { "id": "custom-internet","name": "internet" },
+    { "id": "activity-music", "name": "music" },
+    { "id": "activity-010100","name": "sleep" },
 
-		{ "id": "activity-020102",  "name": "laundry" },
-		{ "id": "activity-600025",  "name": "tv" },
-		{ "id": "custom-movie",     "name": "movie" },
-		{ "id": "custom-medication","name": "medication" }
-	];
-	var db = new SQL.Database();
+    { "id": "activity-020102",  "name": "laundry" },
+    { "id": "activity-600025",  "name": "tv" },
+    { "id": "custom-movie",     "name": "movie" },
+    { "id": "custom-medication","name": "medication" }
+  ];
+  var db = new SQL.Database();
 
   db.run("create table moodlog           (id integer, uuid text, " +
                                          "entry_utc_ms integer, mood_code integer, " +
@@ -459,6 +479,8 @@ function initApp() {
   //var hammer = Hammer(document.body);
   //hammer.on("swipe", function(x) { console.log("dragging...", x); });
 
+  //----
+
   // stop dragable images from ruining experience
   //
   $('#mood-0').on('dragstart', function(event) { event.preventDefault(); });
@@ -470,6 +492,28 @@ function initApp() {
   $('#confirm-activity-daily').on('dragstart', function(event) { event.preventDefault(); });
   $('#add-activity-daily').on('dragstart', function(event) { event.preventDefault(); });
 
+  //----
+
+  $('#mood-0-0').on('dragstart', function(event) { event.preventDefault(); });
+  $('#mood-1-0').on('dragstart', function(event) { event.preventDefault(); });
+  $('#mood-2-0').on('dragstart', function(event) { event.preventDefault(); });
+  $('#mood-3-0').on('dragstart', function(event) { event.preventDefault(); });
+  $('#mood-4-0').on('dragstart', function(event) { event.preventDefault(); });
+
+  $('#confirm-activity-0').on('dragstart', function(event) { event.preventDefault(); });
+  $('#add-activity-0').on('dragstart', function(event) { event.preventDefault(); });
+
+  //--
+
+  $('#mood-0-1').on('dragstart', function(event) { event.preventDefault(); });
+  $('#mood-1-1').on('dragstart', function(event) { event.preventDefault(); });
+  $('#mood-2-1').on('dragstart', function(event) { event.preventDefault(); });
+  $('#mood-3-1').on('dragstart', function(event) { event.preventDefault(); });
+  $('#mood-4-1').on('dragstart', function(event) { event.preventDefault(); });
+
+  $('#confirm-activity-1').on('dragstart', function(event) { event.preventDefault(); });
+  $('#add-activity-1').on('dragstart', function(event) { event.preventDefault(); });
+
   var ae = appData.data.activeEntry;
   ae.state = "mood-daily";
   ae.mood = null;
@@ -477,9 +521,11 @@ function initApp() {
 
   populateActivityGrid();
 
-  populateActivityGrid("edit-grid-1", "1");
   populateActivityGrid("edit-grid-0", "0");
+  populateActivityGrid("edit-grid-1", "1");
 
+  populateMoodGrid("mood-grid-0", "0");
+  populateMoodGrid("mood-grid-1", "1");
   /*
   var sztxt = '80%';
 
