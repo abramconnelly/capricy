@@ -28,16 +28,23 @@ function b64dec(str) {
 
 
 var uiData = {
-  "calendar" : {}
+  "pageTransitionDelay" : 200,
+  "calendar" : {},
+  "calendarModal": {},
+  "timelineModal": {}
 };
 
 var appData = {
   "data" : {
 
     "activeEntry" : {
+      "uuid": null,
+      "entryDate": 0,
+      "modifiedDate": 0,
       "state":"none",
       "mood": null,
-      "activity" : []
+      "activity" : [],
+      "note":""
     },
 
     "log" : {
@@ -220,6 +227,21 @@ logApp.prototype.editEntry = function(uuid, mood, activity, entryDate, modifiedD
   this.data.log[uuid].modifiedDate = log_entry.modifiedDate;
 }
 
+logApp.prototype.findEntryByTime = function(t) {
+  for (var uuid in this.data.log) {
+    if (t === this.data.log[uuid].entryDate) {
+      return uuid;
+    }
+  }
+  return undefined;
+}
+
+g_logapp = new logApp();
+
+// ********************
+// ********************
+// ********************
+// ********************
 
 function onClickMood(moodId, uiSubId) {
   if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
@@ -282,7 +304,7 @@ function populateMoodGrid(grid_id, uiSubId) {
   grid_ad.style = "width:400px; ";
   grid_ad.id = old_grid_ad.id;
 
-  console.log("old_grid_ad.id:", old_grid_ad.id);
+  //console.log("old_grid_ad.id:", old_grid_ad.id);
 
   var row = document.createElement("div");
   row.className = "row";
@@ -308,7 +330,7 @@ function populateMoodGrid(grid_id, uiSubId) {
     celldiv.appendChild(img);
     celldiv.appendChild(txtdiv);
 
-    console.log(">>>", img, txtdiv, celldiv);
+    //console.log(">>>", img, txtdiv, celldiv);
 
     row.appendChild(celldiv);
 
@@ -373,10 +395,77 @@ function populateActivityGrid(grid_id, uiSubId) {
   old_grid_ad.parentNode.replaceChild(grid_ad, old_grid_ad);
 }
 
+function createNewActiveEntry(entryDate, state) {
+  var ae = appData.data.activeEntry;
+
+  ae.uuid = uuidv4();
+  ae.entryDate = entryDate;
+  ae.modifiedDate = Date.now();
+  ae.state = state;
+  ae.mood = null;
+  ae.activity = [];
+  ae.note = "";
+
+  return ae;
+}
+
+function deltaDayMs() {
+  var d = new Date();
+  var utc_midnight_ms = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+  return Date.now() - utc_midnight_ms;
+}
+
+function displayTime(d) {
+
+}
+
+// https://stackoverflow.com/a/3552493
+// by user https://stackoverflow.com/users/333255/marko
+//
+function formatDate(date) {
+  var monthNames = [
+    "January", "February", "March",
+    "April", "May", "June", "July",
+    "August", "September", "October",
+    "November", "December"
+  ];
+
+  var day = date.getDate();
+  var monthIndex = date.getMonth();
+  var year = date.getFullYear();
+
+  return day + ' ' + monthNames[monthIndex] + ' ' + year;
+}
+
+function formatDateFromMs(ms) {
+  return  formatDate( new Date(ms) );
+}
 
 function processCalendarClick(ev, dt) {
+  var mydate = new Date(dt);
+
   console.log(">>>", ev, dt);
-  console.log(">>>>", dt, "<<<<<");
+  console.log(">>>>", dt, "(", dt.getTime(), ")", "<<<<<");
+
+  var uuid = g_logapp.findEntryByTime(dt.getTime());
+
+  if (typeof uuid === "undefined") {
+    console.log(">>> did not find...");
+
+    var entry_date = dt.getTime();
+    entry_date += deltaDayMs();
+    createNewActiveEntry(entry_date, "edit-entry-1");
+
+    $("#calendar-create-modal-header").html("Create entry for " + formatDate(dt) );
+    uiData.calendarModal.modal('show');
+  }
+
+  // click on a date without entry, bring up modal to
+  //   ask if you want to create a new entry
+  // if entry already exists, go to timeline restricted
+  //   for that dat.
+
+
 }
 
 function querySQLiteDatabase(query,inp) {
@@ -526,41 +615,24 @@ function initApp() {
 
   populateMoodGrid("mood-grid-0", "0");
   populateMoodGrid("mood-grid-1", "1");
-  /*
-  var sztxt = '80%';
-
-  old_table_ad = document.getElementById('activity-table');
-  table_ad = document.createElement('table');
-  table_ad.align = "center";
-  table_ad.style = "width:400px; ";
-  var tr = undefined;
-  for (var ii=0; ii<appData.icon.activity.main.length; ii++) {
-
-    if ( (ii%5) == 0 ) { tr = table_ad.insertRow(); }
-    var td = tr.insertCell();
-    td.style = 'text-align:center;';
-    var pdiv = document.createElement('div');
-    var div = document.createElement('div');
-    div.innerHTML= appData.icon.activity.main[ii].name;
-
-    var img = document.createElement('img');
-    img.src = appData.icon.activity.main[ii].img.inactive;
-    img.id = appData.icon.activity.main[ii].id + "-daily";
-    img.onclick = (function(x) { return function() { onClickDailyActivity(x); }; })(appData.icon.activity.main[ii].id);
-    img.ondragstart = (function(x) { return function() { onClickDailyActivity(x); return false; }; })(appData.icon.activity.main[ii].id);
-    img.style = "width:" + sztxt + "; height:" + sztxt + ";";
-
-
-    pdiv.appendChild(img);
-    pdiv.appendChild(div);
-
-    td.appendChild(pdiv);
-  }
-
-  old_table_ad.parentNode.replaceChild(table_ad, old_table_ad);
-  */
-
 }
+
+
+var pageTransition = function(toPage, transitionType, cb) {
+
+  setTimeout( function() {
+    if ($(".screen").page().fetch(toPage) === null) {
+      $(".screen").page().shake();
+    } else {
+      $(".screen").page().transition(toPage, transitionType);
+    }
+    if (typeof cb !== "undefined") { cb(); }
+  }, uiData.pageTransitionDelay);
+
+};
+
+
+var g_modal;
 
 (function ($) {
   $(document).ready(function () {
@@ -568,14 +640,7 @@ function initApp() {
     var w = $(window).width();
     var h = $(window).height();
 
-    console.log(w,h);
     var display = document.getElementById("device");
-
-    //display.style.width = (w-40) + "px";
-    //display.style.height = (h-40) + "px";
-
-    //display.style.width = w + "px";
-    //display.style.height = h + "px";
 
     $(".screen").page();
 
@@ -588,27 +653,9 @@ function initApp() {
         $(".screen").page().transition(page, trans);
     });
 
-    var pageTrans = function(ev, cb) {
-      var page  = $(ev.target).attr("data-page-name");
-      var trans = $(ev.target).attr("data-page-trans");
-      if ($(".screen").page().fetch(page) === null) {
-          $(".screen").page().shake();
-      } else {
-        $(".screen").page().transition(page, trans);
-      }
-
-      if (typeof cb !== "undefined") { cb(); }
-    };
-
     $(".screen .page .navigate-delay").click(function (ev) {
-
-      console.log(ev);
-      console.log(ev.currentTarget.id);
-
       var mood_id = ev.currentTarget.id;
       var ele = appData.icon.mood[mood_id];
-
-      console.log(mood_id, ele, ele.img.active);
 
       var ae = appData.data.activeEntry;
       ae.state = "activity-daily";
@@ -617,18 +664,10 @@ function initApp() {
 
       $("#" + mood_id).attr("src", ele.img.active);
 
-      setTimeout( (function(x) { return function() { return pageTrans(x) }; })(ev), 200);
-
-      /*
-      var page  = $(ev.target).attr("data-page-name");
+      var toPage = $(ev.target).attr("data-page-name");
       var trans = $(ev.target).attr("data-page-trans");
-      if ($(".screen").page().fetch(page) === null) {
-          $(".screen").page().shake();
-      } else {
-        $(".screen").page().transition(page, trans);
-      }
-      */
 
+      pageTransition(toPage, trans);
     });
 
     $(".screen .page .navigate-activity-daily").click(function (ev) {
@@ -638,29 +677,22 @@ function initApp() {
       if (id == "confirm-activity-daily") {
         var ele = appData.icon.action["confirm"];
         $("#confirm-activity-daily").attr("src", ele.img.active);
-        setTimeout( (function(x) { return function() { return pageTrans(x) }; })(ev), 200);
+
+        var toPage = $(ev.target).attr("data-page-name");
+        var trans = $(ev.target).attr("data-page-trans");
+
+        pageTransition(toPage,trans);
       }
       else if (id == "add-activity-daily") {
         var ele = appData.icon.action["add"];
         $("#add-activity-daily").attr("src", ele.img.active);
-        setTimeout(
-            (function(x, inactive) {
-              return function() {
-                return pageTrans(x, function() { setTimeout( function() { $("#add-activity-daily").attr("src", inactive); }, 200); } );
-              };
-            })(ev, ele.img.inactive), 200);
-      }
+        var toPage = $(ev.target).attr("data-page-name");
+        var trans = $(ev.target).attr("data-page-trans");
 
-
-      /*
-      var page  = $(ev.target).attr("data-page-name");
-      var trans = $(ev.target).attr("data-page-trans");
-      if ($(".screen").page().fetch(page) === null) {
-          $(".screen").page().shake();
-      } else {
-        $(".screen").page().transition(page, trans);
+        pageTransition(toPage,
+            trans,
+            function() { setTimeout( function() { $("#add-activity-daily").attr("src", ele.img.inactive); }, 200); } );
       }
-      */
 
     });
 
@@ -668,8 +700,6 @@ function initApp() {
       console.log("add activity daily...", ev);
     });
 
-
-    //$(".screen").page().transition("11", "none");
     $(".screen").page().transition("mood-daily", "none");
     $(".remove-button").click(function () {
       var id = $(".remove-input").val();
@@ -679,9 +709,24 @@ function initApp() {
       $(".screen").page().shake();
     });
 
+    //var edit_entry_0 = $("#edit-entry-0");
+    var edit_entry_1 = $("#edit-entry-1");
+    console.log("edit-entry-1", edit_entry_1);
+
+    uiData.calendarModal = $("#calendar-create-modal").modal({
+      onApprove:
+        function() {
+
+          $("#edit-entry-1-title").html( formatDateFromMs(appData.data.activeEntry.entryDate) );
+
+
+          pageTransition("edit-entry-1", "slide-in-from-bottom");
+        },
+      onDeny: function() { console.log("deny"); }
+    });
+
     initApp();
 
   });
 
 })(jQuery);
-

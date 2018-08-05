@@ -28,6 +28,39 @@
 </head>
 <body>
 
+  <!--
+                       _       _     
+   _ __ ___   ___   __| | __ _| |___ 
+  | '_ ` _ \ / _ \ / _` |/ _` | / __|
+  | | | | | | (_) | (_| | (_| | \__ \
+  |_| |_| |_|\___/ \__,_|\__,_|_|___/
+                                     
+  -->
+
+  <div class="ui tiny modal" id='calendar-create-modal'>
+    <div class="header" id='calendar-create-modal-header'> Create New Entry?  </div>
+    <div class='content'> An entry for this date does not exist. Create a new entry?</div>
+    <div class="actions">
+      <div class="ui black left deny button" style='float:left;'> No thanks </div>
+      <div class="ui positive right button"> Yes, create new entry  </div>
+    </div>
+  </div>
+
+  <div class="ui tiny modal" id='timeline-create-modal'>
+    <div class="header"> Create New Entry?  </div>
+    <div class='content'> An entry for this date does not exist. Create a new entry?</div>
+    <div class="actions">
+      <div class="ui black left deny button" style='float:left;'> No thanks </div>
+      <div class="ui positive right button"> Yes, create new entry  </div>
+    </div>
+  </div>
+
+  <!--
+    ***************
+    ***************
+    ***************
+  -->
+
   <div class="device" id='device'>
 
    <div class="screen">
@@ -348,7 +381,7 @@
          <div class='ui centered grid' style='margin-top:10'>
 
            <div class='row'>
-             <div class="title">... edit entry (1) ...</div>
+             <div class="title" id='edit-entry-1-title'>... edit entry (1) ...</div>
              <div style='text-align:center; ' id='mood-grid-1'>
 
                <!--
