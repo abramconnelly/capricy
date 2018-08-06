@@ -49,6 +49,7 @@ var appData = {
 
     "log" : {
 
+      /*
       "xxx1" : {
         "entryDate": "2018-07-23 03:44.00 UTC",
         "history": [ { "2018-07-23 03:44.00" : "m2;a050101,a600058,cmovie,cmedication;d2018-07-23 03:44.00 UTC" } ],
@@ -62,6 +63,8 @@ var appData = {
         "mood":"mood-3",
         "activity":["activity-050101", "activity-600058","custom-medication"]
       }
+      */
+
     },
 
     "activity" : {
@@ -171,6 +174,11 @@ function utc2str(s) {
   return d.toDateString();
 }
 
+// ********************
+// ********************
+// ********************
+// ********************
+
 function logApp() {
   this.data = appData.data;
   this.defaultData = appData.defaultData;
@@ -182,16 +190,31 @@ logApp.prototype.init = function() { }
 // mood and activity are required.
 // activity is a list, empty if no activities are set
 //
-logApp.prototype.addEntry = function(mood, activity, entryDate, modifiedDate) {
-  if (typeof entryDate === "undefined") { entryDate = Date.now(); }
-  if (typeof modifiedDate === "undefined") { modifiedDate = Date.now(); }
+//logApp.prototype.addEntry = function(mood, activity, entryDate, modifiedDate) {
+logApp.prototype.addEntry = function(input) {
+  if (typeof input === "undefined") { return; }
 
-  var uuid = uuidv4();
-  var log_entry = { "active": true, "uuid":uuid, "entryDate": entryDate, "modifiedDate": modifiedDate, "mood":mood, "activity":activity };
-  var log_entry_copy = Object.assign({}, log_entry);
-  log_entry["history"] = [ log_entry_copy ];
+  var log_entry = {
+    "active": true,
+    "uuid": ((typeof input.uuid === "undefined") ? uuidv4() : input.uuid),
+    "entryDate": ((typeof input.entryDate === "undefined") ? input.entryDate : Date.now() ),
+    "modifiedDate": ((typeof input.modifiedDate === "undefined") ? input.modifiedDate : Date.now() ),
+    "mood": input.mood,
+    "activity": input.activity,
+    "note": input.note
+  };
 
-  this.data.log[uuid] = log_entry;
+  //var log_entry_copy = Object.assign({}, log_entry);
+  //log_entry["history"] = [ log_entry_copy ];
+
+  this.data.log[log_entry.uuid] = log_entry;
+}
+
+logApp.prototype.debugPrintLog = function() {
+  var log = this.data.log;
+  for (var uuid in log) {
+    console.log(uuid, log[uuid].active, log[uuid].entryDate, log[uuid].mood, JSON.stringify(log[uuid].activity), log[uuid].note);
+  }
 }
 
 logApp.prototype.deleteEntry = function(uuid) {
@@ -247,18 +270,27 @@ function onClickMood(moodId, uiSubId) {
   if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
   console.log("mood click", moodId , uiSubId);
 
+  var ele = {};
   var micon = appData.icon.mood;
   if (moodId in appData.icon.mood) {
-    var ele = micon[moodId];
+    ele = micon[moodId];
 
     console.log("found>>>", ele, "(", uiSubId, ")")
-    //$("#" + activityId + "-daily").attr("src", ele.img[icon_state]);
-    $("#" + moodId + "-" + uiSubId).attr("src", ele.img["active"]);
   }
+  else {
+    console.log("ERROR: onClickMood, could not find", moodId, uiSubId);
+    return;
+  }
+
+  var ae = appData.data.activeEntry;
+  if (ae.mood) {
+    $("#" + ae.mood + '-' + uiSubId).attr("src", micon[ae.mood].img["inactive"]);
+  }
+  ae.mood = moodId;
+  $("#" + moodId + "-" + uiSubId).attr("src", ele.img["active"]);
 
 }
 
-//function onClickDailyActivity(activityId) {
 function onClickActivity(activityId, uiSubId) {
   if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
   console.log("activity click", activityId, uiSubId);
@@ -304,8 +336,6 @@ function populateMoodGrid(grid_id, uiSubId) {
   grid_ad.style = "width:400px; ";
   grid_ad.id = old_grid_ad.id;
 
-  //console.log("old_grid_ad.id:", old_grid_ad.id);
-
   var row = document.createElement("div");
   row.className = "row";
   for (var ii=0; ii<5; ii++) {
@@ -313,14 +343,14 @@ function populateMoodGrid(grid_id, uiSubId) {
     var mood_id = 'mood-' + ii.toString();
 
     var img = document.createElement('img');
-    //img.src = appData.icon.mood[ii].img.inactive;
-    //img.id = appData.icon.mood[ii].id + "-" + uiSubId;
-    //img.onclick = (function(x,y) { return function() { onClickMood(x,y); }; })(appData.icon.mood[ii].id,uiSubId);
-    //img.ondragstart = (function(x,y) { return function() { onClickMood(x,y); return false; }; })(appData.icon.mood[ii].id,uiSubId);
     img.src = appData.icon.mood[mood_id].img.inactive;
     img.id = appData.icon.mood[mood_id].id + "-" + uiSubId;
-    img.onclick = (function(x,y) { return function() { onClickMood(x,y); }; })(appData.icon.mood[mood_id].id,uiSubId);
-    img.ondragstart = (function(x,y) { return function() { onClickMood(x,y); return false; }; })(appData.icon.mood[mood_id].id,uiSubId);
+    img.onclick = (function(x,y) {
+       return function() { onClickMood(x,y); };
+     })(appData.icon.mood[mood_id].id,uiSubId);
+    img.ondragstart = (function(x,y) {
+      return function() { onClickMood(x,y); return false; };
+    })(appData.icon.mood[mood_id].id,uiSubId);
 
     var txtdiv = document.createElement("div");
     txtdiv.innerHTML= appData.icon.mood[mood_id].name;
@@ -368,13 +398,15 @@ function populateActivityGrid(grid_id, uiSubId) {
 
     var img = document.createElement('img');
     img.src = appData.icon.activity.main[ii].img.inactive;
-    //img.id = appData.icon.activity.main[ii].id + "-daily";
     img.id = appData.icon.activity.main[ii].id + "-" + uiSubId;
-    //img.onclick = (function(x) { return function() { onClickDailyActivity(x); }; })(appData.icon.activity.main[ii].id);
-    //img.ondragstart = (function(x) { return function() { onClickDailyActivity(x); return false; }; })(appData.icon.activity.main[ii].id);
-    img.onclick = (function(x,y) { return function() { onClickActivity(x,y); }; })(appData.icon.activity.main[ii].id,uiSubId);
-    img.ondragstart = (function(x,y) { return function() { onClickActivity(x,y); return false; }; })(appData.icon.activity.main[ii].id,uiSubId);
-    //img.style = "width:" + sztxt + "; height:" + sztxt + ";";
+
+    img.onclick = (function(x,y) {
+      return function() { onClickActivity(x,y); };
+    })(appData.icon.activity.main[ii].id,uiSubId);
+
+    img.ondragstart = (function(x,y) {
+      return function() { onClickActivity(x,y); return false; };
+    })(appData.icon.activity.main[ii].id,uiSubId);
 
     var txtdiv = document.createElement("div");
     txtdiv.innerHTML= appData.icon.activity.main[ii].name;
@@ -409,14 +441,15 @@ function createNewActiveEntry(entryDate, state) {
   return ae;
 }
 
+
+// ****************************
+// ****************************
+// date helper functions
+
 function deltaDayMs() {
   var d = new Date();
   var utc_midnight_ms = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
   return Date.now() - utc_midnight_ms;
-}
-
-function displayTime(d) {
-
 }
 
 // https://stackoverflow.com/a/3552493
@@ -441,6 +474,41 @@ function formatDateFromMs(ms) {
   return  formatDate( new Date(ms) );
 }
 
+//
+// ****************************
+// ****************************
+
+
+// ****************************
+// ****************************
+// Edit entry management
+//
+
+
+function clearEditUI(uiSubId) {
+
+  for (var moodid in appData.icon.mood) {
+    $("#" + moodid + "-" + uiSubId).attr("src",
+        appData.icon.mood[moodid].img.inactive);
+  }
+
+  for (var ii=0; ii<appData.icon.activity.main.length; ii++) {
+    $("#" + appData.icon.activity.main[ii].id + "-" + uiSubId).attr("src",
+        appData.icon.activity.main[ii].img.inactive);
+  }
+
+  $("#note-" + uiSubId).val("");
+
+  $("#add-activity-" + uiSubId).attr("src",
+      appData.icon.action["add"].img.inactive);
+  $("#confirm-activity-" + uiSubId).attr("src",
+      appData.icon.action["confirm"].img.inactive);
+}
+
+function populateEditUI(uuid, uiSubId) {
+  console.log("not implemented");
+}
+
 function processCalendarClick(ev, dt) {
   var mydate = new Date(dt);
 
@@ -456,6 +524,8 @@ function processCalendarClick(ev, dt) {
     entry_date += deltaDayMs();
     createNewActiveEntry(entry_date, "edit-entry-1");
 
+    clearEditUI("1");
+
     $("#calendar-create-modal-header").html("Create entry for " + formatDate(dt) );
     uiData.calendarModal.modal('show');
   }
@@ -465,8 +535,27 @@ function processCalendarClick(ev, dt) {
   // if entry already exists, go to timeline restricted
   //   for that dat.
 
-
 }
+
+function noteChange() {
+  var ae = appData.data.activeEntry;
+  ae.note = $(this).val();
+
+  console.log("note>>>", ae.note);
+}
+
+function confirmEdit(ev) {
+  console.log("config edit");
+
+  console.log(JSON.stringify(appData.data.activeEntry));
+
+  g_logapp.addEntry( appData.data.activeEntry );
+}
+
+//
+// ****************************
+// ****************************
+
 
 function querySQLiteDatabase(query,inp) {
   var r = g_db.run(query, inp);
@@ -478,7 +567,6 @@ function querySQLiteDatabase(query,inp) {
   //  ]
   //  */
   //
-
 
 }
 
@@ -519,6 +607,8 @@ function initSQLiteDatabase() {
   db.run("create table mood(id integer, name text, description text)");
   db.run("create table activity(id integer, name text, description text, type text)");
 
+  // for surveys and other data that isn't mood tracking
+  //
   db.run("create table customdata        (id integer, entry_utc_ms integer, uuid text, " +
                                         "name text, description text, type text, data text)");
   db.run("create table customdatahistory (id integer, parent_id integer, " +
@@ -534,7 +624,8 @@ function initSQLiteDatabase() {
   db.run("create index moodloghistory_parent_idx on moodloghistory (parent_id);")
 
   for (var ii=0; ii<default_activity.length; ii++) {
-    db.run("insert into activity values (?, ?, ?, ?)", [ii+1, default_activity[ii].id, default_activity[ii].name, "default"]);
+    db.run("insert into activity values (?, ?, ?, ?)",
+        [ii+1, default_activity[ii].id, default_activity[ii].name, "default"]);
   }
 
 
@@ -561,8 +652,6 @@ function initApp() {
   });
   uiData.calendar.showCurrentDay(false);
   uiData.calendar.onDateClick( processCalendarClick );
-
-  //$('.calendar').pignoseCalendar();
 
 
   //var hammer = Hammer(document.body);
@@ -670,6 +759,31 @@ var g_modal;
       pageTransition(toPage, trans);
     });
 
+    $("#note-0").on('change keyup paste', noteChange);
+    $("#note-1").on('change keyup paste', noteChange);
+
+    $("#confirm-activity-0").click(function(ev) {
+      confirmEdit();
+      $("#confirm-activity-0").attr("src", appData.icon.action["confirm"].img.active);
+      pageTransition("calendar", "slide-in-from-top",
+          function() {
+            setTimeout( function() {
+              $("#confirm-activity-0").attr("src", appData.icon.action["confirm"].img.inactive);
+            }, 200)
+          });
+    });
+
+    $("#confirm-activity-1").click(function(ev) {
+      confirmEdit();
+      $("#confirm-activity-1").attr("src", appData.icon.action["confirm"].img.active);
+      pageTransition("calendar", "slide-in-from-top",
+          function() {
+            setTimeout( function() {
+              $("#confirm-activity-1").attr("src", appData.icon.action["confirm"].img.inactive);
+            }, 200)
+          });
+    });
+
     $(".screen .page .navigate-activity-daily").click(function (ev) {
 
       var id = ev.currentTarget.id;
@@ -689,9 +803,12 @@ var g_modal;
         var toPage = $(ev.target).attr("data-page-name");
         var trans = $(ev.target).attr("data-page-trans");
 
-        pageTransition(toPage,
-            trans,
-            function() { setTimeout( function() { $("#add-activity-daily").attr("src", ele.img.inactive); }, 200); } );
+        pageTransition(
+          toPage,
+          trans,
+          function() {
+            setTimeout( function() { $("#add-activity-daily").attr("src", ele.img.inactive); }, 200);
+          });
       }
 
     });
@@ -719,8 +836,13 @@ var g_modal;
 
           $("#edit-entry-1-title").html( formatDateFromMs(appData.data.activeEntry.entryDate) );
 
-
-          pageTransition("edit-entry-1", "slide-in-from-bottom");
+          // reset scroll to top. Works only when visible, so do it in the callback after
+          // transition has started.
+          //
+          pageTransition("edit-entry-1",
+              "slide-in-from-bottom",
+              function () { var ee = document.getElementById("edit-entry-page-1"); ee.scrollTo(0,0); }
+              );
         },
       onDeny: function() { console.log("deny"); }
     });
