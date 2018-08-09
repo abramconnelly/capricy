@@ -11,6 +11,10 @@
   <script src="js/hammer.min.js" type="text/javascript"></script>
 
 
+  <link href="css/semantic.css" rel="stylesheet" type="text/css"/>
+  <script src="js/semantic.js" type="text/javascript"></script>
+
+
   <!-- <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/> -->
   <link href="css/app.css" rel="stylesheet" type="text/css"/>
   <script src="js/app.js" type="text/javascript"></script>
@@ -19,10 +23,6 @@
   <script src="js/jsCalendar.js" type="text/javascript"></script>
 
   <!-- <script src="js/bootstrap.js" type="text/javascript"></script> -->
-
-  <link href="css/semantic.css" rel="stylesheet" type="text/css"/>
-  <script src="js/semantic.js" type="text/javascript"></script>
-
   <script src="js/sql.js" type="text/javascript"></script>
 
 </head>
@@ -210,15 +210,20 @@
 
          <div class="title">... timeline ...</div>
 
-         <div class='ui centered card' style='width:450px'>
-           <div class='content'>
+         <div id='timeline_entry_container'>
 
-             <img class='left floated mini ui image' src='asset/mood/face-horrible-color.svg' style='opactiy:0.8;'>
-             <div class='header'> ok </div>
-             <div class='meta'> dokey </div>
-             <div class='description'> here it is</div>
+           <!-- <div class='ui centered card' style='width:450px'> -->
+           <div class='ui centered card'>
+             <div class='content'>
 
+               <img class='left floated mini ui image' src='asset/mood/face-horrible-color.svg' style='opactiy:0.8;'>
+               <div class='header'> ok </div>
+               <div class='meta'> dokey </div>
+               <div class='description'> here it is</div>
+
+             </div>
            </div>
+
          </div>
 
          <div class="navigate" data-page-name="calendar" data-page-trans="slide-in-from-right">to calendar</div>

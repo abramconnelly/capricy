@@ -148,6 +148,25 @@ var appData = {
         { "id": "custom-medication","name": "medication", "img":{"active":"asset/activities-main/pill-active.svg","inactive":"asset/activities-main/pill.svg"} }
       ],
 
+      "_main" : {
+        "activity-050101" : {  "id": "activity-050101" , "name":"work", "img":{"active":"asset/activities-main/office-active.svg","inactive":"asset/activities-main/office.svg"} },
+        "activity-120000" : {  "id":  "activity-120000" ,  "name": "friends", "img":{"active":"asset/activities-main/group-active.svg","inactive":"asset/activities-main/group.svg"} },
+        "activity-120100" : {  "id":  "activity-120100" ,  "name": "date", "img":{"active":"asset/activities-main/heart-active.svg","inactive":"asset/activities-main/heart.svg"} },
+        "activity-120312" : {  "id":  "activity-120312" ,  "name": "reading", "img":{"active":"asset/activities-main/book-active.svg","inactive":"asset/activities-main/book.svg"} },
+        "activity-600058" : {  "id":  "activity-600058" ,  "name": "gaming", "img":{"active":"asset/activities-main/gamecontroller-active.svg","inactive":"asset/activities-main/gamecontroller.svg"} },
+        "activity-070000" : {  "id":  "activity-070000" ,  "name": "shopping", "img":{"active":"asset/activities-main/shoppingbag-active.svg","inactive":"asset/activities-main/shoppingbag.svg"} },
+        "activity-110100" : {  "id":  "activity-110100" ,  "name": "meal", "img":{"active":"asset/activities-main/food-active.svg","inactive":"asset/activities-main/food.svg"} },
+        "activity-020101" : {  "id":  "activity-020101" ,  "name": "cleaning", "img":{"active":"asset/activities-main/broom-active.svg","inactive":"asset/activities-main/broom.svg"} },
+        "custom-show" : {  "id":  "custom-show" ,    "name": "show", "img":{"active":"asset/activities-main/speaker-active.svg","inactive":"asset/activities-main/speaker.svg"} },
+        "custom-internet" : {  "id":  "custom-internet" ,"name": "internet", "img":{"active":"asset/activities-main/wifi-active.svg","inactive":"asset/activities-main/wifi.svg"} },
+        "activity-music" : {  "id":  "activity-music" , "name": "music", "img":{"active":"asset/activities-main/music-active.svg","inactive":"asset/activities-main/music.svg"} },
+        "activity-010100" : {  "id":  "activity-010100" ,"name": "sleep", "img":{"active":"asset/activities-main/sleep-active.svg","inactive":"asset/activities-main/sleep.svg"} },
+        "activity-020102" : {  "id":  "activity-020102" ,  "name": "laundry", "img":{"active":"asset/activities-main/laundry-active.svg","inactive":"asset/activities-main/laundry.svg"} },
+        "activity-600025" : {  "id":  "activity-600025" ,  "name": "tv", "img":{"active":"asset/activities-main/tv-active.svg","inactive":"asset/activities-main/tv.svg"} },
+        "custom-movie" : {  "id":  "custom-movie" ,     "name": "movie", "img":{"active":"asset/activities-main/movie-active.svg","inactive":"asset/activities-main/movie.svg"} },
+        "custom-medication" : {  "id":  "custom-medication" ,"name": "medication", "img":{"active":"asset/activities-main/pill-active.svg","inactive":"asset/activities-main/pill.svg"} }
+      },
+
       "auxiliary": {
       },
 
@@ -158,6 +177,20 @@ var appData = {
 
   }
 };
+
+function lookupActivityEntry(activity_id) {
+  //var atypes = ["main", "auxiliary", "custom"];
+  var atypes = ["_main"];
+  for (var a=0; a<atypes.length; a++) {
+    var atype = atypes[a];
+
+    if (activity_id in appData.icon.activity[atype]) {
+      return appData.icon.activity[atype][activity_id];
+    }
+
+  }
+  return undefined;
+}
 
 // https://stackoverflow.com/a/2117523
 // by user [broofa]
@@ -197,8 +230,8 @@ logApp.prototype.addEntry = function(input) {
   var log_entry = {
     "active": true,
     "uuid": ((typeof input.uuid === "undefined") ? uuidv4() : input.uuid),
-    "entryDate": ((typeof input.entryDate === "undefined") ? input.entryDate : Date.now() ),
-    "modifiedDate": ((typeof input.modifiedDate === "undefined") ? input.modifiedDate : Date.now() ),
+    "entryDate": ((typeof input.entryDate === "undefined") ? Date.now() : input.entryDate ),
+    "modifiedDate": ((typeof input.modifiedDate === "undefined") ? Date.now() : input.modifiedDate ),
     "mood": input.mood,
     "activity": input.activity,
     "note": input.note
@@ -219,6 +252,20 @@ logApp.prototype.debugPrintLog = function() {
 
 logApp.prototype.deleteEntry = function(uuid) {
   this.data.log[uuid].active = false;
+}
+
+logApp.prototype.filterUUID = function(start, end) {
+  var log = this.data.log;
+  var r = [];
+  if (typeof start === "undefined") { start=0; }
+  //if (typeof end === "undefined") { end = Date.now() + (24*60*60*1000); }
+  for (var uuid in log) {
+    //if ((start <= log[uuid].entryDate) && (log[uuid].entryDate <= end)) {
+    if (start > log[uuid].entryDate) { continue; }
+    if ((typeof end !== "undefined") && (log[uuid].entryDate > end)) { continue; }
+    r.push(uuid);
+  }
+  return r;
 }
 
 // uuid is required
@@ -257,6 +304,12 @@ logApp.prototype.findEntryByTime = function(t) {
     }
   }
   return undefined;
+}
+
+logApp.prototype.getEntryDateRange = function(start, end, n) {
+}
+
+logApp.prototype.getEntryN = function(n, start) {
 }
 
 g_logapp = new logApp();
@@ -509,6 +562,110 @@ function populateEditUI(uuid, uiSubId) {
   console.log("not implemented");
 }
 
+function cmp_entryDate(_a, _b) {
+  var a = g_logapp.data.log[_a];
+  var b = g_logapp.data.log[_b];
+  if (a.entryDate < b.entryDate) { return 1; }
+  if (a.entryDate > b.entryDate) { return -1; }
+  return 0;
+}
+
+function populateTimeline() {
+
+  var a = g_logapp.filterUUID();
+  console.log("before >>>", JSON.stringify(a));
+
+  a.sort(cmp_entryDate);
+
+  console.log("after >>>", JSON.stringify(a));
+
+  var old_timeline = document.getElementById("timeline_entry_container");
+  var timeline = document.createElement("div");
+  timeline.id = old_timeline.id;
+  for (var ii=0; ii<a.length; ii++) {
+
+    var mood_entry = g_logapp.data.log[a[ii]];
+
+    var card = document.createElement("div");
+    card.className = "ui centered card";
+
+    var card_content = document.createElement("div");
+    card_content.className = "content";
+
+    var card_img = document.createElement("img");
+    card_img.className = "left floated mini ui image";
+
+    console.log("cp0", ii, a[ii]);
+    console.log(appData.icon.mood[mood_entry.mood]);
+
+
+    card_img.src = appData.icon.mood[mood_entry.mood].img.active;
+    //card_img.style = "opacity:0.8;";
+
+    var d = new Date(mood_entry.entryDate);
+
+    var card_header = document.createElement("div");
+    card_header.className = 'header';
+    card_header.innerHTML = d.toDateString();
+
+    var activity_ele = [];
+    for (var jj=0; jj<mood_entry.activity.length; jj++) {
+      var activity_entry  = lookupActivityEntry(mood_entry.activity[jj]);
+      activity_ele.push( "<img class='icon-tiny' src='" + activity_entry.img.inactive + "'></img> " + activity_entry.name );
+    }
+
+    var card_meta = document.createElement("div");
+    card_meta.className = 'meta';
+
+    card_meta.innerHTML = activity_ele.join(", ");
+
+
+    var card_description = document.createElement("div");
+    card_description.className = "description";
+    card_description.innerHTML = mood_entry.note;
+
+    card_content.appendChild(card_img);
+    card_content.appendChild(card_header);
+    card_content.appendChild(card_meta);
+    card_content.appendChild(card_description);
+
+    card.appendChild(card_content);
+
+    timeline.appendChild(card);
+  }
+
+  old_timeline.parentNode.replaceChild(timeline, old_timeline);
+
+}
+
+function populateCalendar() {
+
+  var cal = uiData.calendar;
+
+  console.log(">>>", cal);
+
+  var vizday = cal._getVisibleDates();
+  var day_sec = 24*60*60*1000;
+
+  for (var idx=0; idx<vizday.length; idx++) {
+    var d = vizday[idx];
+    var moods = g_logapp.filterUUID(d.getTime(), d.getTime() + day_sec);
+
+    cal.unselect(d);
+    if (moods.length > 0) {
+      var uuid = moods[0];
+      var entry = g_logapp.data.log[uuid];
+      var mood_code = entry.mood.split("-")[1];
+      cal.select(d, [{"className":"jsCalendar-selected-" + mood_code}]);
+
+      console.log(">>> adding", d, mood_code);
+
+    }
+  }
+
+
+}
+
 function processCalendarClick(ev, dt) {
   var mydate = new Date(dt);
 
@@ -523,6 +680,8 @@ function processCalendarClick(ev, dt) {
     var entry_date = dt.getTime();
     entry_date += deltaDayMs();
     createNewActiveEntry(entry_date, "edit-entry-1");
+
+    console.log("entry_date:", entry_date);
 
     clearEditUI("1");
 
@@ -706,8 +865,16 @@ function initApp() {
   populateMoodGrid("mood-grid-1", "1");
 }
 
+var setupPage = {
+  "timeline": populateTimeline,
+  "calendar": populateCalendar
+}
 
 var pageTransition = function(toPage, transitionType, cb) {
+
+  if (toPage in setupPage) {
+    setupPage[toPage]();
+  }
 
   setTimeout( function() {
     if ($(".screen").page().fetch(toPage) === null) {
@@ -736,10 +903,15 @@ var g_modal;
     $(".screen .page .navigate").click(function (ev) {
       var page  = $(ev.target).attr("data-page-name");
       var trans = $(ev.target).attr("data-page-trans");
+
+      pageTransition(page, trans);
+
+      /*
       if ($(".screen").page().fetch(page) === null)
         $(".screen").page().shake();
       else
         $(".screen").page().transition(page, trans);
+        */
     });
 
     $(".screen .page .navigate-delay").click(function (ev) {
@@ -818,6 +990,8 @@ var g_modal;
     });
 
     $(".screen").page().transition("mood-daily", "none");
+    //pageTransition("mood-dialy", "none");
+
     $(".remove-button").click(function () {
       var id = $(".remove-input").val();
       $(".screen").page().remove(id);

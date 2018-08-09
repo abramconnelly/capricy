@@ -6,6 +6,20 @@
 }
 
 
+#timeline_entry_container .card {
+  width: 450px;
+}
+
+#timeline_entry_container .card img {
+  opacity: 0.8;
+}
+
+.icon-tiny {
+  width: 20px;
+  height: 20px;
+  opacity: 0.5;
+}
+
 html, body {
     /* background-color: #999999; */
     background-color: var(--main-bg-color);
