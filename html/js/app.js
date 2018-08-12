@@ -896,11 +896,10 @@ var setupPage = {
   "calendar": populateCalendar
 }
 
-var pageTransition = function(toPage, transitionType, cb) {
+var pageTransition = function(toPage, transitionType, cb, delay) {
 
-  if (toPage in setupPage) {
-    setupPage[toPage]();
-  }
+  if (toPage in setupPage) { setupPage[toPage](); }
+  if (typeof delay === "undefined") { delay = uiData.pageTransitionDelay; }
 
   setTimeout( function() {
     if ($(".screen").page().fetch(toPage) === null) {
@@ -909,10 +908,22 @@ var pageTransition = function(toPage, transitionType, cb) {
       $(".screen").page().transition(toPage, transitionType);
     }
     if (typeof cb !== "undefined") { cb(); }
-  }, uiData.pageTransitionDelay);
+  }, delay);
+
+  //}, uiData.pageTransitionDelay);
 
 };
 
+/*
+function gotoTimeline(trans_style) {
+  if (typeof trans_style === "undefined") {
+    trans_style = "slide-in-from-bottom";
+  }
+  //setupPage["timeline"]();
+  populateTimeline();
+  pageTransition("timeline", trans_style);
+}
+*/
 
 var g_modal;
 
@@ -924,20 +935,21 @@ var g_modal;
 
     var display = document.getElementById("device");
 
-
+    /*
     initApp();
 
     var today_midnight = new Date();
     today_midnight.setUTCHours(0,0,0,0);
 
-
     if (g_logapp.filterUUID(today_midnight.getTime()).length > 0) {
-      $(".screen").page().transition("timeline", "none");
+      pageTransition("timeline", "slide-in-from-bottom");
+      //$(".screen").page().transition("timeline", "none");
     } else {
       $(".screen").page().transition("mood-daily", "none");
     }
+    */
 
-    //$(".screen").page();
+    $(".screen").page();
 
     $(".screen .page .navigate").click(function (ev) {
       var page  = $(ev.target).attr("data-page-name");
@@ -1040,15 +1052,6 @@ var g_modal;
 
     });
 
-    /*
-    $(".screen .page .add-activity-daily").click(function (ev) {
-      console.log("add activity daily...", ev);
-    });
-    */
-
-    //$(".screen").page().transition("mood-daily", "none");
-    //pageTransition("mood-dialy", "none");
-
     $(".remove-button").click(function () {
       var id = $(".remove-input").val();
       $(".screen").page().remove(id);
@@ -1077,6 +1080,24 @@ var g_modal;
         },
       onDeny: function() { console.log("deny"); }
     });
+
+    initApp();
+
+    var today_midnight = new Date();
+    today_midnight.setUTCHours(0,0,0,0);
+
+    if (g_logapp.filterUUID(today_midnight.getTime()).length > 0) {
+      pageTransition("timeline", "none", undefined, 0);
+      //$(".screen").page().transition("timeline", "none");
+    } else {
+      $(".screen").page().transition("mood-daily", "none");
+    }
+
+    setTimeout( function() {
+      //$("#body").css("display", "initial");
+      $("#body").addClass("load");
+    },
+    200 );
 
   });
 

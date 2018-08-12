@@ -5,6 +5,24 @@
   --main-bg-color: #ffffff;
 }
 
+/* to prevent flashing inital load.
+ * unset when app setup
+ */
+body {
+  /* display: none; */
+	opacity: 0;
+
+	-webkit-transition: opacity .2s ease-in;
+		 -moz-transition: opacity .2s ease-in;
+			-ms-transition: opacity .2s ease-in;
+			 -o-transition: opacity .2s ease-in;
+					transition: opacity .2s ease-in;
+}
+
+body.load {
+  opacity: 1;
+}
+
 
 #timeline_entry_container .card {
   width: 450px;
@@ -21,9 +39,9 @@
 }
 
 html, body {
-    /* background-color: #999999; */
-    background-color: var(--main-bg-color);
-    margin: 20px;
+  /* background-color: #999999; */
+  background-color: var(--main-bg-color);
+  margin: 20px;
 }
 
 .device {
