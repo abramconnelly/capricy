@@ -19,3 +19,10 @@
 * sql.js load slow (5-6s), look into possible alternatives
   (in-browser mongodb)
 
+
+2018-08-12
+---
+
+* move over to some SQL backend database
+* make sure to keep historic log entries (for debugging)
+* get rid of glitchy jump to timeline on load (add empty element to render before JS load)

@@ -241,6 +241,8 @@ logApp.prototype.addEntry = function(input) {
   //log_entry["history"] = [ log_entry_copy ];
 
   this.data.log[log_entry.uuid] = log_entry;
+
+  this.flush();
 }
 
 logApp.prototype.debugPrintLog = function() {
@@ -266,6 +268,22 @@ logApp.prototype.filterUUID = function(start, end) {
     r.push(uuid);
   }
   return r;
+}
+
+logApp.prototype.load = function() {
+  var logstr = window.localStorage.getItem("logData", JSON.stringify(this.data.log));
+
+  if (logstr === null) {
+    logstr = "{}";
+  }
+
+  var obj = JSON.parse(logstr);
+  this.data.log = obj;
+  this.flush();
+}
+
+logApp.prototype.flush = function() {
+  window.localStorage.setItem("logData", JSON.stringify(this.data.log));
 }
 
 // uuid is required
@@ -295,6 +313,8 @@ logApp.prototype.editEntry = function(uuid, mood, activity, entryDate, modifiedD
   this.data.log[uuid].activity = log_entry.activity;
   this.data.log[uuid].entryDate = log_entry.entryDate;
   this.data.log[uuid].modifiedDate = log_entry.modifiedDate;
+
+  this.flush();
 }
 
 logApp.prototype.findEntryByTime = function(t) {
@@ -319,6 +339,8 @@ g_logapp = new logApp();
 // ********************
 // ********************
 
+// only in edit pages?
+//
 function onClickMood(moodId, uiSubId) {
   if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
   console.log("mood click", moodId , uiSubId);
@@ -863,6 +885,10 @@ function initApp() {
 
   populateMoodGrid("mood-grid-0", "0");
   populateMoodGrid("mood-grid-1", "1");
+
+  createNewActiveEntry();
+
+  g_logapp.load();
 }
 
 var setupPage = {
@@ -898,11 +924,26 @@ var g_modal;
 
     var display = document.getElementById("device");
 
-    $(".screen").page();
+
+    initApp();
+
+    var today_midnight = new Date();
+    today_midnight.setUTCHours(0,0,0,0);
+
+
+    if (g_logapp.filterUUID(today_midnight.getTime()).length > 0) {
+      $(".screen").page().transition("timeline", "none");
+    } else {
+      $(".screen").page().transition("mood-daily", "none");
+    }
+
+    //$(".screen").page();
 
     $(".screen .page .navigate").click(function (ev) {
       var page  = $(ev.target).attr("data-page-name");
       var trans = $(ev.target).attr("data-page-trans");
+
+      console.log("???");
 
       pageTransition(page, trans);
 
@@ -915,6 +956,9 @@ var g_modal;
     });
 
     $(".screen .page .navigate-delay").click(function (ev) {
+
+
+      /*
       var mood_id = ev.currentTarget.id;
       var ele = appData.icon.mood[mood_id];
 
@@ -927,10 +971,19 @@ var g_modal;
 
       var toPage = $(ev.target).attr("data-page-name");
       var trans = $(ev.target).attr("data-page-trans");
+      */
 
+      var parts = ev.currentTarget.id.split("-");
+      var moodid = parts[0] + "-" + parts[1];
+
+      onClickMood(moodid, "daily");
+
+      var toPage = $(ev.target).attr("data-page-name");
+      var trans = $(ev.target).attr("data-page-trans");
       pageTransition(toPage, trans);
     });
 
+    $("#note-daily").on('change keyup paste', noteChange);
     $("#note-0").on('change keyup paste', noteChange);
     $("#note-1").on('change keyup paste', noteChange);
 
@@ -967,6 +1020,8 @@ var g_modal;
         var toPage = $(ev.target).attr("data-page-name");
         var trans = $(ev.target).attr("data-page-trans");
 
+        confirmEdit();
+
         pageTransition(toPage,trans);
       }
       else if (id == "add-activity-daily") {
@@ -985,11 +1040,13 @@ var g_modal;
 
     });
 
+    /*
     $(".screen .page .add-activity-daily").click(function (ev) {
       console.log("add activity daily...", ev);
     });
+    */
 
-    $(".screen").page().transition("mood-daily", "none");
+    //$(".screen").page().transition("mood-daily", "none");
     //pageTransition("mood-dialy", "none");
 
     $(".remove-button").click(function () {
@@ -1020,8 +1077,6 @@ var g_modal;
         },
       onDeny: function() { console.log("deny"); }
     });
-
-    initApp();
 
   });
 
