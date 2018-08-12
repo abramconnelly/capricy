@@ -622,6 +622,7 @@ function populateTimeline() {
 
 
     card_img.src = appData.icon.mood[mood_entry.mood].img.active;
+    card_img.setAttribute('draggable', 'false');
     //card_img.style = "opacity:0.8;";
 
     var d = new Date(mood_entry.entryDate);
@@ -842,11 +843,13 @@ function initApp() {
 
   // stop dragable images from ruining experience
   //
+
   $('#mood-0').on('dragstart', function(event) { event.preventDefault(); });
   $('#mood-1').on('dragstart', function(event) { event.preventDefault(); });
   $('#mood-2').on('dragstart', function(event) { event.preventDefault(); });
   $('#mood-3').on('dragstart', function(event) { event.preventDefault(); });
   $('#mood-4').on('dragstart', function(event) { event.preventDefault(); });
+
 
   $('#confirm-activity-daily').on('dragstart', function(event) { event.preventDefault(); });
   $('#add-activity-daily').on('dragstart', function(event) { event.preventDefault(); });

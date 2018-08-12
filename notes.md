@@ -26,3 +26,15 @@
 * move over to some SQL backend database
 * make sure to keep historic log entries (for debugging)
 * get rid of glitchy jump to timeline on load (add empty element to render before JS load)
+
+* timeline entries should have an edit button (and have them go to their respective edit pages
+  when hit)
+  - decorate the timeline card with an edit button (only), which when pressed will deposit into edit
+    page
+
+* edit page should have a (confirmed) delete button
+
+* swipe from timeline to calendar
+* nav bar at bottom to nav to timeline, calendar, stats, config and main 'add' button
+  that expands to yesterday, today and day picker option
+
