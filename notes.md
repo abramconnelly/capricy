@@ -75,3 +75,19 @@ priotiry for next time:
 
 * nav bottom bar
 * swipe to navigate
+
+2018-08-15
+---
+
+* jquery-pages doesn't behavce nicely with scroll (cutoff elements at end)
+* maybe transition to jquery-mobile (that has equally nice page transitions)
+* put icons in navbar
+
+todo:
+
+* swipe to navigate
+* attach icons and callbacks to nav bar
+* figure out pagetransition animations
+
+
+

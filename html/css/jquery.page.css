@@ -32,7 +32,19 @@
     width: 100%;
     display: block;
     position: relative;
+
+    /* cuts off content and doesn't allow scroll
+     * but also page transition animations screw
+     * up without this here.
+     */
+    /*
     overflow: hidden;
+    */
+/*
+    overflow-x: hidden;
+    overflow-y: visible;
+    */
+
 }
 
 /*  the container  */

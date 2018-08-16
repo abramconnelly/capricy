@@ -29,6 +29,7 @@ function b64dec(str) {
 
 var uiData = {
   "pageTransitionDelay" : 200,
+  "focus" : "",
   "calendar" : {},
   "calendarModal": {},
   "timelineModal": {}
@@ -905,6 +906,9 @@ var pageTransition = function(toPage, transitionType, cb, delay) {
   if (typeof delay === "undefined") { delay = uiData.pageTransitionDelay; }
 
   setTimeout( function() {
+
+    uiData.focus = toPage;
+
     if ($(".screen").page().fetch(toPage) === null) {
       $(".screen").page().shake();
     } else {
@@ -1078,13 +1082,85 @@ var g_modal;
           //
           pageTransition("edit-entry-1",
               "slide-in-from-bottom",
-              function () { var ee = document.getElementById("edit-entry-page-1"); ee.scrollTo(0,0); }
-              );
+              function () {
+                var ee = document.getElementById("edit-entry-page-1");
+                //ee.scrollTo(0,0);
+              });
         },
       onDeny: function() { console.log("deny"); }
     });
 
     initApp();
+
+    $("#nav-bottom-timeline").click(function() {
+      $("#nav-bottom").children().children().removeClass('active');
+      $("#nav-bottom-timeline").addClass('active');
+
+      if (uiData.focus != "timeline") {
+        pageTransition("timeline", "slide-in-from-left");
+      }
+    });
+
+    $("#nav-bottom-calendar").click(function() {
+      $("#nav-bottom").children().children().removeClass('active');
+      $("#nav-bottom-calendar").addClass('active');
+
+      if (uiData.focus == "timeline") {
+        pageTransition("calendar", "slide-in-from-right");
+      }
+      else if (uiData.focus != "calendar") {
+        pageTransition("calendar", "slide-in-from-left");
+      }
+
+    });
+
+    $("#nav-add-popup").click(function()  {
+      console.log("....");
+      $("#nav-add-popup").fadeOut(200);
+    });
+
+    $("#nav-bottom-add").click(function() {
+      $("#nav-bottom").children().children().removeClass('active');
+      $("#nav-bottom-add").addClass('active');
+      //pageTransition("calendar", "none");
+
+      console.log("click");
+
+      $("#nav-add-popup").fadeIn(200);
+    });
+
+    $("#nav-bottom-stats").click(function() {
+      $("#nav-bottom").children().children().removeClass('active');
+      $("#nav-bottom-stats").addClass('active');
+
+      if ((uiData.focus == "timeline") ||
+          (uiData.focus == "calendar")) {
+        pageTransition("stats", "slide-in-from-right");
+      }
+      else if (uiData.focus != "stats") {
+        pageTransition("stats", "slide-in-from-left");
+      }
+
+
+    });
+
+    $("#nav-bottom-config").click(function() {
+      $("#nav-bottom").children().children().removeClass('active');
+      $("#nav-bottom-config").addClass('active');
+
+      if ((uiData.focus == "timeline") ||
+          (uiData.focus == "calendar") ||
+          (uiData.focus == "stats")) {
+        pageTransition("config", "slide-in-from-right");
+      }
+      else if (uiData.focus != "config") {
+        pageTransition("config", "slide-in-from-left");
+      }
+
+    });
+
+
+    //----------------
 
     var today_midnight = new Date();
     today_midnight.setUTCHours(0,0,0,0);

@@ -187,7 +187,10 @@
              </div>
            </div>
 
+
          </div> <!-- ui centered grid -->
+
+         <div class='footer-ele'> </div>
 
        </div> <!-- page -->
 
@@ -243,6 +246,8 @@
          <div class="navigate" data-page-name="calendar" data-page-trans="slide-in-from-right">to calendar</div>
          <div class="navigate" data-page-name="edit-entry-0" data-page-trans="slide-in-from-bottom">edit entry</div>
          <div class="navigate" data-page-name="mood-historic" data-page-trans="slide-in-from-left">to mood historic</div>
+
+         <div class='footer-ele'> </div>
 
        </div>
 
@@ -340,6 +345,9 @@
            </div>
 
          </div>
+
+         <div class='footer-ele'> </div>
+
        </div>
 
        <!--
@@ -355,6 +363,9 @@
        <div class="page" data-jquery-page-name="add-activity-0">
          <div class="title">... add activity (0)...</div>
          <div class="navigate" data-page-name="edit-entry-0" data-page-trans="slide-in-from-left">back to edit entry</div>
+
+         <div class='footer-ele'> </div>
+
        </div>
 
        <!--
@@ -383,6 +394,9 @@
          <div class="navigate" data-page-name="timeline" data-page-trans="slide-in-from-left">back to timeline</div>
          <div class="navigate" data-page-name="edit-entry-1" data-page-trans="slide-in-from-bottom">edit entry</div>
          <div class="navigate" data-page-name="stats" data-page-trans="slide-in-from-right">to stats</div>
+
+         <div class='footer-ele'> </div>
+
        </div>
 
        <!--
@@ -479,6 +493,8 @@
 
          </div>
 
+         <div class='footer-ele'> </div>
+
        </div>
 
        <!--
@@ -494,6 +510,9 @@
        <div class="page" data-jquery-page-name="add-activity-1">
          <div class="title">... add activity (1)...</div>
          <div class="navigate" data-page-name="edit-entry-1" data-page-trans="slide-in-from-left">back to edit entry</div>
+
+         <div class='footer-ele'> </div>
+
        </div>
 
 
@@ -510,6 +529,9 @@
          <div class="title">... stats ...</div>
          <div class="navigate" data-page-name="calendar" data-page-trans="slide-in-from-left">back to calendar</div>
          <div class="navigate" data-page-name="config" data-page-trans="slide-in-from-right">to config</div>
+
+         <div class='footer-ele'> </div>
+
        </div>
 
         <!--
@@ -523,13 +545,38 @@
        <div class="page" data-jquery-page-name="config">
          <div class="title">... config ...</div>
          <div class="navigate" data-page-name="stats" data-page-trans="slide-in-from-left">back to stats</div>
+
+         <div class='footer-ele'> </div>
+
        </div>
 
 
-     </div>
+     </div> <!-- wrapper div after screen -->
 
-   </div>
+    </div> <!-- screen -->
 
+  </div> <!-- device -->
+
+
+  <div id='nav-add-popup'>
+    <div id='nav-add-popup-items'>
+      <div class="ui three item menu">
+        <a id='nav-add-popup-yesterday' class="item">Yesterday</a>
+        <a id='nav-add-popup-today' class="item">Today</a>
+        <a id='nav-add-popup-calendar' class="item">Pick</a>
+      </div>
+    </div>
   </div>
+
+  <div id='nav-bottom'>
+    <div class="ui five item menu">
+      <a id='nav-bottom-timeline' class="item">Timeline</a>
+      <a id='nav-bottom-calendar' class="item">Calendar</a>
+      <a id='nav-bottom-add' class="item">Add</a>
+      <a id='nav-bottom-stats' class="item">Statistics</a>
+      <a id='nav-bottom-config' class="item">Config</a>
+    </div>
+  </div>
+
 </body>
 </html>
