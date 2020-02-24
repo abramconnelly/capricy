@@ -1,0 +1,243 @@
+
+:root {
+  /* --main-bg-color: #333333; */
+  /* --main-bg-color: #efefef; */
+  --main-bg-color: #ffffff;
+}
+
+/* to prevent flashing inital load.
+ * unset when app setup
+ */
+body {
+  /* display: none; */
+  opacity: 0;
+
+  -webkit-transition: opacity .2s ease-in;
+     -moz-transition: opacity .2s ease-in;
+      -ms-transition: opacity .2s ease-in;
+       -o-transition: opacity .2s ease-in;
+          transition: opacity .2s ease-in;
+
+
+  user-select: none;
+
+  padding-bottom: 100px;
+  margin-bottom: 50px;
+}
+
+body.load {
+  opacity: 1;
+}
+
+.footer-ele {
+  height: 100px;
+}
+
+#nav-add-popup {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(100,100,100,0.3);
+
+  top: 0px;
+  left: 0px;
+
+  z-index: 100;
+
+  /* display: none; */
+
+  /*
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+
+  margin-left: -275px;
+  margin-bottom: 5px;
+  width: 550px;
+
+  display: none;
+  */
+}
+
+#nav-add-popup-items {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+
+  margin-left: -275px;
+  margin-bottom: 5px;
+  width: 550px;
+
+  /* display: none; */
+
+}
+
+#nav-bottom {
+  position: fixed;
+  bottom: 0px;
+  left: 50%;
+  margin-left: -275px;
+  margin-bottom: 5px;
+  width: 550px;
+}
+
+#timeline_entry_container .card {
+  width: 450px;
+}
+
+#timeline_entry_container .card img {
+  opacity: 0.8;
+}
+
+.icon-tiny {
+  width: 20px;
+  height: 20px;
+  opacity: 0.5;
+}
+
+html, body {
+  /* background-color: #999999; */
+  background-color: var(--main-bg-color);
+  margin: 20px;
+}
+
+.device {
+  margin: 0 auto;
+  vertical-align: middle;
+  width:  550px;
+
+  padding-bottom: 100px;
+
+  /* height: 500px; */
+  /* height: 650px; */
+
+  /* height: 750px; */
+  /* height: 800px; */
+  /* background-color: #333333; */
+  background-color: var(--main-bg-color);
+
+  padding: 20px;
+  border-radius: 12px 12px 12px 12px;
+
+  /* background: linear-gradient(to bottom, #404040  0%, #333333  49%, #282828 51%, #222222 100%); */
+}
+
+.device .screen {
+    width:  100%;
+    /* height: 100%; */
+    /* background-color: #666666; */
+    background-color: var(--main-bg-color);
+}
+
+.device .screen .page {
+
+    /* color:  white; */
+    font-family: sans-serif;
+
+    /* take out to get ride of scrollbar */
+    /*
+    width:  100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    */
+
+}
+
+.device .screen .page[data-jquery-page-name='mood-daily'] {
+    background-color: var(--main-bg-color);
+}
+.device .screen .page[data-jquery-page-name='mood-historic'] {
+    background-color: var(--main-bg-color);
+}
+
+.device .screen .page[data-jquery-page-name='activity-daily'] {
+    background-color: var(--main-bg-color);
+}
+.device .screen .page[data-jquery-page-name='activity-historic'] {
+    background-color: var(--main-bg-color);
+}
+
+.device .screen .page[data-jquery-page-name='activity-add'] {
+    background-color: var(--main-bg-color);
+}
+
+.device .screen .page[data-jquery-page-name='timeline'] {
+    background-color: var(--main-bg-color);
+}
+
+.device .screen .page[data-jquery-page-name='calendar'] {
+    background-color: var(--main-bg-color);
+}
+
+.device .screen .page[data-jquery-page-name='stats'] {
+    background-color: var(--main-bg-color);
+}
+
+.device .screen .page[data-jquery-page-name='config'] {
+    background-color: var(--main-bg-color);
+}
+
+
+.device .screen .page[data-jquery-page-name='11'] {
+    background-color: var(--main-bg-color);
+}
+.device .screen .page[data-jquery-page-name='12'] {
+    background-color: var(--main-bg-color);
+}
+.device .screen .page[data-jquery-page-name='21'] {
+    background-color: var(--main-bg-color);
+}
+.device .screen .page[data-jquery-page-name='22'] {
+    background-color: var(--main-bg-color);
+}
+.device .screen .page[data-jquery-page-name='XX'] {
+    background-color: var(--main-bg-color);
+}
+
+/*
+.device .screen .page[data-jquery-page-name='11'] {
+    background-color: red;
+}
+.device .screen .page[data-jquery-page-name='12'] {
+    background-color: purple;
+}
+.device .screen .page[data-jquery-page-name='21'] {
+    background-color: green;
+}
+.device .screen .page[data-jquery-page-name='22'] {
+    background-color: blue;
+}
+.device .screen .page[data-jquery-page-name='XX'] {
+    background-color: orange;
+}
+*/
+
+.device .screen
+.page .title {
+    width: 100%;
+    font-weight: bold;
+    font-size: 20pt;
+    text-align: center;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.device .screen
+.page .navigate {
+    /* border: 1px solid white; */
+    /* border: 1px solid ; */
+    border: 1px solid ;
+    margin: 5px;
+    padding: 5px;
+    width: 90%;
+    text-align: center;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+
+
