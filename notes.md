@@ -1,24 +1,29 @@
-2018-08-05
+
+2020-02-24
 ---
 
-* Timeline should be able to add an entry
-* Timeline entries need to have an 'edit' option, maybe
-  a button in the upper right hand corner.
-* Timeline should have a date filter
-* Timeline needs a facility to add an entry to a day
-  that hasn't been added to. Options are:
-  - leave it calendar
-  - modal with calendar
-  - default the new entry to today with some facility to
-    change it in the newly created entry, either another
-    date picker or a 'carousel'
+* reveal.js is a better method of transitioning
+  - 'out of the box' works, mostly
+  - need to add minimal infrastructure to manage skipping around
+  - can be made to work with scroll without too much issue
+* keep a local copy of (localstorage, cookies) of data
+  - queue data to be sent to local sql database
+  - only need to minimize inital load time
+  - keep rqeuired data (in localstorage, cookies, etc.) for fast initial load
 
-* 'Add' button in the activites page needs to be in line
-  with other activities and dimmed
 
-* sql.js load slow (5-6s), look into possible alternatives
-  (in-browser mongodb)
+2018-08-15
+---
 
+* jquery-pages doesn't behavce nicely with scroll (cutoff elements at end)
+* maybe transition to jquery-mobile (that has equally nice page transitions)
+* put icons in navbar
+
+todo:
+
+* swipe to navigate
+* attach icons and callbacks to nav bar
+* figure out pagetransition animations
 
 2018-08-12
 ---
@@ -76,18 +81,28 @@ priotiry for next time:
 * nav bottom bar
 * swipe to navigate
 
-2018-08-15
+
+
+2018-08-05
 ---
 
-* jquery-pages doesn't behavce nicely with scroll (cutoff elements at end)
-* maybe transition to jquery-mobile (that has equally nice page transitions)
-* put icons in navbar
+* Timeline should be able to add an entry
+* Timeline entries need to have an 'edit' option, maybe
+  a button in the upper right hand corner.
+* Timeline should have a date filter
+* Timeline needs a facility to add an entry to a day
+  that hasn't been added to. Options are:
+  - leave it calendar
+  - modal with calendar
+  - default the new entry to today with some facility to
+    change it in the newly created entry, either another
+    date picker or a 'carousel'
 
-todo:
+* 'Add' button in the activites page needs to be in line
+  with other activities and dimmed
 
-* swipe to navigate
-* attach icons and callbacks to nav bar
-* figure out pagetransition animations
+* sql.js load slow (5-6s), look into possible alternatives
+  (in-browser mongodb)
 
 
 
