@@ -24,7 +24,27 @@ var uiData = {
   "focus" : "",
   "calendar" : {},
   "calendarModal": {},
-  "timelineModal": {}
+  "timelineModal": {},
+  "pageIndex": {
+
+    "mood-landing" : 0,
+
+    "activity-daily" : 1,
+    "activity-daily-add" : 2,
+
+    "timeline" : 3,
+
+    "entry-edit-0" : 4,
+    "activity-add-0" : 5,
+
+    "calendar" : 6,
+
+    "entry-edit-1" : 7,
+    "activity-add-1" : 8,
+
+    "stats" : 9,
+    "config" : 10
+  }
 };
 
 var appData = {
@@ -80,7 +100,7 @@ var appData = {
   "icon" : {
 
     "mood" : {
-      "mood-0": { "id":"mood-0", "name":"horrbile", "img": { "active": "asset/mood/face-horrible-color-active.svg", "inactive":"asset/mood/face-horrible-color.svg" } },
+      "mood-0": { "id":"mood-0", "name":"horrible", "img": { "active": "asset/mood/face-horrible-color-active.svg", "inactive":"asset/mood/face-horrible-color.svg" } },
       "mood-1": { "id":"mood-1", "name":"sad",      "img": { "active": "asset/mood/face-sad-color-active.svg",      "inactive":"asset/mood/face-sad-color.svg" } },
       "mood-2": { "id":"mood-2", "name":"average",  "img": { "active": "asset/mood/face-average-color-active.svg",  "inactive":"asset/mood/face-average-color.svg" } },
       "mood-3": { "id":"mood-3", "name":"happy",    "img": { "active": "asset/mood/face-happy-color-active.svg",    "inactive":"asset/mood/face-happy-color.svg" } },
@@ -99,11 +119,11 @@ var appData = {
         { "id":"activity-050101", "name":"work", "img":{"active":"asset/activities-main/office-active.svg","inactive":"asset/activities-main/office.svg"} },
         { "id": "activity-120000",  "name": "friends", "img":{"active":"asset/activities-main/group-active.svg","inactive":"asset/activities-main/group.svg"} },
         { "id": "activity-120100",  "name": "date", "img":{"active":"asset/activities-main/heart-active.svg","inactive":"asset/activities-main/heart.svg"} },
-        { "id": "activity-120312",  "name": "reading", "img":{"active":"asset/activities-main/book-active.svg","inactive":"asset/activities-main/book.svg"} },
-        { "id": "activity-600058",  "name": "gaming", "img":{"active":"asset/activities-main/gamecontroller-active.svg","inactive":"asset/activities-main/gamecontroller.svg"} },
-        { "id": "activity-070000",  "name": "shopping", "img":{"active":"asset/activities-main/shoppingbag-active.svg","inactive":"asset/activities-main/shoppingbag.svg"} },
+        { "id": "activity-120312",  "name": "read", "img":{"active":"asset/activities-main/book-active.svg","inactive":"asset/activities-main/book.svg"} },
+        { "id": "activity-600058",  "name": "game", "img":{"active":"asset/activities-main/gamecontroller-active.svg","inactive":"asset/activities-main/gamecontroller.svg"} },
+        { "id": "activity-070000",  "name": "shop", "img":{"active":"asset/activities-main/shoppingbag-active.svg","inactive":"asset/activities-main/shoppingbag.svg"} },
         { "id": "activity-110100",  "name": "meal", "img":{"active":"asset/activities-main/food-active.svg","inactive":"asset/activities-main/food.svg"} },
-        { "id": "activity-020101",  "name": "cleaning", "img":{"active":"asset/activities-main/broom-active.svg","inactive":"asset/activities-main/broom.svg"} },
+        { "id": "activity-020101",  "name": "clean", "img":{"active":"asset/activities-main/broom-active.svg","inactive":"asset/activities-main/broom.svg"} },
         { "id": "custom-show",    "name": "show", "img":{"active":"asset/activities-main/speaker-active.svg","inactive":"asset/activities-main/speaker.svg"} },
         { "id": "custom-internet","name": "internet", "img":{"active":"asset/activities-main/wifi-active.svg","inactive":"asset/activities-main/wifi.svg"} },
         { "id": "activity-music", "name": "music", "img":{"active":"asset/activities-main/music-active.svg","inactive":"asset/activities-main/music.svg"} },
@@ -111,16 +131,16 @@ var appData = {
         { "id": "activity-020102",  "name": "laundry", "img":{"active":"asset/activities-main/laundry-active.svg","inactive":"asset/activities-main/laundry.svg"} },
         { "id": "activity-600025",  "name": "tv", "img":{"active":"asset/activities-main/tv-active.svg","inactive":"asset/activities-main/tv.svg"} },
         { "id": "custom-movie",     "name": "movie", "img":{"active":"asset/activities-main/movie-active.svg","inactive":"asset/activities-main/movie.svg"} },
-        { "id": "custom-medication","name": "medication", "img":{"active":"asset/activities-main/pill-active.svg","inactive":"asset/activities-main/pill.svg"} }
+        { "id": "custom-medication","name": "meds", "img":{"active":"asset/activities-main/pill-active.svg","inactive":"asset/activities-main/pill.svg"} }
       ],
 
       "_main" : {
         "activity-050101" : {  "id": "activity-050101" , "name":"work", "img":{"active":"asset/activities-main/office-active.svg","inactive":"asset/activities-main/office.svg"} },
         "activity-120000" : {  "id":  "activity-120000" ,  "name": "friends", "img":{"active":"asset/activities-main/group-active.svg","inactive":"asset/activities-main/group.svg"} },
         "activity-120100" : {  "id":  "activity-120100" ,  "name": "date", "img":{"active":"asset/activities-main/heart-active.svg","inactive":"asset/activities-main/heart.svg"} },
-        "activity-120312" : {  "id":  "activity-120312" ,  "name": "reading", "img":{"active":"asset/activities-main/book-active.svg","inactive":"asset/activities-main/book.svg"} },
-        "activity-600058" : {  "id":  "activity-600058" ,  "name": "gaming", "img":{"active":"asset/activities-main/gamecontroller-active.svg","inactive":"asset/activities-main/gamecontroller.svg"} },
-        "activity-070000" : {  "id":  "activity-070000" ,  "name": "shopping", "img":{"active":"asset/activities-main/shoppingbag-active.svg","inactive":"asset/activities-main/shoppingbag.svg"} },
+        "activity-120312" : {  "id":  "activity-120312" ,  "name": "read", "img":{"active":"asset/activities-main/book-active.svg","inactive":"asset/activities-main/book.svg"} },
+        "activity-600058" : {  "id":  "activity-600058" ,  "name": "game", "img":{"active":"asset/activities-main/gamecontroller-active.svg","inactive":"asset/activities-main/gamecontroller.svg"} },
+        "activity-070000" : {  "id":  "activity-070000" ,  "name": "shop", "img":{"active":"asset/activities-main/shoppingbag-active.svg","inactive":"asset/activities-main/shoppingbag.svg"} },
         "activity-110100" : {  "id":  "activity-110100" ,  "name": "meal", "img":{"active":"asset/activities-main/food-active.svg","inactive":"asset/activities-main/food.svg"} },
         "activity-020101" : {  "id":  "activity-020101" ,  "name": "cleaning", "img":{"active":"asset/activities-main/broom-active.svg","inactive":"asset/activities-main/broom.svg"} },
         "custom-show" : {  "id":  "custom-show" ,    "name": "show", "img":{"active":"asset/activities-main/speaker-active.svg","inactive":"asset/activities-main/speaker.svg"} },
@@ -130,7 +150,7 @@ var appData = {
         "activity-020102" : {  "id":  "activity-020102" ,  "name": "laundry", "img":{"active":"asset/activities-main/laundry-active.svg","inactive":"asset/activities-main/laundry.svg"} },
         "activity-600025" : {  "id":  "activity-600025" ,  "name": "tv", "img":{"active":"asset/activities-main/tv-active.svg","inactive":"asset/activities-main/tv.svg"} },
         "custom-movie" : {  "id":  "custom-movie" ,     "name": "movie", "img":{"active":"asset/activities-main/movie-active.svg","inactive":"asset/activities-main/movie.svg"} },
-        "custom-medication" : {  "id":  "custom-medication" ,"name": "medication", "img":{"active":"asset/activities-main/pill-active.svg","inactive":"asset/activities-main/pill.svg"} }
+        "custom-medication" : {  "id":  "custom-medication" ,"name": "meds", "img":{"active":"asset/activities-main/pill-active.svg","inactive":"asset/activities-main/pill.svg"} }
       },
 
       "auxiliary": { },
@@ -153,7 +173,7 @@ function _click() {
 
 
 function populateActivityGrid(grid_id, uiSubId) {
-  if (typeof grid_id === "undefined") { grid_id = "activity-grid"; }
+  if (typeof grid_id === "undefined") { grid_id = "activity-daily_activity-grid"; }
   if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
 
   console.log(grid_id, uiSubId);
@@ -180,7 +200,7 @@ function populateActivityGrid(grid_id, uiSubId) {
 
     var img = document.createElement('img');
     img.src = appData.icon.activity.main[ii].img.inactive;
-    img.id = appData.icon.activity.main[ii].id + "-" + uiSubId;
+    img.id = appData.icon.activity.main[ii].id + "_" + uiSubId;
     img.style.width = '10vh';
 
     img.onclick = (function(x,y) {
@@ -246,7 +266,7 @@ function populateMoodGrid(grid_id, uiSubId) {
 
     var img = document.createElement('img');
     img.src = appData.icon.mood[mood_id].img.inactive;
-    img.id = appData.icon.mood[mood_id].id + "-" + uiSubId;
+    img.id = appData.icon.mood[mood_id].id + "_" + uiSubId;
     img.style.width = '10vh';
 
     img.onclick = (function(x,y) {
@@ -307,14 +327,156 @@ Reveal.addEventListener('slidechanged', function (event) {
   handleSlideScrolling(event.currentSlide);
 });
 
+// ---
+// ---
+//
+
+function confirmEdit(info) {
+  console.log("confirmEdit:", info);
+}
+
+function _set_mood(ui_id) {
+}
+
+// only in edit pages?
+//
+function onClickMood(moodId, uiSubId) {
+  if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
+
+  var ele = {};
+  var mood_icon = appData.icon.mood;
+  if (moodId in appData.icon.mood) {
+    ele = mood_icon[moodId];
+  }
+  else {
+    return;
+  }
+
+  var active_entry = appData.data.activeEntry;
+  if (active_entry.mood) {
+    $("#" + active_entry.mood + '-' + uiSubId).attr("src", mood_icon[active_entry.mood].img["inactive"]);
+  }
+  active_entry.mood = moodId;
+  $("#" + moodId + "-" + uiSubId).attr("src", ele.img["active"]);
+
+}
+
+
+function onClickActivity(activityId, uiSubId) {
+  if (typeof uiSubId === "undefined") { uiSubId = "daily"; }
+
+  var active_entry = appData.data.activeEntry;
+
+  var icon_state = "active";
+  for (var ii=0; ii<active_entry.activity.length; ii++) {
+    if (activityId == active_entry.activity[ii]) {
+      icon_state = "inactive";
+      break;
+    }
+  }
+  if (icon_state == "inactive") {
+    active_entry.activity.splice(ii,1);
+  }
+  else {
+    active_entry.activity.push(activityId);
+  }
+
+  var aicon = appData.icon.activity.main;
+  for (var ii=0; ii<aicon.length; ii++) {
+    if (aicon[ii].id == activityId) {
+      var ele = aicon[ii];
+      $("#" + activityId + "-" + uiSubId).attr("src", ele.img[icon_state]);
+    }
+  }
+
+}
+
+
+
+
+function _setup_callbacks() {
+
+
+  // "mood-landing" page
+  //
+  for (var ii=0; ii<5; ii++) {
+    var mood_id = "mood-" + ii.toString();
+    var ui_id = "mood-" + ii.toString() + "-daily";
+    $("#" + ui_id).click(
+        (function(x) {
+          return function() {
+            onClickMood(x, "daily");
+            setTimeout( function() {
+              Reveal.slide( uiData.pageIndex["activity-daily"] );
+            }, 200);
+          };
+        })(mood_id)
+    );
+  }
+
+  // "activity-daily" page
+  //
+  $("#activity-daily_add-btn").click(
+      (function(x) {
+        return function() {
+          var active_img = appData.icon.action.add.img.active;
+          $("#activity-daily_add-btn").attr("src", active_img);
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["activity-daily-add"] );
+          }, 200);
+        };
+      })()
+  );
+
+  $("#activity-daily_confirm-btn").click(
+      (function(x) {
+        return function() {
+          var active_img = appData.icon.action.confirm.img.active;
+          $("#activity-daily_confirm-btn").attr("src", active_img);
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["timeline"] );
+          }, 200);
+
+          confirmEdit("...");
+        };
+      })()
+  );
+
+
+}
+
 function _init() {
+
+  // More info about config & dependencies:
+  // - https://github.com/hakimel/reveal.js#configuration
+  // - https://github.com/hakimel/reveal.js#dependencies
+  //
+  Reveal.initialize({
+    width: '100%',
+    height: '100%',
+    hash: false,
+    controls: false,
+    progress: false,
+    history: false,
+    dependencies: [ ]
+  });
+
   populateActivityGrid();
 
-  populateActivityGrid("edit-grid-0", "0");
-  populateActivityGrid("edit-grid-1", "1");
+  populateActivityGrid("entry-edit-0_activity-grid", "0");
+  populateActivityGrid("entry-edit-1_activity-grid", "1");
 
-  populateMoodGrid("mood-grid-0", "0");
+  populateMoodGrid("entry-edit-0_mood-grid", "0");
+  populateMoodGrid("entry-edit-1_mood-grid", "1");
+
   //populateMoodGrid("mood-grid-1", "1");
-
   //createNewActiveEntry();
+
+  _setup_callbacks();
 }
+
+(function ($) {
+  $(document).ready(function() {
+    _init();
+  });
+})(jQuery);
