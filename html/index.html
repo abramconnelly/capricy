@@ -35,7 +35,7 @@
                          |___/                               
        -->
 
-       <section id='mood-landing' >
+       <section id='mood-daily' >
           <div style='width:95vw; background:#efeeee;'>
 
           <div class='ui grid'>
@@ -57,7 +57,7 @@
                draggable='false'
                onmousedown='return false;'
                class='noselect'
-               id='mood-0-daily' width='95px' src='asset/mood/face-horrible-color.svg' style='opacity:0.9;' >
+               id='mood-daily_mood-0' width='95px' src='asset/mood/face-horrible-color.svg' style='opacity:0.9;' >
            </div>
 
            <div class='column'>
@@ -65,7 +65,7 @@
                draggable='false'
                onmousedown='return false;'
                class='noselect'
-               id='mood-1-daily' width='95px' src='asset/mood/face-sad-color.svg' style='opacity:0.9;' >
+               id='mood-daily_mood-1' width='95px' src='asset/mood/face-sad-color.svg' style='opacity:0.9;' >
            </div>
 
            <div class='column'>
@@ -73,7 +73,7 @@
                draggable='false'
                onmousedown='return false;'
                class='noselect'
-               id='mood-2-daily' width='95px' src='asset/mood/face-average-color.svg' style='opacity:0.9;' >
+               id='mood-daily_mood-2' width='95px' src='asset/mood/face-average-color.svg' style='opacity:0.9;' >
             </div>
 
            <div class='column'>
@@ -81,7 +81,7 @@
                draggable='false'
                onmousedown='return false;'
                class='noselect'
-               id='mood-3-daily' width='95px' src='asset/mood/face-happy-color.svg' style='opacity:0.9;' >
+               id='mood-daily_mood-3' width='95px' src='asset/mood/face-happy-color.svg' style='opacity:0.9;' >
            </div>
 
            <div class='column'>
@@ -89,7 +89,7 @@
                draggable='false'
                onmousedown='return false;'
                class='noselect'
-               id='mood-4-daily' width='95px' src='asset/mood/face-awesome-color.svg' style='opacity:0.9;' >
+               id='mood-daily_mood-4' width='95px' src='asset/mood/face-awesome-color.svg' style='opacity:0.9;' >
            </div>
 
            </div>
@@ -116,20 +116,20 @@
 
            <div class='row'>
              <div class='center aligned column'>
-               <div class="title">What did you do?</div>
+               <div class="title">What did you do today?</div>
              </div>
            </div>
 
            <div class='row'>
              <div style='text-align:center; width:100%;' >
-               <div id='activity-daily_activity-grid'> </div>
+               <div id='activity-daily-activity-grid'> </div>
              </div>
            </div>
 
            <div class='row'>
              <div class='center aligned column'>
                <img
-                 id='activity-daily_add-btn'
+                 id='activity-daily_add'
                  src='asset/action/plus.svg'
                  style='opacity:0.9; width:10vh; height:10vh;' >
                <p>
@@ -147,7 +147,7 @@
            <div class='row'>
              <div class='center aligned column'>
                <img
-                 id='activity-daily_confirm-btn'
+                 id='activity-daily_confirm'
                  src='asset/action/checkmark.svg'
                  style='opacity:0.9; width:10vh; height:10vh;' >
                <p>
@@ -175,7 +175,7 @@
         <section  id='activity-daily-add' style='margin-left:2.5vw;'>
         <div style='width:95vw; background:#efeeee;'>
 
-         <div class='ui centered five column grid'>
+         <div class='ui centered grid'>
 
            <div class='row'>
              <div class='center aligned column'>
@@ -183,17 +183,20 @@
              </div>
            </div>
 
-           <div class='row'>
-             <div style='text-align:center; width:100%;' >
-               <div id='activity-daily-add_activity-grid'> </div>
+
+           <div class='row' style='background:#eeeeff;'>
+             <div class='left aligned column'>
+               <div class='ui divided items' style='background:#eeffee;' id='activity-daily-add-activity-grid'>
+
+               </div>
              </div>
            </div>
 
            <div class='row'>
              <div class='center aligned column'>
                <img
-                 id='activity-daily-add_back-btn'
-                 src='asset/noun_back_1394897.svg'
+                 id='activity-daily-add_back'
+                 src='asset/action/back.svg'
                  style='opacity:0.9; height:10vh;' >
                <p>
                Back
@@ -205,7 +208,7 @@
 
              <div class='center aligned column'>
                <img
-                 id='activity-daily-add_add-btn'
+                 id='activity-daily-add_add'
                  src='asset/action/plus.svg'
                  style='opacity:0.9; height:10vh;' >
                <p>
@@ -218,7 +221,7 @@
            <div class='row'>
              <div class='center aligned column'>
                <img
-                 id='activity-daily-add_confirm-btn'
+                 id='activity-daily-add_confirm'
                  src='asset/action/checkmark.svg'
                  style='opacity:0.9; height:10vh;' >
                <p>
@@ -341,7 +344,7 @@
 
            <div class='row'>
              <div style='text-align:center; width:100%;' >
-               <div id='entry-edit-0_mood-grid'></div>
+               <div id='entry-edit-0-mood-grid'></div>
              </div>
            </div>
 
@@ -355,7 +358,7 @@
 
            <div class='row'>
              <div style='text-align:center; ' >
-               <div id='entry-edit-0_activity-grid'> </div>
+               <div id='entry-edit-0-activity-grid'> </div>
              </div>
            </div>
 
@@ -479,7 +482,7 @@
 
            <div class='row'>
              <div style='text-align:center; width:100%;' >
-               <div id='entry-edit-1_mood-grid'></div>
+               <div id='entry-edit-1-mood-grid'></div>
              </div>
            </div>
 
@@ -492,7 +495,7 @@
 
            <div class='row'>
              <div style='text-align:center; ' >
-               <div id='entry-edit-1_activity-grid'> </div>
+               <div id='entry-edit-1-activity-grid'> </div>
              </div>
            </div>
 
