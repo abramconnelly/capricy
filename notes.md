@@ -8,14 +8,14 @@
   - can be made to work with scroll without too much issue
 * keep a local copy of (localstorage, cookies) of data
   - queue data to be sent to local sql database
-  - only need to minimize inital load time
-  - keep rqeuired data (in localstorage, cookies, etc.) for fast initial load
+  - only need to minimize initial load time
+  - keep required data (in localstorage, cookies, etc.) for fast initial load
 
 
 2018-08-15
 ---
 
-* jquery-pages doesn't behavce nicely with scroll (cutoff elements at end)
+* jquery-pages doesn't behave nicely with scroll (cutoff elements at end)
 * maybe transition to jquery-mobile (that has equally nice page transitions)
 * put icons in navbar
 
@@ -76,7 +76,7 @@ todo:
 * icons in timeline be without circles
 * daily grouping in it's own 'box' (multiple timeline elements in a day)
   
-priotiry for next time:
+priority for next time:
 
 * nav bottom bar
 * swipe to navigate
