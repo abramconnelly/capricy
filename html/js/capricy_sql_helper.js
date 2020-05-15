@@ -1,4 +1,4 @@
-var g_ctx =  { "SQL": {}, "init":false, "db":{} };
+var g_ctx =  { "SQL": {}, "init":false, "db":{}, "db_name":"capricy_db" };
 
 
 // wasm file location (sql-wasm.wasm)
@@ -14,6 +14,30 @@ initSqlJs(config).then(function(_SQL){
   attachCapricyDB();
 });
 
+//" mood varchar," +
+//" activity varchar," +
+//" note varchar," +
+//" entry_date timestamp default CURRENT_TIMESTAMP," +
+//" modified_date timestamp default CURRENT_TIMESTAMP)";
+//
+function insertEntry(row) {
+  var sqlstr = "";
+  var db = g_ctx.db;
+  if (row.length == 5) {
+    sqlstr = "insert into capricy_entry (uuid, user_uuid, mood, activity, note) values (?, ?, ?, ?, ?)";
+    db.run(sqlstr, row);
+  }
+  else if (row.length == 6) {
+    sqlstr = "insert into capricy_entry (uuid, user_uuid, mood, activity, note, entry_date) values (?, ?, ?, ?, ?, ?)";
+    db.run(sqlstr, row);
+  }
+  else if (row.length == 7) {
+    sqlstr = "insert into capricy_entry (uuid, user_uuid, mood, activity, note, entry_date, modified_date) values (?, ?, ?, ?, ?, ?, ?)";
+    db.run(sqlstr, row);
+  }
+
+  saveDBToLocalStorage(g_ctx.db_name, g_ctx.db);
+}
 
 function attachCapricyDB() {
   var x = localStorage.getItem("capricy_db");
@@ -80,6 +104,8 @@ function _simple_query_print(db, query) {
 function initDefaultDB(db) {
   var sqlstr = "";
   var _r;
+
+  console.log("??");
 
   sqlstr = "create table capricy_entry ( id INTEGER PRIMARY KEY," +
     " uuid varchar," +
