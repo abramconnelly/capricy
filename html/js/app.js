@@ -29,8 +29,10 @@ var uiData = {
 
     "mood-landing" : 0,
 
-    "activity-daily" : 1,
-    "activity-daily-add" : 2,
+    //"activity-daily" : 1,
+    "ui-entry" : 1,
+    //"activity-daily-add" : 2,
+    "activity-add" : 2,
 
     "timeline" : 3,
 
@@ -265,8 +267,49 @@ function _click() {
 // --
 // --
 
+function addActivityOption(activity_id) {
+  var cur_opt = appData.data.activity_option;
+
+  for (var ii=0; ii<cur_opt.length; ii++) {
+
+    // ignore if already present
+    //
+    if (activity_id == cur_opt[ii].activity_id) {
+      console.log("WARNING: activity_id:", activity_id, "already present in current activity list, ignoring");
+      return;
+    }
+  }
+
+  var act_icon_obj = appData.icon.activity;
+  var add_act_id = "";
+  for (var x in act_icon_obj) {
+    if (activity_id == act_icon_obj[x].id) {
+      console.log(">>", x, act_icon_obj[x]);
+      add_act_id = x;
+      break;
+    }
+  }
+
+  if (add_act_id.length==0) {
+    console.log("WARNING: activity", activity_id, "not found");
+    return;
+  }
+
+  var z = act_icon_obj[add_act_id];
+
+  var ent = { "activity_id": activity_id, "icon_id": z.icon_id, "name": "test" };
+
+  appData.data.activity_option.push(ent);
+  populateActivityGrid(undefined, appData.data.activity_option);
+}
+
+// --
+
+
 function populateAddActivity(activity_list_id) {
-  if (typeof activity_list_id === "undefined") { activity_list_id = "activity-daily-add-activity-grid"; }
+  //if (typeof activity_list_id === "undefined") { activity_list_id = "activity-daily-add-activity-grid"; }
+  if (typeof activity_list_id === "undefined") { activity_list_id = "activity-add-activity-grid"; }
+  //if (typeof activity_list_id === "undefined") { activity_list_id = "ui-entry-activity-grid"; }
 
   var add_activity_order = [];
   for (var icon_id in appData.icon.activity) {
@@ -343,7 +386,8 @@ function populateActivityGrid(grid_id, activity_option) {
 
   // default to daily activity grid
   //
-  if (typeof grid_id === "undefined") { grid_id = "activity-daily-activity-grid"; }
+  //if (typeof grid_id === "undefined") { grid_id = "activity-daily-activity-grid"; }
+  if (typeof grid_id === "undefined") { grid_id = "ui-entry-activity-grid"; }
 
   var sztxt = '80%';
   var row = null;
@@ -352,7 +396,10 @@ function populateActivityGrid(grid_id, activity_option) {
   //
   old_grid_ad = document.getElementById(grid_id);
 
+  console.log("???", grid_id, old_grid_ad);
+
   grid_ad = document.createElement('div');
+  grid_ad.id = grid_id;
   grid_ad.className = "ui five column grid";
   grid_ad.align = "center";
   grid_ad.style = "width:100%; ";
@@ -529,17 +576,24 @@ function confirmEdit(info) {
 
   var ele;
 
-  ele = document.getElementById("activity-daily_note");
+
+  //ele = document.getElementById("activity-daily_note");
+  ele = document.getElementById("ui-entry_note");
   console.log("note:", ele.value);
   console.log(">>>", appData.data.activeEntry);
 
-  var entry_id = uuidv4();
-  var user_id = uuidv4();
+  var entry_id = appData.data.activeEntry.entry_uuid;
+  var user_id = null;
   var mood = appData.data.activeEntry.mood;
   var activity = appData.data.activeEntry.activity.join(",");
   var note = ele.value;
   var create_date = moment().utc().format("YYYY-MM-DD HH:mm:ss");
   var modify_date = create_date;
+
+  if (appData.data.activeEntry.state == "edit") {
+    create_date = appData.data.activeEntry.entry_timestamp;
+    modify_date = moment().utc().format("YYYY-MM-DD HH:mm:ss");
+  }
 
   var entry_row = [ entry_id, user_id, mood, activity, note, create_date, modify_date ];
 
@@ -706,9 +760,18 @@ function _gebi(v) {
   return document.getElementById(v);
 }
 
-function _activity_icon(id) {
+function _activity_icon(activity_id) {
   for (var x in appData.icon.activity) {
-    if (appData.icon.activity[x].id == id) {
+    if (appData.icon.activity[x].id == activity_id) {
+      return appData.icon.activity[x];
+    }
+  }
+  return null;
+}
+
+function _activity_icon_img(activity_id) {
+  for (var x in appData.icon.activity) {
+    if (appData.icon.activity[x].id == activity_id) {
       return appData.icon.activity[x].img.inactive;
     }
   }
@@ -723,23 +786,76 @@ function _mood_icon(id) {
   }
 }
 
+function setupActiveEntry(uuid) {
+  var db = g_ctx.db;
+  var ent = db.exec("select uuid, user_uuid, mood, activity, note, entry_date, modified_date from capricy_entry where uuid = ?", [uuid]);
+  if (ent.length==0) { return; }
+
+  var db_uuid           = ent[0].values[0][0];
+  var db_user_uuid      = ent[0].values[0][1];
+  var db_mood           = ent[0].values[0][2];
+  var db_activity       = ent[0].values[0][3];
+  var db_note           = ent[0].values[0][4];
+  var db_entry_date     = ent[0].values[0][5];
+  var db_modified_date  = ent[0].values[0][6];
+
+  appData.data.activeEntry.entry_uuid = db_uuid;
+  appData.data.activeEntry.entry_timestamp = db_entry_date;
+  appData.data.activeEntry.modified_timestamp = db_modified_date;
+  appData.data.activeEntry.mood = db_mood;;
+  appData.data.activeEntry.note = db_note;
+
+  appData.data.activeEntry.activity = [];
+  var a = db_activity.split(",");
+  for (var ii=0; ii<a.length; ii++) {
+    appData.data.activeEntry.activity.push(a[ii]);
+  }
+
+  appData.data.activeEntry.state = "edit";
+}
+
 function setupTimeline() {
 
   var db = g_ctx.db;
 
-  var ent = db.exec("select mood, activity, note, entry_date from capricy_entry order by entry_date desc");
+  var ent = db.exec("select mood, activity, note, entry_date, uuid from capricy_entry order by entry_date desc");
   if (ent.length == 0) { return; }
+
+  var dedup_row = [];
+  var seen_uuid = {};
+  for (var ii=0; ii<ent[0].values.length; ii++) {
+    var db_uuid = ent[0].values[ii][4];
+    if (db_uuid in seen_uuid) { continue; }
+    seen_uuid[db_uuid] = true;
+    dedup_row.push(ent[0].values[ii]);
+
+
+  }
 
   var ui_entry_list = _gebi("timeline_entry-list");
   ui_entry_list.innerHTML = "";
-  for (var ii=0; ii<ent[0].values.length; ii++) {
+  //for (var ii=0; ii<ent[0].values.length; ii++) {
+  for (var ii=0; ii<dedup_row.length; ii++) {
+
+    /*
+    var db_mood       = ent[0].values[ii][0];
+    var db_activity   = ent[0].values[ii][1];
+    var db_note       = ent[0].values[ii][2];
+    var db_entry_date = ent[0].values[ii][3];
+    var db_uuid       = ent[0].values[ii][4];
+    */
+
+    var db_mood       = dedup_row[ii][0];
+    var db_activity   = dedup_row[ii][1];
+    var db_note       = dedup_row[ii][2];
+    var db_entry_date = dedup_row[ii][3];
+    var db_uuid       = dedup_row[ii][4];
 
     var item = _div(["item"]);
 
       var lface = _div(["ui", "tiny", "image"]);
       item.appendChild(lface);
-        var im = _mood_icon(ent[0].values[ii][0]);
-        //lface.appendChild( _img("asset/mood/face-awesome-color-active.svg") );
+        var im = _mood_icon(db_mood);
         lface.appendChild( _img(im) );
 
       var content = _div(["middle", "aligned", "tiny", "content"]);
@@ -747,39 +863,37 @@ function setupTimeline() {
         var hdr = _div(["header"], "font-size:7vh;");
         content.appendChild(hdr);
 
-          //hdr.appendChild( _text("2020-05-12 \u00A0 \u00A0 \u00A0") );
-          //
-          var entry_date = ent[0].values[ii][3].split(" ")[0];
-          //hdr.appendChild( _text(ent[0].values[ii][3] + " \u00A0 \u00A0 \u00A0 \u00A0" ) );
+          var entry_date = db_entry_date.split(" ")[0];
           hdr.appendChild( _text(entry_date + " \u00A0 \u00A0 \u00A0 \u00A0" ) );
 
-          var a = ent[0].values[ii][1].split(",");
-
+          var a = db_activity.split(",");
 
           for (var jj=0; jj<a.length; jj++) {
             if (a[jj].length==0) { continue; }
-            var im = _activity_icon(a[jj]);
-
-            console.log(">>", a[jj], im);
+            var im = _activity_icon_img(a[jj]);
 
             hdr.appendChild( _img(im, "height:8vh;") );
             hdr.appendChild( _text(" ") );
           }
 
-
-          /*
-          hdr.appendChild( _img("asset/mood/face-awesome-color-active.svg", "height:8vh;") );
-          hdr.appendChild( _img("asset/mood/face-awesome-color-active.svg", "height:8vh;") );
-          hdr.appendChild( _text(" ") );
-          hdr.appendChild( _img("asset/mood/face-awesome-color-active.svg", "height:8vh;") );
-          hdr.appendChild( _text(" ") );
-          */
-
         var descr = _div(["description"], "font-size:6vh;");
         content.appendChild(descr);
-          descr.appendChild( _text(ent[0].values[ii][2]) );
+          descr.appendChild( _text(db_note) );
           var descr_0 = _div(["ui", "right", "floated", "secondary", "button"], "background: none;");
-          descr_0.appendChild( _img("asset/noun_edit_2490873.svg", "height:10vh;") );
+          var im = _img("asset/noun_edit_2490873.svg", "height:10vh;");
+          im.onclick = (function(x) {
+            return function() {
+              setupActiveEntry(x);
+              uiEntryFill();
+              uiEntryMoodShow();
+              uiEntryTitle("Editing " + appData.data.activeEntry.entry_timestamp);
+              setTimeout( function() {
+                Reveal.slide( uiData.pageIndex["ui-entry"] );
+              }, 200);
+              
+            };
+          })(db_uuid);
+          descr_0.appendChild( im );
 
           descr.appendChild(descr_0);
 
@@ -788,20 +902,93 @@ function setupTimeline() {
 
 }
 
-function _setup_callbacks() {
+function uiEntryMoodHide() {
+  var ele = document.getElementById("ui-entry_mood-hideshow");
+  ele.style.display = "none";
+}
 
+
+function uiEntryMoodShow() {
+  var ele = document.getElementById("ui-entry_mood-hideshow");
+  ele.style.display = "block";
+}
+
+function uiEntryTitle(txt) {
+  var ele = document.getElementById("ui-entry_title");
+  ele.innerHTML = txt;
+}
+
+function uiEntryClear() {
+  for (var ii=0; ii<5; ii++) {
+    var mood_id = "mood-" + ii.toString();
+    var ui_mood_id = "ui-entry_mood-" + ii.toString();
+    $("#" + ui_mood_id).attr("src", appData.icon.mood[mood_id].img["inactive"]);
+  }
+
+  var aopt = appData.data.activity_option;
+
+  for (var ii=0; ii<aopt.length; ii++) {
+    var aid = "ui-entry-activity-grid_" + aopt[ii].activity_id;
+    var icon_id = aopt[ii].icon_id;
+    $("#" + aid).attr("src", appData.icon.activity[icon_id].img["inactive"]);
+  }
+}
+
+
+function uiEntryFill(opt) {
+  var ae = appData.data.activeEntry;
+
+  populateActivityGrid(undefined, appData.data.activity_option);
+  uiEntryClear();
+
+  var mood_id = ae.mood;
+
+  $("#" + "ui-entry_" + mood_id).attr("src", appData.icon.mood[mood_id].img["active"]);
+
+  for (var ii=0; ii<ae.activity.length; ii++) {
+    var aid = ae.activity[ii];
+    var icon_info = _activity_icon(aid);
+    $("#" + "ui-entry-activity-grid_" + aid).attr("src", icon_info.img.active);
+  }
+
+  var ele = _gebi("ui-entry_note");
+  ele.value = ae.note;
+
+}
+
+
+function _setup_callbacks() {
 
   // "mood-landing" page
   //
   for (var ii=0; ii<5; ii++) {
     var mood_id = "mood-daily_mood-" + ii.toString();
+    var pfx = "mood-daily";
+    var sfx = "mood-" + ii.toString();
+    $("#" + mood_id).click(
+        (function(x,y) {
+          return function() {
+            var t = x + "_" + y;
+            ui_onClickMood(t);
+            ui_onClickMood("ui-entry_" + y);
+
+            uiEntryMoodHide();
+            setTimeout( function() {
+              Reveal.slide( uiData.pageIndex["ui-entry"] );
+            }, 200);
+          };
+        })(pfx, sfx)
+    );
+  }
+
+  // "ui-entry" (edit) page
+  //
+  for (var ii=0; ii<5; ii++) {
+    var mood_id = "ui-entry_mood-" + ii.toString();
     $("#" + mood_id).click(
         (function(x) {
           return function() {
             ui_onClickMood(x);
-            setTimeout( function() {
-              Reveal.slide( uiData.pageIndex["activity-daily"] );
-            }, 200);
           };
         })(mood_id)
     );
@@ -809,27 +996,27 @@ function _setup_callbacks() {
 
   // "activity-daily" page
   //
-  $("#activity-daily_add").click(
+  $("#ui-entry_add").click(
       (function(x) {
         return function() {
           var active_img = appData.icon.action.add.img.active;
-          $("#activity-daily_add").attr("src", active_img);
+          $("#ui-entry_add").attr("src", active_img);
           setTimeout( function() {
-            Reveal.slide( uiData.pageIndex["activity-daily-add"] );
-            $("#activity-daily_add").attr("src", appData.icon.action.add.img.inactive);
+            Reveal.slide( uiData.pageIndex["activity-add"] );
+            $("#ui-entry_add").attr("src", appData.icon.action.add.img.inactive);
           }, 200);
         };
       })()
   );
 
-  $("#activity-daily_confirm").click(
+  $("#ui-entry_confirm").click(
       (function(x) {
         return function() {
           var active_img = appData.icon.action.confirm.img.active;
-          $("#activity-daily_confirm").attr("src", active_img);
+          $("#ui-entry_confirm").attr("src", active_img);
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["timeline"] );
-            $("#activity-daily_confirm").attr("src", appData.icon.action.confirm.img.inactive);
+            $("#ui-entry_confirm").attr("src", appData.icon.action.confirm.img.inactive);
           }, 200);
           confirmEdit();
 
@@ -841,40 +1028,40 @@ function _setup_callbacks() {
   // "activity-daily-add" page
   //
 
-  $("#activity-daily-add_back").click(
+  $("#activity-add_back").click(
       (function(x) {
         return function() {
           var active_img = appData.icon.action.back.img.active;
-          $("#activity-daily-add_back").attr("src", active_img);
+          $("#activity-add_back").attr("src", active_img);
           setTimeout( function() {
-            Reveal.slide( uiData.pageIndex["activity-daily"] );
-            $("#activity-daily-add_back").attr("src", appData.icon.action.back.img.inactive);
+            Reveal.slide( uiData.pageIndex["ui-entry"] );
+            $("#activity-add_back").attr("src", appData.icon.action.back.img.inactive);
           }, 200);
         };
       })()
   );
 
-  $("#activity-daily-add_add").click(
+  $("#activity-add_add").click(
       (function(x) {
         return function() {
           var active_img = appData.icon.action.add.img.active;
-          $("#activity-daily-add_add").attr("src", active_img);
+          $("#activity-add_add").attr("src", active_img);
           setTimeout( function() {
-            Reveal.slide( uiData.pageIndex["activity-daily"] );
-            $("#activity-daily-add_add").attr("src", appData.icon.action.add.img.inactive);
+            Reveal.slide( uiData.pageIndex["ui-entry"] );
+            $("#activity-add_add").attr("src", appData.icon.action.add.img.inactive);
           }, 200);
         };
       })()
   );
 
-  $("#activity-daily-add_confirm").click(
+  $("#activity-add_confirm").click(
       (function(x) {
         return function() {
           var active_img = appData.icon.action.confirm.img.active;
-          $("#activity-daily-add_confirm").attr("src", active_img);
+          $("#activity-add_confirm").attr("src", active_img);
           setTimeout( function() {
-            Reveal.slide( uiData.pageIndex["activity-daily"] );
-            $("#activity-daily-add_confirm").attr("src", appData.icon.action.confirm.img.inactive);
+            Reveal.slide( uiData.pageIndex["ui-entry"] );
+            $("#activity-add_confirm").attr("src", appData.icon.action.confirm.img.inactive);
           }, 200);
         };
       })()
@@ -903,16 +1090,10 @@ function ui_init() {
   populateActivityGrid(undefined, activity_option);
   populateAddActivity();
 
-  populateActivityGrid("entry-edit-0-activity-grid", activity_option);
-  populateActivityGrid("entry-edit-1-activity-grid", activity_option);
-
-  populateMoodGrid("entry-edit-0-mood-grid", "0");
-  populateMoodGrid("entry-edit-1-mood-grid", "1");
-
-  //populateMoodGrid("mood-grid-1", "1");
-  //createNewActiveEntry();
-
   _setup_callbacks();
+
+  appData.data.activeEntry.entry_uuid = uuidv4();
+  appData.data.activeEntry.state = "daily"; 
 }
 
 (function ($) {

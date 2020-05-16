@@ -56,85 +56,132 @@
 
          <div class='ui five column grid'>
 
+
            <div class='row'>
-           <div class='column'>
-             <img
-               draggable='false'
-               onmousedown='return false;'
-               class='noselect'
-               id='mood-daily_mood-0' width='95px' src='asset/mood/face-horrible-color.svg' style='opacity:0.9;' >
+             <div class='column'>
+               <img
+                 draggable='false'
+                 onmousedown='return false;'
+                 class='noselect'
+                 id='mood-daily_mood-0' width='95px' src='asset/mood/face-horrible-color.svg' style='opacity:0.9;' >
+             </div>
+
+             <div class='column'>
+               <img
+                 draggable='false'
+                 onmousedown='return false;'
+                 class='noselect'
+                 id='mood-daily_mood-1' width='95px' src='asset/mood/face-sad-color.svg' style='opacity:0.9;' >
+             </div>
+
+             <div class='column'>
+               <img
+                 draggable='false'
+                 onmousedown='return false;'
+                 class='noselect'
+                 id='mood-daily_mood-2' width='95px' src='asset/mood/face-average-color.svg' style='opacity:0.9;' >
+              </div>
+
+             <div class='column'>
+               <img
+                 draggable='false'
+                 onmousedown='return false;'
+                 class='noselect'
+                 id='mood-daily_mood-3' width='95px' src='asset/mood/face-happy-color.svg' style='opacity:0.9;' >
+             </div>
+
+             <div class='column'>
+               <img
+                 draggable='false'
+                 onmousedown='return false;'
+                 class='noselect'
+                 id='mood-daily_mood-4' width='95px' src='asset/mood/face-awesome-color.svg' style='opacity:0.9;' >
+             </div>
            </div>
 
-           <div class='column'>
-             <img
-               draggable='false'
-               onmousedown='return false;'
-               class='noselect'
-               id='mood-daily_mood-1' width='95px' src='asset/mood/face-sad-color.svg' style='opacity:0.9;' >
-           </div>
+         </div> <!-- fiv ecolumn grid -->
 
-           <div class='column'>
-             <img
-               draggable='false'
-               onmousedown='return false;'
-               class='noselect'
-               id='mood-daily_mood-2' width='95px' src='asset/mood/face-average-color.svg' style='opacity:0.9;' >
-            </div>
-
-           <div class='column'>
-             <img
-               draggable='false'
-               onmousedown='return false;'
-               class='noselect'
-               id='mood-daily_mood-3' width='95px' src='asset/mood/face-happy-color.svg' style='opacity:0.9;' >
-           </div>
-
-           <div class='column'>
-             <img
-               draggable='false'
-               onmousedown='return false;'
-               class='noselect'
-               id='mood-daily_mood-4' width='95px' src='asset/mood/face-awesome-color.svg' style='opacity:0.9;' >
-           </div>
-
-           </div>
-
-         </div>
 
         </div>
         </section>
 
        <!--
-             _       _ _                    _   _       _ _         
-          __| | __ _(_) |_   _    __ _  ___| |_(_)_   _(_) |_ _   _ 
-         / _` |/ _` | | | | | |  / _` |/ __| __| \ \ / / | __| | | |
-        | (_| | (_| | | | |_| | | (_| | (__| |_| |\ V /| | |_| |_| |
-         \__,_|\__,_|_|_|\__, |  \__,_|\___|\__|_| \_/ |_|\__|\__, |
-                         |___/                                |___/ 
+							 _                  _              
+				 _   _(_)       ___ _ __ | |_ _ __ _   _ 
+				| | | | |_____ / _ \ '_ \| __| '__| | | |
+				| |_| | |_____|  __/ | | | |_| |  | |_| |
+				 \__,_|_|      \___|_| |_|\__|_|   \__, |
+																					 |___/ 
        -->
 
 
-       <section id='activity-daily' style='margin-left:2.5vw;'>
+       <section id='ui-entry' style='margin-left:2.5vw;'>
         <div style='width:95vw; background:#efeeee;'>
 
          <div class='ui centered grid'>
 
            <div class='row'>
              <div class='center aligned column'>
-               <div class="title">What did you do today?</div>
+               <div id='ui-entry_title' class="title">What did you do today?</div>
              </div>
            </div>
 
+
+           <!-- <div id='ui-entry_mood-hideshow' style='display:none; width:100%;'> -->
+           <div id='ui-entry_mood-hideshow' style='display:block; width:100%;'>
+           <div class='row'>
+             <div class='ui five column vertically divided grid' style='width:100%;'>
+               <div class='row'></div>
+               <div class='row'></div>
+             </div>
+           </div>
+
+
+           <div class='row'> <div style='text-align:center; width:100%;'> <div id='foof'>
+
+           <div class='ui five column grid' style='width:100%;' align='center'>
+             <div class='row'>
+               <div class='column'>
+                 <img id='ui-entry_mood-0' src='asset/mood/face-horrible-color.svg' style='width:10vh;'>
+               </div>
+               <div class='column'>
+                 <img id='ui-entry_mood-1' src='asset/mood/face-sad-color.svg' style='width:10vh;'>
+               </div>
+               <div class='column'>
+                 <img id='ui-entry_mood-2' src='asset/mood/face-average-color.svg' style='width:10vh;'>
+               </div>
+               <div class='column'>
+                 <img id='ui-entry_mood-3' src='asset/mood/face-happy-color.svg' style='width:10vh;'>
+               </div>
+               <div class='column'>
+                 <img id='ui-entry_mood-4' src='asset/mood/face-awesome-color.svg' style='width:10vh;'>
+               </div>
+             </div>
+           </div>
+
+           </div> </div> </div>
+
+           </div>
+
+
+           <div class='row'>
+             <div class='ui five column vertically divided grid' style='width:100%;'>
+               <div class='row'></div>
+               <div class='row'></div>
+             </div>
+           </div>
+
+
            <div class='row'>
              <div style='text-align:center; width:100%;' >
-               <div id='activity-daily-activity-grid'> </div>
+               <div id='ui-entry-activity-grid'> </div>
              </div>
            </div>
 
            <div class='row'>
              <div class='center aligned column'>
                <img
-                 id='activity-daily_add'
+                 id='ui-entry_add'
                  src='asset/action/plus.svg'
                  style='opacity:0.9; width:10vh; height:10vh;' >
                <p>
@@ -145,14 +192,14 @@
 
            <div class='row'>
              <div class='ui input'>
-               <textarea id='activity-daily_note' name='note-0' rows='3' cols='30'></textarea>
+               <textarea id='ui-entry_note' name='note-0' rows='3' cols='30'></textarea>
              </div>
            </div>
 
            <div class='row'>
              <div class='center aligned column'>
                <img
-                 id='activity-daily_confirm'
+                 id='ui-entry_confirm'
                  src='asset/action/checkmark.svg'
                  style='opacity:0.9; width:10vh; height:10vh;' >
                <p>
@@ -168,19 +215,17 @@
         </section>
 
        <!--
-             _       _ _                    _   _       _ _                     _     _ 
-          __| | __ _(_) |_   _    __ _  ___| |_(_)_   _(_) |_ _   _    __ _  __| | __| |
-         / _` |/ _` | | | | | |  / _` |/ __| __| \ \ / / | __| | | |  / _` |/ _` |/ _` |
-        | (_| | (_| | | | |_| | | (_| | (__| |_| |\ V /| | |_| |_| | | (_| | (_| | (_| |
-         \__,_|\__,_|_|_|\__, |  \__,_|\___|\__|_| \_/ |_|\__|\__, |  \__,_|\__,_|\__,_|
-                         |___/                                |___/                     
+                    _   _       _ _                     _     _ 
+          __ _  ___| |_(_)_   _(_) |_ _   _    __ _  __| | __| |
+         / _` |/ __| __| \ \ / / | __| | | |  / _` |/ _` |/ _` |
+        | (_| | (__| |_| |\ V /| | |_| |_| | | (_| | (_| | (_| |
+         \__,_|\___|\__|_| \_/ |_|\__|\__, |  \__,_|\__,_|\__,_|
+                                       |___/                     
        -->
 
+        <section  id='activity-add' style='margin-left:2.5vw;'>
 
-        <section  id='activity-daily-add' style='margin-left:2.5vw;'>
         <div style='width:95vw; background:#efeeee;'>
-
-
 
          <div class='ui centered grid'>
 
@@ -190,21 +235,12 @@
                <button class='massive ui button'>Remove Activity</button>
              </div>
 
-             <!--
-             <div class='ui six wide column' style='text-align:center;'>
-               <div class="title">Add Activity</div>
-             </div>
-             <div class='ui six wide column'>
-               <div class="title">Remove Activity</div>
-             </div>
-             -->
-
            </div>
 
 
              <div class='row' style='background:#eeeeff;'>
                <div class='left aligned column'>
-                 <div class='ui divided items' style='background:#eeffee;' id='activity-daily-add-activity-grid'>
+                 <div class='ui divided items' style='background:#eeffee;' id='activity-add-activity-grid'>
 
                  </div>
                </div>
@@ -213,7 +249,7 @@
              <div class='row'>
                <div class='center aligned column'>
                  <img
-                   id='activity-daily-add_back'
+                   id='activity-add_back'
                    src='asset/action/back.svg'
                    style='opacity:0.9; height:10vh;' >
                  <p>
@@ -226,7 +262,7 @@
 
                <div class='center aligned column'>
                  <img
-                   id='activity-daily-add_add'
+                   id='activity-add_add'
                    src='asset/action/plus.svg'
                    style='opacity:0.9; height:10vh;' >
                  <p>
@@ -239,7 +275,7 @@
              <div class='row'>
                <div class='center aligned column'>
                  <img
-                   id='activity-daily-add_confirm'
+                   id='activity-add_confirm'
                    src='asset/action/checkmark.svg'
                    style='opacity:0.9; height:10vh;' >
                  <p>
@@ -254,6 +290,7 @@
 
 
         </div>
+
         </section>
 
        <!--
@@ -282,53 +319,6 @@
                 <div class='left aligned column'>
 
                   <div class='ui divided items' id='timeline_entry-list'>
-
-                    <!--
-
-                    <div class='item'>
-                      <div class='ui tiny image'> <img src='asset/mood/face-awesome-color-active.svg'> </div>
-                      <div class='middle aligned tiny content'>
-                        <div id='okokok' class='header' style='font-size:7vh;'>
-                          2020-02-23 &nbsp; &nbsp; &nbsp; &nbsp;
-                          <img src='asset/mood/face-awesome-color-active.svg' style='height:8vh;'>
-                          <img src='asset/mood/face-awesome-color-active.svg' style='height:8vh;'>
-                          <img src='asset/mood/face-awesome-color-active.svg' style='height:8vh;'>
-                          <img src='asset/mood/face-awesome-color-active.svg' style='height:8vh;'>
-                        </div>
-                        <div class='description' style='font-size:6vh;'>
-                          hello, friend
-                          <div class='ui right floated secondary button' style='background:none;'>
-                            <img src='asset/noun_edit_2490873.svg' style='height:10vh;'>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div class='item'>
-                      <div class='ui tiny image'> <img src='asset/mood/face-average-color-active.svg'> </div>
-                      <div class='content'>
-                        <div class='header' style='font-size:7vh;'>
-                          2020-02-23 &nbsp; &nbsp; &nbsp; &nbsp;
-                          <img src='asset/mood/face-awesome-color-active.svg' style='height:8vh;'>
-                          <img src='asset/mood/face-awesome-color-active.svg' style='height:8vh;'>
-                          <img src='asset/mood/face-awesome-color-active.svg' style='height:8vh;'>
-                          <img src='asset/mood/face-awesome-color-active.svg' style='height:8vh;'>
-                        </div>
-                        <div class='description' style='font-size:6vh;'>
-                          hello...
-                          <br>
-                          there
-                          <div class='ui right floated secondary button' style='background:none;'>
-                            <img src='asset/noun_edit_2490873.svg' style='height:10vh;'>
-                          </div>
-                        </div>
-
-                      </div>
-
-                    </div>
-                    -->
-
                   </div>
 
                 <!-- column -->
@@ -342,121 +332,6 @@
 
           <!-- container div -->
           </div>
-        </section>
-
-
-
-       <!--
-                  _ _ _                _                 ___  
-          ___  __| (_) |_    ___ _ __ | |_ _ __ _   _   / _ \ 
-         / _ \/ _` | | __|  / _ \ '_ \| __| '__| | | | | | | |
-        |  __/ (_| | | |_  |  __/ | | | |_| |  | |_| | | |_| |
-         \___|\__,_|_|\__|  \___|_| |_|\__|_|   \__, |  \___/ 
-                                                |___/         
-       -->
-
-        <section  id='entry-edit-0' style='margin-left:2.5vw;'>
-        <div style='width:95vw; background:#efeeee;'>
-
-          <div class='ui centered grid' >
-
-           <div class='row'>
-             <div class='column' style='text-align:center; width:100%;'>
-               <div class="title">... edit entry (0) ...</div>
-             </div>
-           </div>
-
-           <div class='row'>
-             <div style='text-align:center; width:100%;' >
-               <div id='entry-edit-0-mood-grid'></div>
-             </div>
-           </div>
-
-           <div class='row'>
-             <div class='ui five column vertically divided grid' style='width:100%;'>
-               <div class='row'></div>
-               <div class='row'></div>
-             </div>
-           </div>
-
-
-           <div class='row'>
-             <div style='text-align:center; ' >
-               <div id='entry-edit-0-activity-grid'> </div>
-             </div>
-           </div>
-
-           <div class='row'>
-
-             <div class='ui six wide column' style='text-align:center;'>
-               <img
-                 id='add-activity-0'
-                 src='asset/action/plus.svg'
-                 class='navigate-activity-daily'
-                 style='opacity:0.9; width:10vh; height:10vh;'
-                 data-page-name='add-activity-0'
-                 data-page-trans="slide-in-from-right">
-               <p> Add </p>
-             </div>
-
-           </div>
-
-           <div class='row'>
-             <div class='ui input'>
-               <textarea id='note-0' name='note-0' rows='3' cols='30'></textarea>
-             </div>
-           </div>
-           
-           <div class='row'>
-
-             <div class='ui three wide column' style='text-align:center;'>
-               <img
-                 id='confirm-activity-0'
-                 src='asset/action/checkmark.svg'
-                 class='navigate-activity-daily'
-                 style='opacity:0.9; width:10vh; height:10vh;'
-                 data-page-name='timeline'
-                 data-page-trans="slide-in-from-top">
-               <p> confirm </p>
-             </div>
-
-           </div>
-
-           <div class='row'>
-
-             <div class='two ui buttons'>
-               <button class='massive ui button'>Back to Timeline</button>
-               <button class='massive ui button'>Add Activity</button>
-             </div>
-
-
-             <!--
-             <div class="navigate" data-page-name="timeline" data-page-trans="slide-in-from-top">back to timeline</div>
-             <div class="navigate" data-page-name="add-activity-0" data-page-trans="slide-in-from-right">to add activity</div>
-             -->
-
-           </div>
-
-         </div>
-
-
-        </div>
-        </section>
-
-
-       <!--
-                   _     _              _   _       _ _            ___  
-          __ _  __| | __| |   __ _  ___| |_(_)_   _(_) |_ _   _   / _ \ 
-         / _` |/ _` |/ _` |  / _` |/ __| __| \ \ / / | __| | | | | | | |
-        | (_| | (_| | (_| | | (_| | (__| |_| |\ V /| | |_| |_| | | |_| |
-         \__,_|\__,_|\__,_|  \__,_|\___|\__|_| \_/ |_|\__|\__, |  \___/ 
-                                                          |___/         
-       -->   
-
-        <section  id='activity-add-0' style='margin-left:2.5vw;'>
-        <div style='width:95vw;'>
-          edit add activity 0
-        </div>
         </section>
 
 
@@ -492,107 +367,6 @@
 
        </div>
        </section>
-
-       <!--  
-                  _ _ _                _                _ 
-          ___  __| (_) |_    ___ _ __ | |_ _ __ _   _  / |
-         / _ \/ _` | | __|  / _ \ '_ \| __| '__| | | | | |
-        |  __/ (_| | | |_  |  __/ | | | |_| |  | |_| | | |
-         \___|\__,_|_|\__|  \___|_| |_|\__|_|   \__, | |_|
-                                                |___/     
-       -->
-
-       <section  id='entry-edit-1' style='margin-left:2.5vw;'>
-       <div style='width:95vw; background:#efeeee;'>
-         <div class='ui centered grid'>
-
-
-           <div class='row'>
-             <div class='column' style='text-align:center; width:100%;'>
-               <div class="title">... edit entry (1) ...</div>
-             </div>
-           </div>
-
-           <div class='row'>
-             <div style='text-align:center; width:100%;' >
-               <div id='entry-edit-1-mood-grid'></div>
-             </div>
-           </div>
-
-           <div class='row'>
-             <div class='ui five column vertically divided grid' style='width:100%;'>
-               <div class='row'></div>
-               <div class='row'></div>
-             </div>
-           </div>
-
-           <div class='row'>
-             <div style='text-align:center; ' >
-               <div id='entry-edit-1-activity-grid'> </div>
-             </div>
-           </div>
-
-           <div class='row'>
-
-             <div class='ui six wide column' style='text-align:center;'>
-               <img
-                 id='add-activity-1'
-                 src='asset/action/plus.svg'
-                 class='navigate-activity-daily'
-                 style='opacity:0.9; width:10vh; height:10vh;'
-                 data-page-name='add-activity-1'
-                 data-page-trans="slide-in-from-right">
-               <p> Add </p>
-             </div>
-
-           </div>
-
-           <div class='row'>
-             <div class='ui input'>
-               <textarea id='note-1' name='note-1' rows='3' cols='30'></textarea>
-             </div>
-           </div>
-
-           <div class='row'>
-
-             <div class='ui three wide column' style='text-align:center;'>
-               <img
-                 id='confirm-activity-1'
-                 src='asset/action/checkmark.svg'
-                 class='navigate-activity-daily'
-                 style='opacity:0.9; width:10vh; height:10vh;'
-                 data-page-name='timeline'
-                 data-page-trans="slide-in-from-top">
-               <p> confirm </p>
-             </div>
-
-           </div>
-
-           <div class='row'>
-
-             <div class="navigate" data-page-name="calendar" data-page-trans="slide-in-from-top">back to calendar</div>
-             <div class="navigate" data-page-name="add-activity-1" data-page-trans="slide-in-from-right">to add activity</div>
-           </div>
-
-          </div>
-
-        </div>
-        </section>
-
-       <!--
-                   _     _              _   _       _ _           _ 
-          __ _  __| | __| |   __ _  ___| |_(_)_   _(_) |_ _   _  / |
-         / _` |/ _` |/ _` |  / _` |/ __| __| \ \ / / | __| | | | | |
-        | (_| | (_| | (_| | | (_| | (__| |_| |\ V /| | |_| |_| | | |
-         \__,_|\__,_|\__,_|  \__,_|\___|\__|_| \_/ |_|\__|\__, | |_|
-                                                          |___/     
-       -->   
-
-        <section  id='activity-add-1' style='margin-left:2.5vw;'>
-        <div style='width:95vw;'>
-          add activity 1
-        </div>
-        </section>
 
         <!--
              _        _       
