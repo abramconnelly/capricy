@@ -393,7 +393,29 @@
 
         <section  id='config' style='margin-left:2.5vw;'>
         <div style='width:95vw;'>
-          config
+
+          <div class='ui centered grid'>
+
+            <div class='row'>
+              <div class='center aligned column'>
+                <div class='title'>Config</div>
+              </div>
+            </div>
+
+            <div class='row'>
+              <div class='center aligned column'>
+                <button class='massive ui button' onclick='exportDBToFile(g_ctx.db)' >Export DB (sqlite)</button>
+              </div>
+            </div>
+
+            <div class='row'>
+              <div class='center aligned column'>
+                <button class='massive ui button'>Import DB <br> <br> <input type='file' id='ui_import_db'> </button>
+              </div>
+            </div>
+
+          </div>
+
         </div>
         </section>
 

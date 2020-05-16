@@ -87,6 +87,23 @@ function loadDBFromLocalStorage(_sql, item_name) {
   return db;
 }
 
+function exportDBToFile(db) {
+  var blob = new Blob([db.export()]);
+  var objurl = URL.createObjectURL(blob);
+
+  var a = document.createElement("a");
+  a.setAttribute('href', objurl);
+  a.setAttribute('download', 'capricy.sqlite');
+  a.style.visibility = 'hidden';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function importDBFromFile(db) {
+
+}
+
 function _simple_query_print(db, query) {
   var res = db.exec(query);
   var delim = ",";
@@ -149,5 +166,6 @@ function initDefaultDB(db) {
 
   return db;
 }
+
 
 

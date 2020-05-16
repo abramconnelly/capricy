@@ -1094,6 +1094,20 @@ function ui_init() {
 
   appData.data.activeEntry.entry_uuid = uuidv4();
   appData.data.activeEntry.state = "daily"; 
+
+  var ul_fn = document.getElementById("ui_import_db");
+  ul_fn.onchange = function() {
+    var ul_fn = document.getElementById("ui_import_db");
+    var f = ul_fn.files[0];
+    var r = new FileReader();
+    r.onload = function() {
+      var ab = new Uint8Array(r.result);
+      var db = new g_ctx.SQL.Database(ab);
+      g_ctx.db = db;
+    };
+    r.readAsArrayBuffer(f);
+  };
+
 }
 
 (function ($) {
