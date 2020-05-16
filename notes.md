@@ -3,7 +3,7 @@
 
 todo:
 
-* import/export sqlite database
+* ~import/export sqlite database~
 * calendar
   - show average day's mood
   - clickable option to go to that position in timeline
