@@ -1,3 +1,15 @@
+2020-05-16
+---
+
+todo:
+
+* import/export sqlite database
+* calendar
+  - show average day's mood
+  - clickable option to go to that position in timeline
+* uuid for entries displayed
+* add/remove activity from available list
+* simple graph
 
 2020-02-24
 ---
