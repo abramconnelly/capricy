@@ -25,6 +25,9 @@
     <script src='js/sql-wasm.js' type='text/javascript'></script>
     <script src='js/capricy_sql_helper.js' type='text/javascript'></script>
 
+    <link rel='stylesheet' href='css/jsCalendar.css'>
+    <link rel='stylesheet' href='css/jsCalendar.clean.css'>
+    <script src='js/jsCalendar.js' type='text/javascript'></script>
 
   </head>
   <body>
@@ -42,6 +45,23 @@
 
        <section id='mood-daily' >
           <div style='width:95vw; background:#efeeee;'>
+
+          <div class='ui five column grid'>
+            <div class='row'>
+              <div class='column' ></div>
+              <div class='column' ></div>
+              <div class='column' ></div>
+              <div class='column' ></div>
+              <div class='column'>
+               <img
+                 draggable='false'
+                 onmousedown='return false;'
+                 class='noselect'
+                 id='mood-daily_config' src='asset/cog.svg' style='opacity:0.3; width:3vw;' >
+
+              </div>
+            </div>
+          </div>
 
           <div class='ui grid'>
             <div class='row'>
@@ -343,29 +363,25 @@
 
        --> 
 
-       <section  id='calendar' style='margin-left:2.5vw;'>
-       <div style='width:95vw;'>
-         <div class="title">... calendar ...</div>
+       <section  id='ui-calendar' style='margin-left:2.5vw;'>
+         <div style='width:95vw;'>
 
-         <div class='ui centered grid' style='margin-top:1px'>
-           <div class='row'>
+           <div class='ui centered grid' style='margin-top:1px'>
+
+             <div class='row'>
+               <div class='center aligned column'>
+                 <div class='title'>Calendar</div>
+               </div>
+             </div>
 
 
-             <div id='calendar'></div>
-
-
+             <div class='row'>
+               <!-- <div id='ui-calendar_calendar' class='auto-jsCalendar clean-theme' ></div> -->
+               <div id='ui-calendar_calendar' class='clean-theme'></div>
+             </div>
            </div>
+
          </div>
-
-
-         <div class="navigate" data-page-name="timeline" data-page-trans="slide-in-from-left">back to timeline</div>
-         <div class="navigate" data-page-name="edit-entry-1" data-page-trans="slide-in-from-bottom">edit entry</div>
-         <div class="navigate" data-page-name="stats" data-page-trans="slide-in-from-right">to stats</div>
-
-         <div class='footer-ele'> </div>
-
-
-       </div>
        </section>
 
         <!--
@@ -377,7 +393,7 @@
                               
         -->  
 
-        <section  id='stats' style='margin-left:2.5vw;'>
+        <section  id='ui-stats' style='margin-left:2.5vw;'>
         <div style='width:95vw;'>
           stats
         </div>
@@ -391,32 +407,32 @@
                                |___/ 
         -->
 
-        <section  id='config' style='margin-left:2.5vw;'>
+        <section  id='ui-config' style='margin-left:2.5vw;'>
         <div style='width:95vw;'>
 
-          <div class='ui centered grid'>
+            <div class='ui centered grid'>
 
-            <div class='row'>
-              <div class='center aligned column'>
-                <div class='title'>Config</div>
+              <div class='row'>
+                <div class='center aligned column'>
+                  <div class='title'>Config</div>
+                </div>
               </div>
-            </div>
 
-            <div class='row'>
-              <div class='center aligned column'>
-                <button class='massive ui button' onclick='exportDBToFile(g_ctx.db)' >Export DB (sqlite)</button>
+              <div class='row'>
+                <div class='center aligned column'>
+                  <button class='massive ui button' onclick='exportDBToFile(g_ctx.db)' >Export DB (sqlite)</button>
+                </div>
               </div>
-            </div>
 
-            <div class='row'>
-              <div class='center aligned column'>
-                <button class='massive ui button'>Import DB <br> <br> <input type='file' id='ui_import_db'> </button>
+              <div class='row'>
+                <div class='center aligned column'>
+                  <button class='massive ui button'>Import DB <br> <br> <input type='file' id='ui_import_db'> </button>
+                </div>
               </div>
+
             </div>
 
           </div>
-
-        </div>
         </section>
 
       </div>

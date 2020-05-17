@@ -956,6 +956,39 @@ function uiEntryFill(opt) {
 
 }
 
+function iso_date_tokenize(dt) {
+  var a = dt.split("T");
+  var ymd = a[0].split("-");
+  var hms = a[1].split("Z")[0].split(":");
+
+  return [ ymd[0], ymd[1], ymd[2], hms[0], hms[1], hms[2] ];
+}
+
+function calendarDayCallback(date, ele, info) {
+  var dt_iso = date.toISOString();
+  var dt_a = iso_date.tokenize(dt_iso);
+
+  var ymd = dt_a[0] + "-" + dt_a[1] + "-" + dt_a[2];
+
+  var row = g_ctx.db.exec("select entry_date, mood from capricy_entry where date(entry_date) = ?", ymd);
+  if (row.length == 0) { return; }
+
+  var mood = row[0].values[1];
+
+  if (info.isCurrentMonth) {
+    var r = Math.floor(6*Math.random());
+    if (r!=5) {
+      ele.style["border-radius"] = "50%";
+      if (r==0) { ele.style["background-color"] = 'rgb(255,127,122,0.5)'; }
+      if (r==1) { ele.style["background-color"] = '#61cb9b77'; }
+      if (r==2) { ele.style["background-color"] = '#d6c33f77'; }
+      if (r==3) { ele.style["background-color"] = '#387db377'; }
+      if (r==4) { ele.style["background-color"] = '#21496977'; }
+    }
+  }
+
+}
+
 
 function _setup_callbacks() {
 
@@ -1095,6 +1128,9 @@ function ui_init() {
   appData.data.activeEntry.entry_uuid = uuidv4();
   appData.data.activeEntry.state = "daily"; 
 
+
+  // import functionality
+  //
   var ul_fn = document.getElementById("ui_import_db");
   ul_fn.onchange = function() {
     var ul_fn = document.getElementById("ui_import_db");
@@ -1108,7 +1144,23 @@ function ui_init() {
     r.readAsArrayBuffer(f);
   };
 
+  // calendar
+  //
+
+  var cal = new jsCalendar("#ui-calendar_calendar");
+  /*
+  cal.colorfulSelect("13/05/2020", 'rgb(255,127,122,0.5)')
+  cal.colorfulSelect("12/05/2020", '#61cb9b77')
+  cal.colorfulSelect("11/05/2020", '#d6c33f77')
+  cal.colorfulSelect("10/05/2020", '#387db377')
+  cal.colorfulSelect("09/05/2020", '#21496977')
+  */
+
+  cal.onDateRender( calendarDayCallback );
+  g_ctx.calendar = cal;
 }
+
+
 
 (function ($) {
   $(document).ready(function() {
