@@ -91,9 +91,12 @@ function exportDBToFile(db) {
   var blob = new Blob([db.export()]);
   var objurl = URL.createObjectURL(blob);
 
+  var db_fn = "db-" + moment().format("YYYY-MM-DD") + ".sqlite";
+
   var a = document.createElement("a");
   a.setAttribute('href', objurl);
-  a.setAttribute('download', 'db.sqlite');
+  //a.setAttribute('download', 'db.sqlite');
+  a.setAttribute('download', db_fn);
   a.style.visibility = 'hidden';
   document.body.appendChild(a);
   a.click();

@@ -814,6 +814,9 @@ function setupTimeline() {
   var ent = db.exec("select mood, activity, note, entry_date, uuid from entry order by entry_date desc");
   if (ent.length == 0) { return; }
 
+  // Database is (meant to be) append only,
+  // so to get the most current entry, we deduplicate by entry uuid.
+  //
   var dedup_row = [];
   var seen_uuid = {};
   for (var ii=0; ii<ent[0].values.length; ii++) {
@@ -821,22 +824,11 @@ function setupTimeline() {
     if (db_uuid in seen_uuid) { continue; }
     seen_uuid[db_uuid] = true;
     dedup_row.push(ent[0].values[ii]);
-
-
   }
 
   var ui_entry_list = _gebi("ui-timeline_entry-list");
   ui_entry_list.innerHTML = "";
-  //for (var ii=0; ii<ent[0].values.length; ii++) {
   for (var ii=0; ii<dedup_row.length; ii++) {
-
-    /*
-    var db_mood       = ent[0].values[ii][0];
-    var db_activity   = ent[0].values[ii][1];
-    var db_note       = ent[0].values[ii][2];
-    var db_entry_date = ent[0].values[ii][3];
-    var db_uuid       = ent[0].values[ii][4];
-    */
 
     var db_mood       = dedup_row[ii][0];
     var db_activity   = dedup_row[ii][1];
@@ -853,7 +845,7 @@ function setupTimeline() {
 
       var content = _div(["middle", "aligned", "tiny", "content"]);
       item.appendChild(content);
-        var hdr = _div(["header"], "font-size:7vh;");
+        var hdr = _div(["header"], "font-size:7vh; opacity:0.8;");
         content.appendChild(hdr);
 
           var entry_date = db_entry_date.split(" ")[0];
@@ -873,7 +865,7 @@ function setupTimeline() {
         content.appendChild(descr);
           descr.appendChild( _text(db_note) );
           var descr_0 = _div(["ui", "right", "floated", "secondary", "button"], "background: none;");
-          var im = _img("asset/noun_edit_2490873.svg", "height:10vh;");
+          var im = _img("asset/noun_edit_2490873.svg", "height:10vh; opacity:0.8;");
           im.onclick = (function(x) {
             return function() {
               setupActiveEntry(x);
@@ -1058,7 +1050,19 @@ function _setup_callbacks() {
       (function(x) {
         return function() {
           var active_img = appData.icon.action.back.img.active;
-          $("#ui-activity-add_back").attr("src", active_img);
+          //$("#ui-activity-add_back").attr("src", active_img);
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["ui-entry"] );
+            $("#ui-activity-add_back").attr("src", appData.icon.action.back.img.inactive);
+          }, 200);
+        };
+      })()
+  );
+
+  $("#ui-activity-add_back1").click(
+      (function(x) {
+        return function() {
+          var active_img = appData.icon.action.back.img.active;
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-entry"] );
             $("#ui-activity-add_back").attr("src", appData.icon.action.back.img.inactive);
