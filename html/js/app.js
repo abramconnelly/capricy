@@ -27,25 +27,17 @@ var uiData = {
   "timelineModal": {},
   "pageIndex": {
 
-    "mood-landing" : 0,
+    "ui-mood-daily" : 0,
 
-    //"activity-daily" : 1,
     "ui-entry" : 1,
-    //"activity-daily-add" : 2,
-    "activity-add" : 2,
+    "ui-activity-add" : 2,
 
-    "timeline" : 3,
+    "ui-timeline" : 3,
 
-    "entry-edit-0" : 4,
-    "activity-add-0" : 5,
+    "ui-calendar" : 4,
 
-    "calendar" : 6,
-
-    "entry-edit-1" : 7,
-    "activity-add-1" : 8,
-
-    "stats" : 9,
-    "config" : 10
+    "ui-stats" : 5,
+    "ui-config" : 6
   },
 
   "activeEntry": {
@@ -308,7 +300,7 @@ function addActivityOption(activity_id) {
 
 function populateAddActivity(activity_list_id) {
   //if (typeof activity_list_id === "undefined") { activity_list_id = "activity-daily-add-activity-grid"; }
-  if (typeof activity_list_id === "undefined") { activity_list_id = "activity-add-activity-grid"; }
+  if (typeof activity_list_id === "undefined") { activity_list_id = "ui-activity-add-activity-grid"; }
   //if (typeof activity_list_id === "undefined") { activity_list_id = "ui-entry-activity-grid"; }
 
   var add_activity_order = [];
@@ -832,7 +824,7 @@ function setupTimeline() {
 
   }
 
-  var ui_entry_list = _gebi("timeline_entry-list");
+  var ui_entry_list = _gebi("ui-timeline_entry-list");
   ui_entry_list.innerHTML = "";
   //for (var ii=0; ii<ent[0].values.length; ii++) {
   for (var ii=0; ii<dedup_row.length; ii++) {
@@ -995,8 +987,8 @@ function _setup_callbacks() {
   // "mood-landing" page
   //
   for (var ii=0; ii<5; ii++) {
-    var mood_id = "mood-daily_mood-" + ii.toString();
-    var pfx = "mood-daily";
+    var mood_id = "ui-mood-daily_mood-" + ii.toString();
+    var pfx = "ui-mood-daily";
     var sfx = "mood-" + ii.toString();
     $("#" + mood_id).click(
         (function(x,y) {
@@ -1035,7 +1027,7 @@ function _setup_callbacks() {
           var active_img = appData.icon.action.add.img.active;
           $("#ui-entry_add").attr("src", active_img);
           setTimeout( function() {
-            Reveal.slide( uiData.pageIndex["activity-add"] );
+            Reveal.slide( uiData.pageIndex["ui-activity-add"] );
             $("#ui-entry_add").attr("src", appData.icon.action.add.img.inactive);
           }, 200);
         };
@@ -1048,7 +1040,7 @@ function _setup_callbacks() {
           var active_img = appData.icon.action.confirm.img.active;
           $("#ui-entry_confirm").attr("src", active_img);
           setTimeout( function() {
-            Reveal.slide( uiData.pageIndex["timeline"] );
+            Reveal.slide( uiData.pageIndex["ui-timeline"] );
             $("#ui-entry_confirm").attr("src", appData.icon.action.confirm.img.inactive);
           }, 200);
           confirmEdit();
@@ -1061,44 +1053,108 @@ function _setup_callbacks() {
   // "activity-daily-add" page
   //
 
-  $("#activity-add_back").click(
+  $("#ui-activity-add_back").click(
       (function(x) {
         return function() {
           var active_img = appData.icon.action.back.img.active;
-          $("#activity-add_back").attr("src", active_img);
+          $("#ui-activity-add_back").attr("src", active_img);
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-entry"] );
-            $("#activity-add_back").attr("src", appData.icon.action.back.img.inactive);
+            $("#ui-activity-add_back").attr("src", appData.icon.action.back.img.inactive);
           }, 200);
         };
       })()
   );
 
-  $("#activity-add_add").click(
+  $("#ui-activity-add_add").click(
       (function(x) {
         return function() {
           var active_img = appData.icon.action.add.img.active;
-          $("#activity-add_add").attr("src", active_img);
+          $("#ui-activity-add_add").attr("src", active_img);
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-entry"] );
-            $("#activity-add_add").attr("src", appData.icon.action.add.img.inactive);
+            $("#ui-activity-add_add").attr("src", appData.icon.action.add.img.inactive);
           }, 200);
         };
       })()
   );
 
-  $("#activity-add_confirm").click(
+  $("#ui-activity-add_confirm").click(
       (function(x) {
         return function() {
           var active_img = appData.icon.action.confirm.img.active;
-          $("#activity-add_confirm").attr("src", active_img);
+          $("#ui-activity-add_confirm").attr("src", active_img);
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-entry"] );
-            $("#activity-add_confirm").attr("src", appData.icon.action.confirm.img.inactive);
+            $("#ui-activity-add_confirm").attr("src", appData.icon.action.confirm.img.inactive);
           }, 200);
         };
       })()
   );
+
+  //---
+
+  $("#ui-mood-daily_config").click(
+      (function(x) {
+        return function() {
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["ui-config"] );
+          }, 200);
+        };
+      })()
+  );
+
+  $("#ui-config_back").click(
+      (function(x) {
+        return function() {
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["ui-timeline"] );
+          }, 200);
+        };
+      })()
+  );
+
+  $("#ui-timeline_config").click(
+      (function(x) {
+        return function() {
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["ui-config"] );
+          }, 200);
+        };
+      })()
+  );
+
+  $("#ui-timeline_stats").click(
+      (function(x) {
+        return function() {
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["ui-stats"] );
+          }, 200);
+        };
+      })()
+  );
+
+  $("#ui-timeline_calendar").click(
+      (function(x) {
+        return function() {
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["ui-calendar"] );
+          }, 200);
+        };
+      })()
+  );
+
+  $("#ui-stats_back").click(
+      (function(x) {
+        return function() {
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["ui-timeline"] );
+          }, 200);
+        };
+      })()
+  );
+
+
 
 }
 

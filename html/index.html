@@ -43,23 +43,24 @@
                          |___/                               
        -->
 
-       <section id='mood-daily' >
+       <section id='ui-mood-daily' >
           <div style='width:95vw; background:#efeeee;'>
 
           <div class='ui five column grid'>
             <div class='row'>
-              <div class='column' ></div>
-              <div class='column' ></div>
-              <div class='column' ></div>
-              <div class='column' ></div>
               <div class='column'>
                <img
                  draggable='false'
                  onmousedown='return false;'
                  class='noselect'
-                 id='mood-daily_config' src='asset/cog.svg' style='opacity:0.3; width:3vw;' >
+                 id='ui-mood-daily_config' src='asset/cog.svg' style='opacity:0.3; width:3vw;' >
 
               </div>
+              <div class='column' ></div>
+              <div class='column' ></div>
+              <div class='column' ></div>
+              <div class='column' ></div>
+
             </div>
           </div>
 
@@ -83,7 +84,7 @@
                  draggable='false'
                  onmousedown='return false;'
                  class='noselect'
-                 id='mood-daily_mood-0' width='95px' src='asset/mood/face-horrible-color.svg' style='opacity:0.9;' >
+                 id='ui-mood-daily_mood-0' width='95px' src='asset/mood/face-horrible-color.svg' style='opacity:0.9;' >
              </div>
 
              <div class='column'>
@@ -91,7 +92,7 @@
                  draggable='false'
                  onmousedown='return false;'
                  class='noselect'
-                 id='mood-daily_mood-1' width='95px' src='asset/mood/face-sad-color.svg' style='opacity:0.9;' >
+                 id='ui-mood-daily_mood-1' width='95px' src='asset/mood/face-sad-color.svg' style='opacity:0.9;' >
              </div>
 
              <div class='column'>
@@ -99,7 +100,7 @@
                  draggable='false'
                  onmousedown='return false;'
                  class='noselect'
-                 id='mood-daily_mood-2' width='95px' src='asset/mood/face-average-color.svg' style='opacity:0.9;' >
+                 id='ui-mood-daily_mood-2' width='95px' src='asset/mood/face-average-color.svg' style='opacity:0.9;' >
               </div>
 
              <div class='column'>
@@ -107,7 +108,7 @@
                  draggable='false'
                  onmousedown='return false;'
                  class='noselect'
-                 id='mood-daily_mood-3' width='95px' src='asset/mood/face-happy-color.svg' style='opacity:0.9;' >
+                 id='ui-mood-daily_mood-3' width='95px' src='asset/mood/face-happy-color.svg' style='opacity:0.9;' >
              </div>
 
              <div class='column'>
@@ -115,7 +116,7 @@
                  draggable='false'
                  onmousedown='return false;'
                  class='noselect'
-                 id='mood-daily_mood-4' width='95px' src='asset/mood/face-awesome-color.svg' style='opacity:0.9;' >
+                 id='ui-mood-daily_mood-4' width='95px' src='asset/mood/face-awesome-color.svg' style='opacity:0.9;' >
              </div>
            </div>
 
@@ -126,12 +127,12 @@
         </section>
 
        <!--
-							 _                  _              
-				 _   _(_)       ___ _ __ | |_ _ __ _   _ 
-				| | | | |_____ / _ \ '_ \| __| '__| | | |
-				| |_| | |_____|  __/ | | | |_| |  | |_| |
-				 \__,_|_|      \___|_| |_|\__|_|   \__, |
-																					 |___/ 
+               _                  _              
+         _   _(_)       ___ _ __ | |_ _ __ _   _ 
+        | | | | |_____ / _ \ '_ \| __| '__| | | |
+        | |_| | |_____|  __/ | | | |_| |  | |_| |
+         \__,_|_|      \___|_| |_|\__|_|   \__, |
+                                           |___/ 
        -->
 
 
@@ -243,7 +244,7 @@
                                        |___/                     
        -->
 
-        <section  id='activity-add' style='margin-left:2.5vw;'>
+        <section  id='ui-activity-add' style='margin-left:2.5vw;'>
 
         <div style='width:95vw; background:#efeeee;'>
 
@@ -260,7 +261,7 @@
 
              <div class='row' style='background:#eeeeff;'>
                <div class='left aligned column'>
-                 <div class='ui divided items' style='background:#eeffee;' id='activity-add-activity-grid'>
+                 <div class='ui divided items' style='background:#eeffee;' id='ui-activity-add-activity-grid'>
 
                  </div>
                </div>
@@ -269,7 +270,7 @@
              <div class='row'>
                <div class='center aligned column'>
                  <img
-                   id='activity-add_back'
+                   id='ui-activity-add_back'
                    src='asset/action/back.svg'
                    style='opacity:0.9; height:10vh;' >
                  <p>
@@ -282,7 +283,7 @@
 
                <div class='center aligned column'>
                  <img
-                   id='activity-add_add'
+                   id='ui-activity-add_add'
                    src='asset/action/plus.svg'
                    style='opacity:0.9; height:10vh;' >
                  <p>
@@ -295,7 +296,7 @@
              <div class='row'>
                <div class='center aligned column'>
                  <img
-                   id='activity-add_confirm'
+                   id='ui-activity-add_confirm'
                    src='asset/action/checkmark.svg'
                    style='opacity:0.9; height:10vh;' >
                  <p>
@@ -323,8 +324,35 @@
        -->
 
 
-        <section  id='timeline' style='margin-left:0.5vw;'>
+        <section  id='ui-timeline' style='margin-left:0.5vw;'>
           <div style='width:95vw; background:#efeeee;' >
+
+            <div class='ui three column grid'>
+              <div class='row'>
+
+                <div class='column'>
+                  <img
+                    id='ui-timeline_config'
+                    src='asset/cog.svg'
+                    style='opacity:0.3; width:3vw;' >
+                </div>
+                <div class='column'>
+                  <img
+                    id='ui-timeline_calendar'
+                    src='asset/add_event.svg'
+                    style='opacity:0.3; width:3vw;' >
+                </div>
+                <div class='column'>
+                  <img
+                    id='ui-timeline_stats'
+                    src='asset/stats.svg'
+                    style='opacity:0.5; width:3vw;' >
+                </div>
+
+              </div>
+            </div>
+
+
             <div class='ui centered grid'>
 
               <div class='row'>
@@ -338,7 +366,7 @@
               <div class='row'>
                 <div class='left aligned column'>
 
-                  <div class='ui divided items' id='timeline_entry-list'>
+                  <div class='ui divided items' id='ui-timeline_entry-list'>
                   </div>
 
                 <!-- column -->
@@ -376,9 +404,16 @@
 
 
              <div class='row'>
-               <!-- <div id='ui-calendar_calendar' class='auto-jsCalendar clean-theme' ></div> -->
                <div id='ui-calendar_calendar' class='clean-theme'></div>
              </div>
+
+             <div class='row'>
+               <div class='center aligned column'>
+                 <span style='font-size:5vh;'>Add/Edit Entry</span>
+               </div>
+             </div>
+
+
            </div>
 
          </div>
@@ -390,13 +425,34 @@
         / __| __/ _` | __/ __|
         \__ \ || (_| | |_\__ \
         |___/\__\__,_|\__|___/
-                              
+
         -->  
 
         <section  id='ui-stats' style='margin-left:2.5vw;'>
-        <div style='width:95vw;'>
-          stats
-        </div>
+          <div style='width:95vw;'>
+
+            <div class='ui centered three column grid'>
+
+              <div class='row'>
+                <div class='left aligned column'>
+                  <img
+                    id='ui-stats_back'
+                    src='asset/noun_back_1394897.svg'
+                    style='opacity:0.5; height:3vw;' >
+                </div>
+
+                <div class='center aligned column'>
+                  <div class='title'>Stats</div>
+                </div>
+
+                <div class='right aligned column'>
+                </div>
+
+              </div>
+            </div> <!-- grid -->
+
+          </div> <!-- container section div -->
+
         </section>
 
         <!-- 
@@ -408,16 +464,44 @@
         -->
 
         <section  id='ui-config' style='margin-left:2.5vw;'>
-        <div style='width:95vw;'>
+          <div style='width:95vw;'>
 
-            <div class='ui centered grid'>
+          <!--
+            <div class='ui five column grid'>
+              <div class='row'>
+
+                <div class='column'>
+                </div>
+                <div class='column'></div>
+                <div class='column'></div>
+                <div class='column'></div>
+                <div class='column'></div>
+
+              </div>
+            </div>
+            -->
+
+            <div class='ui centered three column grid'>
 
               <div class='row'>
+                <div class='left aligned column'>
+                  <img
+                    id='ui-config_back'
+                    src='asset/noun_back_1394897.svg'
+                    style='opacity:0.5; height:3vw;' >
+                </div>
+
                 <div class='center aligned column'>
                   <div class='title'>Config</div>
                 </div>
-              </div>
 
+                <div class='right aligned column'>
+                </div>
+
+              </div>
+            </div>
+
+            <div class='ui centered grid'>
               <div class='row'>
                 <div class='center aligned column'>
                   <button class='massive ui button' onclick='exportDBToFile(g_ctx.db)' >Export DB (sqlite)</button>
