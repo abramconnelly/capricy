@@ -37,7 +37,8 @@ var uiData = {
     "ui-calendar" : 4,
 
     "ui-stats" : 5,
-    "ui-config" : 6
+    "ui-config" : 6,
+    "ui-about" : 7
   },
 
   "activeEntry": {
@@ -780,7 +781,7 @@ function _mood_icon(id) {
 
 function setupActiveEntry(uuid) {
   var db = g_ctx.db;
-  var ent = db.exec("select uuid, user_uuid, mood, activity, note, entry_date, modified_date from capricy_entry where uuid = ?", [uuid]);
+  var ent = db.exec("select uuid, user_uuid, mood, activity, note, entry_date, modified_date from entry where uuid = ?", [uuid]);
   if (ent.length==0) { return; }
 
   var db_uuid           = ent[0].values[0][0];
@@ -810,7 +811,7 @@ function setupTimeline() {
 
   var db = g_ctx.db;
 
-  var ent = db.exec("select mood, activity, note, entry_date, uuid from capricy_entry order by entry_date desc");
+  var ent = db.exec("select mood, activity, note, entry_date, uuid from entry order by entry_date desc");
   if (ent.length == 0) { return; }
 
   var dedup_row = [];
@@ -962,7 +963,7 @@ function calendarDayCallback(date, ele, info) {
 
   var ymd = dt_a[0] + "-" + dt_a[1] + "-" + dt_a[2];
 
-  var row = g_ctx.db.exec("select entry_date, mood from capricy_entry where date(entry_date) = ?", ymd);
+  var row = g_ctx.db.exec("select entry_date, mood from entry where date(entry_date) = ?", ymd);
   if (row.length == 0) { return; }
 
   var mood = row[0].values[1];
@@ -1099,27 +1100,51 @@ function _setup_callbacks() {
         return function() {
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-config"] );
-          }, 200);
+          }, 20);
         };
       })()
   );
+
+  $("#ui-mood-daily_about").click(
+      (function(x) {
+        return function() {
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["ui-about"] );
+          }, 20);
+        };
+      })()
+  );
+
+  //---
 
   $("#ui-config_back").click(
       (function(x) {
         return function() {
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-timeline"] );
-          }, 200);
+          }, 20);
         };
       })()
   );
+
+  $("#ui-config_about").click(
+      (function(x) {
+        return function() {
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["ui-about"] );
+          }, 20);
+        };
+      })()
+  );
+
+  //---
 
   $("#ui-timeline_config").click(
       (function(x) {
         return function() {
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-config"] );
-          }, 200);
+          }, 20);
         };
       })()
   );
@@ -1139,7 +1164,7 @@ function _setup_callbacks() {
         return function() {
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-calendar"] );
-          }, 200);
+          }, 20);
         };
       })()
   );
@@ -1149,7 +1174,29 @@ function _setup_callbacks() {
         return function() {
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-timeline"] );
-          }, 200);
+          }, 20);
+        };
+      })()
+  );
+
+  $("#ui-calendar_back").click(
+      (function(x) {
+        return function() {
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["ui-timeline"] );
+          }, 20);
+        };
+      })()
+  );
+
+  //---
+
+  $("#ui-about_back").click(
+      (function(x) {
+        return function() {
+          setTimeout( function() {
+            Reveal.slide( uiData.pageIndex["ui-timeline"] );
+          }, 20);
         };
       })()
   );

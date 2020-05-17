@@ -1,4 +1,4 @@
-var g_ctx =  { "SQL": {}, "init":false, "db":{}, "db_name":"capricy_db" };
+var g_ctx =  { "SQL": {}, "init":false, "db":{}, "db_name":"db" };
 
 
 // wasm file location (sql-wasm.wasm)
@@ -11,7 +11,7 @@ config = { locateFile: filename => `js/${filename}` }
 initSqlJs(config).then(function(_SQL){
   g_ctx.SQL = _SQL;
   g_ctx.init = true;
-  attachCapricyDB();
+  attachDB();
 });
 
 //" mood varchar," +
@@ -24,23 +24,23 @@ function insertEntry(row) {
   var sqlstr = "";
   var db = g_ctx.db;
   if (row.length == 5) {
-    sqlstr = "insert into capricy_entry (uuid, user_uuid, mood, activity, note) values (?, ?, ?, ?, ?)";
+    sqlstr = "insert into entry (uuid, user_uuid, mood, activity, note) values (?, ?, ?, ?, ?)";
     db.run(sqlstr, row);
   }
   else if (row.length == 6) {
-    sqlstr = "insert into capricy_entry (uuid, user_uuid, mood, activity, note, entry_date) values (?, ?, ?, ?, ?, ?)";
+    sqlstr = "insert into entry (uuid, user_uuid, mood, activity, note, entry_date) values (?, ?, ?, ?, ?, ?)";
     db.run(sqlstr, row);
   }
   else if (row.length == 7) {
-    sqlstr = "insert into capricy_entry (uuid, user_uuid, mood, activity, note, entry_date, modified_date) values (?, ?, ?, ?, ?, ?, ?)";
+    sqlstr = "insert into entry (uuid, user_uuid, mood, activity, note, entry_date, modified_date) values (?, ?, ?, ?, ?, ?, ?)";
     db.run(sqlstr, row);
   }
 
   saveDBToLocalStorage(g_ctx.db_name, g_ctx.db);
 }
 
-function attachCapricyDB() {
-  var x = localStorage.getItem("capricy_db");
+function attachDB() {
+  var x = localStorage.getItem("db");
   if (x === null) {
 
     console.log("DEBUG: initalizing default db");
@@ -48,13 +48,13 @@ function attachCapricyDB() {
     g_ctx.db = new g_ctx.SQL.Database();
     initDefaultDB(g_ctx.db);
 
-    saveDBToLocalStorage("capricy_db", g_ctx.db);
+    saveDBToLocalStorage("db", g_ctx.db);
   }
   else {
 
     console.log("DEBUG: loading database from localstorage");
 
-    g_ctx.db = loadDBFromLocalStorage(g_ctx.SQL, "capricy_db");
+    g_ctx.db = loadDBFromLocalStorage(g_ctx.SQL, "db");
   }
 }
 
@@ -93,7 +93,7 @@ function exportDBToFile(db) {
 
   var a = document.createElement("a");
   a.setAttribute('href', objurl);
-  a.setAttribute('download', 'capricy.sqlite');
+  a.setAttribute('download', 'db.sqlite');
   a.style.visibility = 'hidden';
   document.body.appendChild(a);
   a.click();
@@ -122,9 +122,7 @@ function initDefaultDB(db) {
   var sqlstr = "";
   var _r;
 
-  console.log("??");
-
-  sqlstr = "create table capricy_entry ( id INTEGER PRIMARY KEY," +
+  sqlstr = "create table entry ( id INTEGER PRIMARY KEY," +
     " uuid varchar," +
     " user_uuid varchar," +
     " mood varchar," +
@@ -139,27 +137,27 @@ function initDefaultDB(db) {
   // FROM sqlite_master
   // WHERE type='index'
   //
-  sqlstr = "create INDEX capricy_entry_idx0 on capricy_entry (uuid)";
+  sqlstr = "create INDEX entry_idx0 on entry (uuid)";
   db.run(sqlstr);
 
-  sqlstr = "create INDEX capricy_entry_idx1 on capricy_entry (user_uuid)";
+  sqlstr = "create INDEX entry_idx1 on entry (user_uuid)";
   db.run(sqlstr);
 
-  sqlstr = "create INDEX capricy_entry_idx2 on capricy_entry (uuid, user_uuid)";
+  sqlstr = "create INDEX entry_idx2 on entry (uuid, user_uuid)";
   db.run(sqlstr);
 
-  sqlstr = "create INDEX capricy_entry_idx3 on capricy_entry (entry_date)";
+  sqlstr = "create INDEX entry_idx3 on entry (entry_date)";
   db.run(sqlstr);
 
-  sqlstr = "create INDEX capricy_entry_idx4 on capricy_entry (user_uuid, entry_date)";
+  sqlstr = "create INDEX entry_idx4 on entry (user_uuid, entry_date)";
   db.run(sqlstr);
 
   //--
 
-  sqlstr = "create table capricy_db_version ( id INTEGER PRIMARY KEY, name varchar )";
+  sqlstr = "create table db_version ( id INTEGER PRIMARY KEY, name varchar )";
   db.run(sqlstr);
 
-  sqlstr = "insert into capricy_db_version values (0, '0.1.0')";
+  sqlstr = "insert into db_version values (0, '0.1.0')";
   db.run(sqlstr);
 
   //--
