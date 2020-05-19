@@ -28,9 +28,12 @@
     <link rel='stylesheet' href='css/jsCalendar.css'>
     <link rel='stylesheet' href='css/jsCalendar.clean.css'>
     <script src='js/jsCalendar.js' type='text/javascript'></script>
+    <script src='js/jsCalendar.datepicker.js' type='text/javascript'></script>
 
   </head>
+
   <body>
+
     <div class="reveal">
       <div class="slides" style='width:100%;' id='slide-container'>
 
@@ -286,47 +289,6 @@
 
             </div>
 
-            <!--
-          <div class='ui three column grid'>
-            <div class='row'>
-              <div class='center aligned column'>
-                <img
-                  id='ui-activity-add_back'
-                  src='asset/action/back.svg'
-                  style='opacity:0.9; height:10vh;' >
-                <p>
-                Back
-                </p>
-              </div>
-
-              <div class='center aligned column'> </div>
-
-              <div class='center aligned column'>
-                <img
-                  id='ui-activity-add_add'
-                  src='asset/action/plus.svg'
-                  style='opacity:0.9; height:10vh;' >
-                <p>
-                Add
-                </p>
-              </div>
-
-            </div>
-
-            <div class='row'>
-              <div class='center aligned column'></div>
-              <div class='center aligned column'>
-                <img
-                  id='ui-activity-add_confirm'
-                  src='asset/action/checkmark.svg'
-                  style='opacity:0.9; height:10vh;' >
-                <p>
-                Confirm
-              </p>
-              </div>
-              <div class='center aligned column'></div>
-              -->
-
             <div class='ui three column grid'>
               <div class='row'>
 
@@ -342,11 +304,7 @@
               </div>
             </div>
 
-            </div> <!-- ui centered grid -->
-
           </div> <!-- ui centered grid -->
-
-        </div>
 
         </section>
 
@@ -389,16 +347,56 @@
             </div>
 
 
-            <div class='ui centered grid'>
+            <div class='ui three column grid'>
+
+              <div class='row'>
+
+                <div class='center aligned column'>
+                  <div id='ui-timeline_start-display' onclick='uiTimeline("start")' >x</div>
+                </div>
+
+                <div class='center aligned column'>
+                  <div class='title' style='font-size:7vh; opacity:0.9;'>Timeline</div>
+                </div>
+
+                <div class='center aligned column'>
+                  <div id='ui-timeline_end-display' onclick='uiTimeline("end")' >y</div>
+                </div>
+
+              </div>
+
+              <div class='ui divider'></div>
+            </div>
+
+            <div id='ui-timeline_start-end-display' class='ui two column grid' style='display:none;' >
 
               <div class='row'>
                 <div class='center aligned column'>
-                  <div class='title' style='font-size:7vh; opacity:0.9;'>Timeline</div>
+                  Start
+                </div>
+                <div class='center aligned column'>
+                  End
+                </div>
+              </div>
+
+              <div class='row'>
+                <div class='center aligned column'>
+                  <div id='ui-timeline_start' class='ui centered grid' >
+                    <div id='ui-timeline_start-calendar' class='clean-theme'></div>
+                  </div>
+                </div>
+
+                <div class='center aligned column'>
+                  <div id='ui-timeline_end' class='ui centered grid' >
+                    <div id='ui-timeline_end-calendar' class='clean-theme'></div>
+                  </div>
                 </div>
               </div>
 
               <div class='ui divider'></div>
+            </div>
 
+            <div class='ui centered grid'>
               <div class='row'>
                 <div class='left aligned column'>
 

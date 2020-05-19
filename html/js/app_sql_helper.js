@@ -1,4 +1,4 @@
-var g_ctx =  { "SQL": {}, "init":false, "db":{}, "db_name":"db" };
+var g_ctx =  { "SQL": {}, "init":false, "db":{}, "db_name":"db", "db_ready":false };
 
 
 // wasm file location (sql-wasm.wasm)
@@ -12,6 +12,8 @@ initSqlJs(config).then(function(_SQL){
   g_ctx.SQL = _SQL;
   g_ctx.init = true;
   attachDB();
+
+  db_init();
 });
 
 //" mood varchar," +
@@ -43,18 +45,15 @@ function attachDB() {
   var x = localStorage.getItem("db");
   if (x === null) {
 
-    console.log("DEBUG: initalizing default db");
-
     g_ctx.db = new g_ctx.SQL.Database();
     initDefaultDB(g_ctx.db);
+    g_ctx.db_ready = true;
 
     saveDBToLocalStorage("db", g_ctx.db);
   }
   else {
-
-    console.log("DEBUG: loading database from localstorage");
-
     g_ctx.db = loadDBFromLocalStorage(g_ctx.SQL, "db");
+    g_ctx.db_ready = true;
   }
 }
 

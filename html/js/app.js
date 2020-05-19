@@ -41,10 +41,17 @@ var uiData = {
     "ui-about" : 7
   },
 
+  "timeline": {
+    "display":false,
+    "start" : null,
+    "end" : null
+  },
+
   "activeEntry": {
     "ui_moodId": null,
     "ui_activityId": null
   }
+
 };
 
 // Log entries consist of:
@@ -99,6 +106,11 @@ var appData = {
       "mood": null,
       "activity" : [],
       "note":""
+    },
+
+    "timeline": {
+      "start":null,
+      "end":null
     },
 
     "log" : { },
@@ -389,8 +401,6 @@ function populateActivityGrid(grid_id, activity_option) {
   //
   old_grid_ad = document.getElementById(grid_id);
 
-  console.log("???", grid_id, old_grid_ad);
-
   grid_ad = document.createElement('div');
   grid_ad.id = grid_id;
   grid_ad.className = "ui five column grid";
@@ -552,7 +562,6 @@ Reveal.addEventListener('slidechanged', function (event) {
   handleSlideScrolling(event.currentSlide);
 
   var x = event.currentSlide;
-  console.log(event.currentSlide, event.indexv, event.indexh);
 
   // timeline
   if (event.indexh == 3) {
@@ -565,15 +574,9 @@ Reveal.addEventListener('slidechanged', function (event) {
 //
 
 function confirmEdit(info) {
-  console.log("confirmEdit:", info);
-
   var ele;
 
-
-  //ele = document.getElementById("activity-daily_note");
   ele = document.getElementById("ui-entry_note");
-  console.log("note:", ele.value);
-  console.log(">>>", appData.data.activeEntry);
 
   var entry_id = appData.data.activeEntry.entry_uuid;
   var user_id = null;
@@ -590,8 +593,6 @@ function confirmEdit(info) {
 
   var entry_row = [ entry_id, user_id, mood, activity, note, create_date, modify_date ];
 
-  console.log("DEBUG: adding:", entry_row);
-
   insertEntry(entry_row);
 }
 
@@ -603,8 +604,6 @@ function _set_mood(ui_id) {
 function ui_onClickMood(ui_moodId) {
   var active_entry = appData.data.activeEntry;
 
-  console.log(ui_moodId);
-
   var tok = ui_moodId.split("_");
   var mood_page_id = tok[0];
   var mood_val = tok[1];
@@ -615,8 +614,6 @@ function ui_onClickMood(ui_moodId) {
     mood_icon_ele = mood_icon[mood_val];
   }
   else { return; }
-
-  console.log("DEBUG:", ui_moodId, active_entry.mood);
 
   if (active_entry.mood) {
     $("#" + mood_page_id + "_" + active_entry.mood ).attr("src", mood_icon[active_entry.mood].img["inactive"]);
@@ -801,6 +798,7 @@ function setupActiveEntry(uuid) {
   appData.data.activeEntry.activity = [];
   var a = db_activity.split(",");
   for (var ii=0; ii<a.length; ii++) {
+    if (a[ii].length==0) { continue; }
     appData.data.activeEntry.activity.push(a[ii]);
   }
 
@@ -808,11 +806,35 @@ function setupActiveEntry(uuid) {
 }
 
 function setupTimeline() {
-
   var db = g_ctx.db;
+  var additional_query_count = 0;
 
-  var ent = db.exec("select mood, activity, note, entry_date, uuid from entry order by entry_date desc");
+  var query_str = "select mood, activity, note, entry_date, uuid from entry ";
+  if (appData.data.timeline.start) {
+    if (additional_query_count == 0) {
+      query_str += " where date(entry_date) >= '" + appData.data.timeline.start + "'";
+      additional_query_count++;
+    }
+  }
+  if (appData.data.timeline.end) {
+    if (additional_query_count == 0) {
+      query_str += " where date(entry_date) <= '" + appData.data.timeline.end + "'";
+      additional_query_count++;
+    }
+    else {
+      query_str += " and date(entry_date) <= '" + appData.data.timeline.end + "'";
+      additional_query_count++;
+    }
+  }
+  query_str += " order by entry_date desc";
+
+  var ent = db.exec(query_str);
+
+  var ui_entry_list = _gebi("ui-timeline_entry-list");
+  ui_entry_list.innerHTML = "";
+
   if (ent.length == 0) { return; }
+
 
   // Database is (meant to be) append only,
   // so to get the most current entry, we deduplicate by entry uuid.
@@ -826,8 +848,6 @@ function setupTimeline() {
     dedup_row.push(ent[0].values[ii]);
   }
 
-  var ui_entry_list = _gebi("ui-timeline_entry-list");
-  ui_entry_list.innerHTML = "";
   for (var ii=0; ii<dedup_row.length; ii++) {
 
     var db_mood       = dedup_row[ii][0];
@@ -855,6 +875,9 @@ function setupTimeline() {
 
           for (var jj=0; jj<a.length; jj++) {
             if (a[jj].length==0) { continue; }
+
+            console.log("activity:", a[jj]);
+
             var im = _activity_icon_img(a[jj]);
 
             hdr.appendChild( _img(im, "height:8vh;") );
@@ -930,9 +953,12 @@ function uiEntryFill(opt) {
 
   $("#" + "ui-entry_" + mood_id).attr("src", appData.icon.mood[mood_id].img["active"]);
 
+  console.log("??", ae.activity, ae.activity.length);
+
   for (var ii=0; ii<ae.activity.length; ii++) {
     var aid = ae.activity[ii];
     var icon_info = _activity_icon(aid);
+    console.log(">>>", aid, icon_info);
     $("#" + "ui-entry-activity-grid_" + aid).attr("src", icon_info.img.active);
   }
 
@@ -949,31 +975,68 @@ function iso_date_tokenize(dt) {
   return [ ymd[0], ymd[1], ymd[2], hms[0], hms[1], hms[2] ];
 }
 
+function _sql_exec(db, query, param) {
+  var _res = { "column": [], "values":[]},
+      res = [];
+  var q = db.prepare(query, param);
+
+  while (q.step()) {
+    if (res.length==0) {
+      res.push(_res);
+      _res.column = q.getColumnNames();
+    }
+    _res.values.push( q.get() );
+  }
+  q.free();
+
+  console.log(res);
+  return res;
+}
+
 function calendarDayCallback(date, ele, info) {
   var dt_iso = date.toISOString();
-  var dt_a = iso_date.tokenize(dt_iso);
-
+  var dt_a = iso_date_tokenize(dt_iso);
   var ymd = dt_a[0] + "-" + dt_a[1] + "-" + dt_a[2];
 
-  var row = g_ctx.db.exec("select entry_date, mood from entry where date(entry_date) = ?", ymd);
+  var row = g_ctx.db.exec("select entry_date, mood from entry where date(entry_date) = '" + ymd + "' order by id desc");
+
   if (row.length == 0) { return; }
 
-  var mood = row[0].values[1];
+  var mood = row[0].values[0][1];
 
   if (info.isCurrentMonth) {
-    var r = Math.floor(6*Math.random());
-    if (r!=5) {
-      ele.style["border-radius"] = "50%";
-      if (r==0) { ele.style["background-color"] = 'rgb(255,127,122,0.5)'; }
-      if (r==1) { ele.style["background-color"] = '#61cb9b77'; }
-      if (r==2) { ele.style["background-color"] = '#d6c33f77'; }
-      if (r==3) { ele.style["background-color"] = '#387db377'; }
-      if (r==4) { ele.style["background-color"] = '#21496977'; }
-    }
+    ele.style["border-radius"] = "50%";
+    if (mood=='mood-4') { ele.style["background-color"] = 'rgb(255,127,122,0.5)'; }
+    if (mood=='mood-3') { ele.style["background-color"] = '#61cb9b77'; }
+    if (mood=='mood-2') { ele.style["background-color"] = '#d6c33f77'; }
+    if (mood=='mood-1') { ele.style["background-color"] = '#387db377'; }
+    if (mood=='mood-0') { ele.style["background-color"] = '#21496977'; }
   }
 
 }
 
+function calendarDayClickCallback(event, date) {
+  //console.log("calendar dateclick:", event, date);
+
+  var dt_iso = date.toISOString();
+  var dt_a = iso_date_tokenize(dt_iso);
+  var ymd = dt_a[0] + "-" + dt_a[1] + "-" + dt_a[2];
+
+  appData.data.timeline.start = ymd;
+  appData.data.timeline.end = ymd;
+
+  var x = document.getElementById("ui-timeline_start-display");
+  x.innerHTML = ymd;
+
+  var x = document.getElementById("ui-timeline_end-display");
+  x.innerHTML = ymd;
+
+  setTimeout( function() {
+    Reveal.slide( uiData.pageIndex["ui-timeline"] );
+  }, 20);
+
+
+}
 
 function _setup_callbacks() {
 
@@ -1049,12 +1112,9 @@ function _setup_callbacks() {
   $("#ui-activity-add_back").click(
       (function(x) {
         return function() {
-          var active_img = appData.icon.action.back.img.active;
-          //$("#ui-activity-add_back").attr("src", active_img);
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-entry"] );
-            $("#ui-activity-add_back").attr("src", appData.icon.action.back.img.inactive);
-          }, 200);
+          }, 20);
         };
       })()
   );
@@ -1062,11 +1122,9 @@ function _setup_callbacks() {
   $("#ui-activity-add_back1").click(
       (function(x) {
         return function() {
-          var active_img = appData.icon.action.back.img.active;
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-entry"] );
-            $("#ui-activity-add_back").attr("src", appData.icon.action.back.img.inactive);
-          }, 200);
+          }, 20);
         };
       })()
   );
@@ -1079,7 +1137,7 @@ function _setup_callbacks() {
           setTimeout( function() {
             Reveal.slide( uiData.pageIndex["ui-entry"] );
             $("#ui-activity-add_add").attr("src", appData.icon.action.add.img.inactive);
-          }, 200);
+          }, 20);
         };
       })()
   );
@@ -1167,6 +1225,7 @@ function _setup_callbacks() {
       (function(x) {
         return function() {
           setTimeout( function() {
+            g_ctx.calendar.refresh();
             Reveal.slide( uiData.pageIndex["ui-calendar"] );
           }, 20);
         };
@@ -1207,6 +1266,25 @@ function _setup_callbacks() {
 
 
 
+}
+
+function uiTimeline(f) {
+  console.log(">>>", f);
+  var x = document.getElementById("ui-timeline_start-end-display");
+
+  if (uiData.timeline.display) {
+    x.style.display = 'none';
+    uiData.timeline.display = false;
+  }
+  else {
+    x.style.display = 'block';
+    uiData.timeline.display = true;
+  }
+
+}
+
+function db_init() {
+  g_ctx.calendar.refresh();
 }
 
 function ui_init() {
@@ -1253,18 +1331,35 @@ function ui_init() {
 
   // calendar
   //
-
   var cal = new jsCalendar("#ui-calendar_calendar");
-  /*
-  cal.colorfulSelect("13/05/2020", 'rgb(255,127,122,0.5)')
-  cal.colorfulSelect("12/05/2020", '#61cb9b77')
-  cal.colorfulSelect("11/05/2020", '#d6c33f77')
-  cal.colorfulSelect("10/05/2020", '#387db377')
-  cal.colorfulSelect("09/05/2020", '#21496977')
-  */
-
   cal.onDateRender( calendarDayCallback );
+  cal.onDateClick( calendarDayClickCallback );
   g_ctx.calendar = cal;
+
+  var cal = new jsCalendar("#ui-timeline_start-calendar");
+  cal.onDateClick( function(ele, date, info) {
+    var dt_iso = date.toISOString();
+    var dt_a = iso_date_tokenize(dt_iso);
+    var ymd = dt_a[0] + "-" + dt_a[1] + "-" + dt_a[2];
+    var x = document.getElementById("ui-timeline_start-display");
+    x.innerHTML = ymd;
+    appData.data.timeline.start = ymd;
+    setupTimeline();
+  });
+  g_ctx.calendar_timeline_start = cal;
+
+  var cal = new jsCalendar("#ui-timeline_end-calendar");
+  cal.onDateClick( function(ele, date, info) {
+    var dt_iso = date.toISOString();
+    var dt_a = iso_date_tokenize(dt_iso);
+    var ymd = dt_a[0] + "-" + dt_a[1] + "-" + dt_a[2];
+    var x = document.getElementById("ui-timeline_end-display");
+    x.innerHTML = ymd;
+    appData.data.timeline.end = ymd;
+    setupTimeline();
+  });
+  g_ctx.calendar_timeline_end = cal;
+
 }
 
 

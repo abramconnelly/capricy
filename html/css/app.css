@@ -54,3 +54,12 @@
   /* background-size: cover; */
 
 }
+
+.calpicker {
+  padding: 5px 5px;
+  background: #ccc;
+  border: 0 none;
+  -wbekit-border-radius: 5px;
+  border-radius: 5px;
+  width:20vw;
+}
