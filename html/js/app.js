@@ -213,50 +213,50 @@ var appData = {
 
       // standard activities
       //
-      "icon-work": { "type":"standard", "id":"activity-050101", "icon_id":"icon-work", "img":{"active":"asset/activities-main/office-active.svg","inactive":"asset/activities-main/office.svg"} },
-      "icon-friends": { "type":"standard", "id": "activity-120000",  "icon_id":"icon-friends", "img":{"active":"asset/activities-main/group-active.svg","inactive":"asset/activities-main/group.svg"} },
-      "icon-date": { "type":"standard", "id": "activity-120100",  "icon_id":"icon-date", "img":{"active":"asset/activities-main/heart-active.svg","inactive":"asset/activities-main/heart.svg"} },
-      "icon-read": { "type":"standard", "id": "activity-120312",  "icon_id":"icon-read", "img":{"active":"asset/activities-main/book-active.svg","inactive":"asset/activities-main/book.svg"} },
-      "icon-game": { "type":"standard", "id": "activity-600058",  "icon_id":"icon-game", "img":{"active":"asset/activities-main/gamecontroller-active.svg","inactive":"asset/activities-main/gamecontroller.svg"} },
-      "icon-shop": { "type":"standard", "id": "activity-070000",  "icon_id":"icon-shop", "img":{"active":"asset/activities-main/shoppingbag-active.svg","inactive":"asset/activities-main/shoppingbag.svg"} },
-      "icon-meal": { "type":"standard", "id": "activity-110100",  "icon_id":"icon-meal", "img":{"active":"asset/activities-main/food-active.svg","inactive":"asset/activities-main/food.svg"} },
-      "icon-clean": { "type":"standard", "id": "activity-020101",  "icon_id":"icon-clean", "img":{"active":"asset/activities-main/broom-active.svg","inactive":"asset/activities-main/broom.svg"} },
-      //"icon-show": { "type":"standard", "id": "custom-show",    "icon_id":"icon-show", "img":{"active":"asset/activities-main/speaker-active.svg","inactive":"asset/activities-main/speaker.svg"} },
-      //"icon-music": { "type":"standard", "id": "activity-music", "icon_id":"icon-music", "img":{"active":"asset/activities-main/music-active.svg","inactive":"asset/activities-main/music.svg"} },
-      "icon-sleep": { "type":"standard", "id": "activity-010100","icon_id":"icon-sleep", "img":{"active":"asset/activities-main/sleep-active.svg","inactive":"asset/activities-main/sleep.svg"} },
-      "icon-laundry": { "type":"standard", "id": "activity-020102",  "icon_id":"icon-laundry", "img":{"active":"asset/activities-main/laundry-active.svg","inactive":"asset/activities-main/laundry.svg"} },
-      "icon-tv": { "type":"standard", "id": "activity-600025",  "icon_id":"icon-tv", "img":{"active":"asset/activities-main/tv-active.svg","inactive":"asset/activities-main/tv.svg"} },
-      //"icon-movie": { "type":"standard", "id": "custom-movie",     "icon_id":"icon-movie", "img":{"active":"asset/activities-main/movie-active.svg","inactive":"asset/activities-main/movie.svg"} },
-      //"icon-medication": { "type":"standard", "id": "custom-medication","icon_id":"icon-meds", "img":{"active":"asset/activities-main/pill-active.svg","inactive":"asset/activities-main/pill.svg"} }
+      "icon-work": { "type":"standard", "name":"work","activity_id":"activity-050101", "icon_id":"icon-work", "img":{"active":"asset/activities-main/office-active.svg","inactive":"asset/activities-main/office.svg"} },
+      "icon-friends": { "type":"standard", "name":"friends","activity_id": "activity-120000",  "icon_id":"icon-friends", "img":{"active":"asset/activities-main/group-active.svg","inactive":"asset/activities-main/group.svg"} },
+      "icon-date": { "type":"standard", "name":"date","activity_id": "activity-120100",  "icon_id":"icon-date", "img":{"active":"asset/activities-main/heart-active.svg","inactive":"asset/activities-main/heart.svg"} },
+      "icon-read": { "type":"standard", "name":"read","activity_id": "activity-120312",  "icon_id":"icon-read", "img":{"active":"asset/activities-main/book-active.svg","inactive":"asset/activities-main/book.svg"} },
+      "icon-game": { "type":"standard", "name":"game","activity_id": "activity-600058",  "icon_id":"icon-game", "img":{"active":"asset/activities-main/gamecontroller-active.svg","inactive":"asset/activities-main/gamecontroller.svg"} },
+      "icon-shop": { "type":"standard", "name":"shop","activity_id": "activity-070000",  "icon_id":"icon-shop", "img":{"active":"asset/activities-main/shoppingbag-active.svg","inactive":"asset/activities-main/shoppingbag.svg"} },
+      "icon-meal": { "type":"standard", "name":"meal","activity_id": "activity-110100",  "icon_id":"icon-meal", "img":{"active":"asset/activities-main/food-active.svg","inactive":"asset/activities-main/food.svg"} },
+      "icon-clean": { "type":"standard", "name":"clean","activity_id": "activity-020101",  "icon_id":"icon-clean", "img":{"active":"asset/activities-main/broom-active.svg","inactive":"asset/activities-main/broom.svg"} },
+      //"icon-show": { "type":"standard", "activity_id": "custom-show",    "icon_id":"icon-show", "img":{"active":"asset/activities-main/speaker-active.svg","inactive":"asset/activities-main/speaker.svg"} },
+      //"icon-music": { "type":"standard", "activity_id": "activity-music", "icon_id":"icon-music", "img":{"active":"asset/activities-main/music-active.svg","inactive":"asset/activities-main/music.svg"} },
+      "icon-sleep": { "type":"standard", "name":"sleep","activity_id": "activity-010100","icon_id":"icon-sleep", "img":{"active":"asset/activities-main/sleep-active.svg","inactive":"asset/activities-main/sleep.svg"} },
+      "icon-laundry": { "type":"standard", "name":"laundry","activity_id": "activity-020102",  "icon_id":"icon-laundry", "img":{"active":"asset/activities-main/laundry-active.svg","inactive":"asset/activities-main/laundry.svg"} },
+      "icon-tv": { "type":"standard", "name":"tv", "activity_id": "activity-600025",  "icon_id":"icon-tv", "img":{"active":"asset/activities-main/tv-active.svg","inactive":"asset/activities-main/tv.svg"} },
+      //"icon-movie": { "type":"standard", "activity_id": "custom-movie",     "icon_id":"icon-movie", "img":{"active":"asset/activities-main/movie-active.svg","inactive":"asset/activities-main/movie.svg"} },
+      //"icon-medication": { "type":"standard", "activity_id": "custom-medication","icon_id":"icon-meds", "img":{"active":"asset/activities-main/pill-active.svg","inactive":"asset/activities-main/pill.svg"} }
 
       // custom activities
       //
-      "icon-book": { "type":"custom", "id":"custom-book", "icon_id":"icon-book", "img":{"active":"asset/activities-custom/book-active.svg", "inactive":"asset/activities-custom/book.svg" } },
-      "icon-briefcase": { "type":"custom", "id":"custom-briefcase", "icon_id":"icon-briefcase", "img":{"active":"asset/activities-custom/briefcase-active.svg", "inactive":"asset/activities-custom/briefcase.svg" } },
-      "icon-broom": { "type":"custom", "id":"custom-broom", "icon_id":"icon-broom", "img":{"active":"asset/activities-custom/broom-active.svg", "inactive":"asset/activities-custom/broom.svg" } },
-      "icon-calendar": { "type":"custom", "id":"custom-calendar", "icon_id":"icon-calendar", "img":{"active":"asset/activities-custom/calendar-active.svg", "inactive":"asset/activities-custom/calendar.svg" } },
-      "icon-coffee1": { "type":"custom", "id":"custom-coffee1", "icon_id":"icon-coffee1", "img":{"active":"asset/activities-custom/coffee1-active.svg", "inactive":"asset/activities-custom/coffee1.svg" } },
-      "icon-coffee": { "type":"custom", "id":"custom-coffee", "icon_id":"icon-coffee", "img":{"active":"asset/activities-custom/coffee-active.svg", "inactive":"asset/activities-custom/coffee.svg" } },
-      "icon-fastfood": { "type":"custom", "id":"custom-fastfood", "icon_id":"icon-fastfood", "img":{"active":"asset/activities-custom/fastfood-active.svg", "inactive":"asset/activities-custom/fastfood.svg" } },
-      "icon-food": { "type":"custom", "id":"custom-food", "icon_id":"icon-food", "img":{"active":"asset/activities-custom/food-active.svg", "inactive":"asset/activities-custom/food.svg" } },
-      "icon-gamecontroller": { "type":"custom", "id":"custom-gamecontroller", "icon_id":"icon-gamecontroller", "img":{"active":"asset/activities-custom/gamecontroller-active.svg", "inactive":"asset/activities-custom/gamecontroller.svg" } },
-      "icon-group": { "type":"custom", "id":"custom-group", "icon_id":"icon-group", "img":{"active":"asset/activities-custom/group-active.svg", "inactive":"asset/activities-custom/group.svg" } },
-      "icon-heart": { "type":"custom", "id":"custom-heart", "icon_id":"icon-heart", "img":{"active":"asset/activities-custom/heart-active.svg", "inactive":"asset/activities-custom/heart.svg" } },
-      "icon-internet": { "type":"custom", "id":"custom-internet", "icon_id":"icon-internet", "img":{"active":"asset/activities-main/wifi-active.svg","inactive":"asset/activities-main/wifi.svg"} },
+      "icon-book": { "type":"custom", "name":"book","activity_id":"custom-book", "icon_id":"icon-book", "img":{"active":"asset/activities-custom/book-active.svg", "inactive":"asset/activities-custom/book.svg" } },
+      "icon-briefcase": { "type":"custom", "name":"briefcase","activity_id":"custom-briefcase", "icon_id":"icon-briefcase", "img":{"active":"asset/activities-custom/briefcase-active.svg", "inactive":"asset/activities-custom/briefcase.svg" } },
+      "icon-broom": { "type":"custom", "name":"broom","activity_id":"custom-broom", "icon_id":"icon-broom", "img":{"active":"asset/activities-custom/broom-active.svg", "inactive":"asset/activities-custom/broom.svg" } },
+      "icon-calendar": { "type":"custom", "name":"calendar","activity_id":"custom-calendar", "icon_id":"icon-calendar", "img":{"active":"asset/activities-custom/calendar-active.svg", "inactive":"asset/activities-custom/calendar.svg" } },
+      "icon-coffee1": { "type":"custom", "name":"coffee","activity_id":"custom-coffee1", "icon_id":"icon-coffee1", "img":{"active":"asset/activities-custom/coffee1-active.svg", "inactive":"asset/activities-custom/coffee1.svg" } },
+      "icon-coffee": { "type":"custom", "name":"coffee","activity_id":"custom-coffee", "icon_id":"icon-coffee", "img":{"active":"asset/activities-custom/coffee-active.svg", "inactive":"asset/activities-custom/coffee.svg" } },
+      "icon-fastfood": { "type":"custom", "name":"fastfood","activity_id":"custom-fastfood", "icon_id":"icon-fastfood", "img":{"active":"asset/activities-custom/fastfood-active.svg", "inactive":"asset/activities-custom/fastfood.svg" } },
+      "icon-food": { "type":"custom", "name":"food","activity_id":"custom-food", "icon_id":"icon-food", "img":{"active":"asset/activities-custom/food-active.svg", "inactive":"asset/activities-custom/food.svg" } },
+      "icon-gamecontroller": { "type":"custom", "name":"game","activity_id":"custom-gamecontroller", "icon_id":"icon-gamecontroller", "img":{"active":"asset/activities-custom/gamecontroller-active.svg", "inactive":"asset/activities-custom/gamecontroller.svg" } },
+      "icon-group": { "type":"custom", "name":"group","activity_id":"custom-group", "icon_id":"icon-group", "img":{"active":"asset/activities-custom/group-active.svg", "inactive":"asset/activities-custom/group.svg" } },
+      "icon-heart": { "type":"custom", "name":"date","activity_id":"custom-heart", "icon_id":"icon-heart", "img":{"active":"asset/activities-custom/heart-active.svg", "inactive":"asset/activities-custom/heart.svg" } },
+      "icon-internet": { "type":"custom", "name":"web","activity_id":"custom-internet", "icon_id":"icon-internet", "img":{"active":"asset/activities-main/wifi-active.svg","inactive":"asset/activities-main/wifi.svg"} },
       //"icon-laundry": { "type":"custom", "icon_id":"icon-laundry", "img":{"active":"asset/activities-custom/laundry-active.svg", "inactive":"asset/activities-custom/laundry.svg" } },
-      "icon-luggage": { "type":"custom", "id":"custom-luggage", "icon_id":"icon-luggage", "img":{"active":"asset/activities-custom/luggage-active.svg", "inactive":"asset/activities-custom/luggage.svg" } },
-      "icon-medication": { "type":"custom", "id":"custom-medication", "icon_id":"icon-medication", "img":{"active":"asset/activities-main/pill-active.svg","inactive":"asset/activities-main/pill.svg"} },
-      "icon-movie": { "type":"custom", "id":"custom-movie", "icon_id":"icon-movie", "img":{"active":"asset/activities-custom/movie-active.svg", "inactive":"asset/activities-custom/movie.svg" } },
-      "icon-music": { "type":"custom", "id":"custom-music", "icon_id":"icon-music", "img":{"active":"asset/activities-custom/music-active.svg", "inactive":"asset/activities-custom/music.svg" } },
-      "icon-office": { "type":"custom", "id":"custom-office", "icon_id":"icon-office", "img":{"active":"asset/activities-custom/office-active.svg", "inactive":"asset/activities-custom/office.svg" } },
-      "icon-pill": { "type":"custom", "id":"custom-pill", "icon_id":"icon-pill", "img":{"active":"asset/activities-custom/pill-active.svg", "inactive":"asset/activities-custom/pill.svg" } },
-      "icon-shoppingbag": { "type":"custom", "id":"custom-shoppingbang", "icon_id":"icon-shoppingbag", "img":{"active":"asset/activities-custom/shoppingbag-active.svg", "inactive":"asset/activities-custom/shoppingbag.svg" } },
-      "icon-show": { "type":"custom", "id":"custom-show", "icon_id":"icon-show", "img":{"active":"asset/activities-main/speaker-active.svg","inactive":"asset/activities-main/speaker.svg"} },
+      "icon-luggage": { "type":"custom", "name":"travel","activity_id":"custom-luggage", "icon_id":"icon-luggage", "img":{"active":"asset/activities-custom/luggage-active.svg", "inactive":"asset/activities-custom/luggage.svg" } },
+      "icon-medication": { "type":"custom", "name":"meds", "activity_id":"custom-medication", "icon_id":"icon-medication", "img":{"active":"asset/activities-main/pill-active.svg","inactive":"asset/activities-main/pill.svg"} },
+      "icon-movie": { "type":"custom", "name":"movie","activity_id":"custom-movie", "icon_id":"icon-movie", "img":{"active":"asset/activities-custom/movie-active.svg", "inactive":"asset/activities-custom/movie.svg" } },
+      "icon-music": { "type":"custom", "name":"music","activity_id":"custom-music", "icon_id":"icon-music", "img":{"active":"asset/activities-custom/music-active.svg", "inactive":"asset/activities-custom/music.svg" } },
+      "icon-office": { "type":"custom", "name":"office","activity_id":"custom-office", "icon_id":"icon-office", "img":{"active":"asset/activities-custom/office-active.svg", "inactive":"asset/activities-custom/office.svg" } },
+      "icon-pill": { "type":"custom", "name":"meds","activity_id":"custom-pill", "icon_id":"icon-pill", "img":{"active":"asset/activities-custom/pill-active.svg", "inactive":"asset/activities-custom/pill.svg" } },
+      "icon-shoppingbag": { "type":"custom", "name":"shopping","activity_id":"custom-shoppingbang", "icon_id":"icon-shoppingbag", "img":{"active":"asset/activities-custom/shoppingbag-active.svg", "inactive":"asset/activities-custom/shoppingbag.svg" } },
+      "icon-show": { "type":"custom", "name":"show","activity_id":"custom-show", "icon_id":"icon-show", "img":{"active":"asset/activities-main/speaker-active.svg","inactive":"asset/activities-main/speaker.svg"} },
       //"icon-sleep": { "type":"custom", "icon_id":"icon-sleep", "img":{"active":"asset/activities-custom/sleep-active.svg", "inactive":"asset/activities-custom/sleep.svg" } },
-      "icon-speaker": { "type":"custom", "id":"custom-speaker", "icon_id":"icon-speaker", "img":{"active":"asset/activities-custom/speaker-active.svg", "inactive":"asset/activities-custom/speaker.svg" } },
-      "icon-sports": { "type":"custom", "id":"custom-sports", "icon_id":"icon-sports", "img":{"active":"asset/activities-custom/sports-active.svg", "inactive":"asset/activities-custom/sports.svg" } },
+      "icon-speaker": { "type":"custom", "name":"show","activity_id":"custom-speaker", "icon_id":"icon-speaker", "img":{"active":"asset/activities-custom/speaker-active.svg", "inactive":"asset/activities-custom/speaker.svg" } },
+      "icon-sports": { "type":"custom", "name":"sports","activity_id":"custom-sports", "icon_id":"icon-sports", "img":{"active":"asset/activities-custom/sports-active.svg", "inactive":"asset/activities-custom/sports.svg" } },
       //"icon-tv": { "type":"custom", "icon_id":"icon-tv", "img":{"active":"asset/activities-custom/tv-active.svg", "inactive":"asset/activities-custom/tv.svg" } },
-      "icon-wifi": { "type":"custom", "id":"custom-wifi", "icon_id":"icon-wifi", "img":{"active":"asset/activities-custom/wifi-active.svg", "inactive":"asset/activities-custom/wifi.svg" } }
+      "icon-wifi": { "type":"custom", "name":"web","activity_id":"custom-wifi", "icon_id":"icon-wifi", "img":{"active":"asset/activities-custom/wifi-active.svg", "inactive":"asset/activities-custom/wifi.svg" } }
 
     }
 
@@ -288,7 +288,7 @@ function addActivityOption(activity_id) {
   var act_icon_obj = appData.icon.activity;
   var add_act_id = "";
   for (var x in act_icon_obj) {
-    if (activity_id == act_icon_obj[x].id) {
+    if (activity_id == act_icon_obj[x].activity_id) {
       console.log(">>", x, act_icon_obj[x]);
       add_act_id = x;
       break;
@@ -311,14 +311,62 @@ function addActivityOption(activity_id) {
 // --
 
 
+function isActivityActive(aid, a_opt_list) {
+  for (var ii=0; ii<a_opt_list.length; ii++) {
+    if (aid == a_opt_list[ii].activity_id) { return true; }
+  }
+  return false;
+}
+
+function delActivity(obj, a_opt_list) {
+
+  for (var ii=0; ii<a_opt_list.length; ii++) {
+    if (a_opt_list[ii].activity_id == obj.activity_id) {
+      a_opt_list.splice(ii,1);
+      return;
+    }
+  }
+
+}
+
+function ui_clickAddActivity(activity_id) {
+  var is_active = isActivityActive(activity_id, appData.data.activity_option);
+
+  var d = _activity_icon(activity_id);
+
+  var ele_item = _gebi("ui-activity-add_item-" + activity_id);
+  var ele_icon = _gebi("ui-activity-add_icon-" + activity_id);
+  var ele_plusminus = _gebi("ui-activity-add_pm-" + activity_id);
+  if (is_active) {
+    ele_item.style = "background:none;";
+    ele_icon.src = d.img.inactive;
+    ele_plusminus.src = "asset/action/minus.svg";
+
+    var xx = delActivity(d, appData.data.activity_option);
+  }
+  else {
+    ele_item.style = "background:#ffffee;";
+    ele_icon.src = d.img.active;
+    ele_plusminus.src = "asset/action/plus.svg";
+
+    appData.data.activity_option.push({
+      "activity_id":activity_id,
+      "name":d.name,
+      "icon_id":d.icon_id
+    });
+
+  }
+
+  populateActivityGrid(undefined, appData.data.activity_option);
+
+}
+
 function populateAddActivity(activity_list_id) {
-  //if (typeof activity_list_id === "undefined") { activity_list_id = "activity-daily-add-activity-grid"; }
   if (typeof activity_list_id === "undefined") { activity_list_id = "ui-activity-add-activity-grid"; }
-  //if (typeof activity_list_id === "undefined") { activity_list_id = "ui-entry-activity-grid"; }
 
   var add_activity_order = [];
   for (var icon_id in appData.icon.activity) {
-    add_activity_order.push(icon_id);
+    add_activity_order.push({"activity_id": appData.icon.activity[icon_id].activity_id, "icon_id":icon_id, "name":appData.icon.activity[icon_id].name});
   }
 
 
@@ -326,53 +374,66 @@ function populateAddActivity(activity_list_id) {
   //
   old_activity_list = document.getElementById(activity_list_id);
 
-  activity_list = document.createElement("div");
-  activity_list.className = "ui divided items";
-  activity_list.style = "background:#eeffee;";
+  var activity_list = _div(["ui", "divided", "items"]);
+  activity_list.id = activity_list_id;
 
-  //for (var ii=0; ii<appData.icon.activity.custom.length; ii++) {
   for (var ii=0; ii<add_activity_order.length; ii++) {
+    var icon_id = add_activity_order[ii].icon_id;
+    var activity_id = add_activity_order[ii].activity_id;
+    var name = add_activity_order[ii].name;
 
-    var icon_id = add_activity_order[ii];
+    var is_active = isActivityActive(activity_id, appData.data.activity_option);
 
     var activity_icon = appData.icon.activity[icon_id];
 
-    //var custom_entry = appData.icon.activity.custom[ii];
     var custom_entry = activity_icon;
     var custom_img = custom_entry.img;
 
-    var item = document.createElement("div");
-    item.className = "item";
+    var item = _div(["item"]);
+    if (is_active) {
+      item.style = "background:#ffffee;";
+    }
+    item.id = "ui-activity-add_item-" + activity_id;
 
-    var div_img = document.createElement("div");
-    div_img.className = "ui tiny image";
-    var img = document.createElement("img");
-    img.src = custom_img.inactive;
+    var div_img = _div(["ui","tiny", "image"]);
+
+    var img = null;
+    if (is_active) {
+      img = _img(custom_img.active);
+    }
+    else {
+      img = _img(custom_img.inactive);
+    }
+    img.id = "ui-activity-add_icon-" + activity_id;
+
     div_img.appendChild(img);
 
-    var div_content = document.createElement("div");
-    div_content.className = "middle aligned tiny content";
+    var div_content = _div(["middle","aligned","tiny","content"]);
 
-    //var div_content_header = document.createElement("div");
-    //div_content_header.className = "header";
-    //div_content_header.innerHTML = "2020-01-02 10:03";
+    var div_content_description = _div(["description"], "font-size:10vh;");
+    div_content_description.innerHTML = name;
 
-    var div_content_description = document.createElement("div");
-    div_content_description.className = "description";
-    div_content_description.style = "font-size:10vh;";
-    div_content_description.innerHTML = "hello";
+    var div_content_description_button = _div(["ui", "right", "floated", "secondary", "button"], "background:none;");
 
-    var div_content_description_button = document.createElement("div");
-    div_content_description_button.className = "ui right floated secondary button";
-    div_content_description_button.style = "background:none;";
-    var _img = document.createElement("img");
-    _img.src = "asset/action/minus.svg";
-    _img.style = "height:10vh;";
-    div_content_description_button.appendChild(_img);
+    var img_btn = null;
+    if (is_active) {
+      img_btn = _img("asset/action/plus.svg", "height:10vh");
+    }
+    else {
+      img_btn = _img("asset/action/minus.svg", "height:10vh");
+    }
+    img_btn.id = "ui-activity-add_pm-" + activity_id;
+    img_btn.onclick = (function(aid) {
+      return function() {
+        ui_clickAddActivity(aid);
+        return false;
+      };
+    })(activity_id);
+
+    div_content_description_button.appendChild(img_btn);
 
     div_content_description.appendChild(div_content_description_button);
 
-    //div_content.appendChild(div_content_header);
     div_content.appendChild(div_content_description);
 
     item.appendChild(div_img);
@@ -407,7 +468,7 @@ function populateActivityGrid(grid_id, activity_option) {
   grid_ad.align = "center";
   grid_ad.style = "width:100%; ";
   var row_ele_count=0;
-  //for (var ii=0; ii<appData.icon.activity.standard.length; ii++) {
+
   for (var ii=0; ii<activity_option.length; ii++) {
 
     var activity_id = activity_option[ii].activity_id;
@@ -423,12 +484,10 @@ function populateActivityGrid(grid_id, activity_option) {
       row_ele_count=0;
     }
 
-    //var img_id = grid_id + "_" + appData.icon.activity.standard[ii].id;
     var img_id = grid_id + "_" + activity_id
 
     var img = document.createElement('img');
 
-    //img.src = appData.icon.activity.standard[ii].img.inactive;
     var activity_icon = appData.icon.activity[icon_id];
 
     img.src = activity_icon.img.inactive;
@@ -497,8 +556,7 @@ function populateMoodGrid(grid_id) {
 
     var mood_id = 'mood-' + ii.toString();
 
-    //var img_id = grid_id + ":" + appData.icon.mood[mood_id].id;
-    var img_id = grid_id + "_" + appData.icon.mood[mood_id].id;
+    var img_id = grid_id + "_" + appData.icon.mood[mood_id].activity_id;
     var img = document.createElement('img');
     img.src = appData.icon.mood[mood_id].img.inactive;
     img.id = img_id;
@@ -646,7 +704,7 @@ function __onClickActivity(activityId, uiSubId) {
 
   var aicon = appData.icon.activity.standard;
   for (var ii=0; ii<aicon.length; ii++) {
-    if (aicon[ii].id == activityId) {
+    if (aicon[ii].activity_id == activityId) {
       var ele = aicon[ii];
       $("#" + activityId + "-" + uiSubId).attr("src", ele.img[icon_state]);
     }
@@ -752,7 +810,7 @@ function _gebi(v) {
 
 function _activity_icon(activity_id) {
   for (var x in appData.icon.activity) {
-    if (appData.icon.activity[x].id == activity_id) {
+    if (appData.icon.activity[x].activity_id == activity_id) {
       return appData.icon.activity[x];
     }
   }
@@ -761,7 +819,7 @@ function _activity_icon(activity_id) {
 
 function _activity_icon_img(activity_id) {
   for (var x in appData.icon.activity) {
-    if (appData.icon.activity[x].id == activity_id) {
+    if (appData.icon.activity[x].activity_id == activity_id) {
       return appData.icon.activity[x].img.inactive;
     }
   }
@@ -875,8 +933,6 @@ function setupTimeline() {
 
           for (var jj=0; jj<a.length; jj++) {
             if (a[jj].length==0) { continue; }
-
-            console.log("activity:", a[jj]);
 
             var im = _activity_icon_img(a[jj]);
 
