@@ -6068,6 +6068,8 @@
 		hasHorizontalSlides: hasHorizontalSlides,
 		hasVerticalSlides: hasVerticalSlides,
 
+		resetVerticalSlides: resetVerticalSlides,
+
 		// Returns the previous slide element, may be null
 		getPreviousSlide: function() {
 			return previousSlide;

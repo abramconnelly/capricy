@@ -1,4 +1,4 @@
-var g_ctx =  { "SQL": {}, "init":false, "db":{}, "db_name":"db", "db_ready":false };
+var g_ctx =  { "SQL": {}, "init":false, "db":{}, "db_name":"db", "db_ready":false, "db_init":false };
 
 
 // wasm file location (sql-wasm.wasm)
@@ -13,7 +13,7 @@ initSqlJs(config).then(function(_SQL){
   g_ctx.init = true;
   attachDB();
 
-  db_init();
+  db_init(g_ctx);
 });
 
 //" mood varchar," +
@@ -48,6 +48,7 @@ function attachDB() {
     g_ctx.db = new g_ctx.SQL.Database();
     initDefaultDB(g_ctx.db);
     g_ctx.db_ready = true;
+    g_ctx.db_init = true;
 
     saveDBToLocalStorage("db", g_ctx.db);
   }
@@ -152,6 +153,37 @@ function initDefaultDB(db) {
   db.run(sqlstr);
 
   sqlstr = "create INDEX entry_idx4 on entry (user_uuid, entry_date)";
+  db.run(sqlstr);
+
+  //--
+
+  sqlstr = "create table activity ( id INTEGER PRIMARY KEY," +
+    " activity_id varchar," +
+    " name varchar," +
+    " icon_id varchar," +
+    " type varchar)" ;
+  db.run(sqlstr);
+
+  sqlstr = "create INDEX activity_idx0 on activity (activity_id)";
+  db.run(sqlstr);
+
+  sqlstr = "create INDEX activity_idx1 on activity (icon_id)";
+  db.run(sqlstr);
+
+  //--
+
+  //--
+
+  sqlstr = "create table activity_convenient ( id INTEGER PRIMARY KEY," +
+    " activity_id varchar," +
+    " name varchar," +
+    " icon_id varchar)";
+  db.run(sqlstr);
+
+  sqlstr = "create INDEX activity_convenient_idx0 on activity (activity_id)";
+  db.run(sqlstr);
+
+  sqlstr = "create INDEX activity_convenient_idx1 on activity (icon_id)";
   db.run(sqlstr);
 
   //--

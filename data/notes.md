@@ -17,5 +17,6 @@ Noun Project Icons
 | stats | stats | https://thenounproject.com/search/?q=stats&i=2630073 | CC-BY | stats by IconSrc from the Noun Project | ... |
 | calendar | add calendar | https://thenounproject.com/term/add-event/1918361/ | CC-BY | add event by Sophia Bai from the Noun Project | ... |
 | calendar | add calendar | https://thenounproject.com/term/add-event/534761/ | CC-BY | add event by Shmidt Sergey from the Noun Project | ... |
-| about | about | https://thenounproject.com/search/?q=about&i=3330263 | about by Jae Deasigner from the Noun Project | ... |
-| code | code branch | https://thenounproject.com/search/?q=git&i=1918506 | Git Branch by icon 54 from the Noun Project | ... |
+| about | about | https://thenounproject.com/search/?q=about&i=3330263 | CC-BY | about by Jae Deasigner from the Noun Project | ... |
+| code | code branch | https://thenounproject.com/search/?q=git&i=1918506 | CC-BY | Git Branch by icon 54 from the Noun Project | ... |
+| pencil | pencil | https://thenounproject.com/term/edit/2753905/ | CC-BY | edit by Bismillah from the Noun Project | ... |

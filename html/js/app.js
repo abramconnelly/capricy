@@ -1,4 +1,11 @@
-var g_slideHeight = 800;
+var g_slideHeight = 400;
+
+function _donk() {
+
+  var s = Reveal.getCurrentSlide();
+  Reveal.sync();
+  handleSlideScrolling(s); 
+}
 
 // https://stackoverflow.com/a/2117523
 // by user [broofa]
@@ -20,6 +27,14 @@ function utc2str(s) {
 //
 
 var uiData = {
+  "calendar":null,
+  "edit": {
+    "type": "none",
+    "active":false,
+    "activity_id":"",
+    "icon_id":"",
+    "undo_data":""
+  },
   "pageTransitionDelay" : 200,
   "focus" : "",
   "calendar" : {},
@@ -95,6 +110,7 @@ var uiData = {
 //   
 
 var appData = {
+  "db_ctx":null,
   "data" : {
 
     "activeEntry" : {
@@ -253,7 +269,7 @@ var appData = {
       "icon-shoppingbag": { "type":"custom", "name":"shopping","activity_id":"custom-shoppingbang", "icon_id":"icon-shoppingbag", "img":{"active":"asset/activities-custom/shoppingbag-active.svg", "inactive":"asset/activities-custom/shoppingbag.svg" } },
       "icon-show": { "type":"custom", "name":"show","activity_id":"custom-show", "icon_id":"icon-show", "img":{"active":"asset/activities-main/speaker-active.svg","inactive":"asset/activities-main/speaker.svg"} },
       //"icon-sleep": { "type":"custom", "icon_id":"icon-sleep", "img":{"active":"asset/activities-custom/sleep-active.svg", "inactive":"asset/activities-custom/sleep.svg" } },
-      "icon-speaker": { "type":"custom", "name":"show","activity_id":"custom-speaker", "icon_id":"icon-speaker", "img":{"active":"asset/activities-custom/speaker-active.svg", "inactive":"asset/activities-custom/speaker.svg" } },
+      "icon-speaker": { "type":"custom", "name":"speaker","activity_id":"custom-speaker", "icon_id":"icon-speaker", "img":{"active":"asset/activities-custom/speaker-active.svg", "inactive":"asset/activities-custom/speaker.svg" } },
       "icon-sports": { "type":"custom", "name":"sports","activity_id":"custom-sports", "icon_id":"icon-sports", "img":{"active":"asset/activities-custom/sports-active.svg", "inactive":"asset/activities-custom/sports.svg" } },
       //"icon-tv": { "type":"custom", "icon_id":"icon-tv", "img":{"active":"asset/activities-custom/tv-active.svg", "inactive":"asset/activities-custom/tv.svg" } },
       "icon-wifi": { "type":"custom", "name":"web","activity_id":"custom-wifi", "icon_id":"icon-wifi", "img":{"active":"asset/activities-custom/wifi-active.svg", "inactive":"asset/activities-custom/wifi.svg" } }
@@ -271,6 +287,19 @@ function _click() {
 
 // --
 // --
+function saveActivityOptionToDB() {
+  var db = appData.db_ctx.db;
+
+  db.run("delete from activity_convenient");
+
+  var aopt = appData.data.activity_option;
+  for (var ii=0; ii<aopt.length; ii++) {
+    var vals = [ aopt[ii].activity_id, aopt[ii].name, aopt[ii].icon_id ];
+    db.run("insert into activity_convenient (activity_id, name, icon_id) values (?, ?, ?)", vals);
+  }
+
+  saveDBToLocalStorage(appData.db_ctx.db_name, appData.db_ctx.db);
+}
 
 function addActivityOption(activity_id) {
   var cur_opt = appData.data.activity_option;
@@ -306,10 +335,41 @@ function addActivityOption(activity_id) {
 
   appData.data.activity_option.push(ent);
   populateActivityGrid(undefined, appData.data.activity_option);
+
+  //saveActivityOptionToDB();
 }
+
+function updateActivityName(activity_id, new_name) {
+  for (var ii=0; ii<appData.data.activity_option.length; ii++) {
+    if (appData.data.activity_option[ii].activity_id == activity_id) {
+      appData.data.activity_option[ii].name = new_name;
+      break;
+    }
+  }
+
+  for (var icon_id in appData.icon.activity) {
+    if (appData.icon.activity[icon_id].activity_id == activity_id) {
+      appData.icon.activity[icon_id].name = new_name;
+    }
+  }
+
+  var db = appData.db_ctx.db;
+  db.run("update activity set name = ? where activity_id = ?", [new_name, activity_id]);
+
+  populateActivityGrid(undefined, appData.data.activity_option);
+  saveActivityOptionToDB();
+}
+
 
 // --
 
+function clearUIEdit() {
+  uiData.edit.type = "none";
+  uiData.edit.active = false;
+  uiData.activity_id = "";
+  uiData.icon_id = "";
+  uiData.undo_data = "";
+}
 
 function isActivityActive(aid, a_opt_list) {
   for (var ii=0; ii<a_opt_list.length; ii++) {
@@ -329,6 +389,64 @@ function delActivity(obj, a_opt_list) {
 
 }
 
+function ui_clickAddActivityEdit(activity_id) {
+
+  if (uiData.edit.type != "ui-add-activity_edit-activity-name") {
+    clearUIEdit();
+    uiData.edit.type = "ui-add-activity_edit-activity-name";
+    uiData.edit.active = false;
+    uiData.edit.activity_id = activity_id;
+  }
+
+  if (activity_id != uiData.edit.activity_id) {
+
+    console.log("switched....", uiData.edit);
+
+    // stop editing prev selected....
+    //
+    var prev_act_id = uiData.edit.activity_id;
+    var ele = document.getElementById("ui-activity-add_name-" + prev_act_id);
+    ele.value = uiData.edit.undo_data;
+    ele.setAttribute("readonly", "readonly");
+    ele.style.background = "none";
+    var div_ele = _gebi("ui-activity-add_div-name-"+prev_act_id);
+    div_ele.style.background = "none";
+
+    ele = _gebi("ui-activity-add_name-" + activity_id);
+
+    uiData.edit.active = false;
+    uiData.edit.activity_id = activity_id;
+    uiData.edit.undo_data = ele.value;
+  }
+
+  if (uiData.edit.active) {
+    var ele = document.getElementById("ui-activity-add_name-" + activity_id);
+    ele.setAttribute("readonly", "readonly");
+    ele.style.background = "none";
+    uiData.edit.active = false;
+
+    var div_ele = _gebi("ui-activity-add_div-name-"+activity_id);
+    div_ele.style.background = "none";
+
+    //committing change
+    //
+
+    var new_name = ele.value;
+    updateActivityName(activity_id, new_name);
+  }
+  else {
+    var ele = document.getElementById("ui-activity-add_name-" + activity_id);
+    ele.removeAttribute("readonly");
+    ele.focus();
+    uiData.edit.active = true;
+    uiData.edit.undo_data = ele.value;
+
+    var div_ele = _gebi("ui-activity-add_div-name-"+activity_id);
+    div_ele.style.background = "#aaaaaa";
+  }
+
+}
+
 function ui_clickAddActivity(activity_id) {
   var is_active = isActivityActive(activity_id, appData.data.activity_option);
 
@@ -336,18 +454,18 @@ function ui_clickAddActivity(activity_id) {
 
   var ele_item = _gebi("ui-activity-add_item-" + activity_id);
   var ele_icon = _gebi("ui-activity-add_icon-" + activity_id);
-  var ele_plusminus = _gebi("ui-activity-add_pm-" + activity_id);
+  //var ele_plusminus = _gebi("ui-activity-add_pm-" + activity_id);
   if (is_active) {
     ele_item.style = "background:none;";
     ele_icon.src = d.img.inactive;
-    ele_plusminus.src = "asset/action/minus.svg";
+    //ele_plusminus.src = "asset/action/minus.svg";
 
     var xx = delActivity(d, appData.data.activity_option);
   }
   else {
     ele_item.style = "background:#ffffee;";
     ele_icon.src = d.img.active;
-    ele_plusminus.src = "asset/action/plus.svg";
+    //ele_plusminus.src = "asset/action/plus.svg";
 
     appData.data.activity_option.push({
       "activity_id":activity_id,
@@ -359,6 +477,8 @@ function ui_clickAddActivity(activity_id) {
 
   populateActivityGrid(undefined, appData.data.activity_option);
 
+  console.log(">>> saving activity_convenient");
+  saveActivityOptionToDB();
 }
 
 function populateAddActivity(activity_list_id) {
@@ -366,7 +486,12 @@ function populateAddActivity(activity_list_id) {
 
   var add_activity_order = [];
   for (var icon_id in appData.icon.activity) {
-    add_activity_order.push({"activity_id": appData.icon.activity[icon_id].activity_id, "icon_id":icon_id, "name":appData.icon.activity[icon_id].name});
+    add_activity_order.push({
+      "activity_id": appData.icon.activity[icon_id].activity_id,
+      "icon_id":icon_id,
+      "name":appData.icon.activity[icon_id].name,
+      "type":appData.icon.activity[icon_id].type
+    });
   }
 
 
@@ -381,6 +506,7 @@ function populateAddActivity(activity_list_id) {
     var icon_id = add_activity_order[ii].icon_id;
     var activity_id = add_activity_order[ii].activity_id;
     var name = add_activity_order[ii].name;
+    var activity_type = add_activity_order[ii].type;
 
     var is_active = isActivityActive(activity_id, appData.data.activity_option);
 
@@ -405,39 +531,64 @@ function populateAddActivity(activity_list_id) {
       img = _img(custom_img.inactive);
     }
     img.id = "ui-activity-add_icon-" + activity_id;
-
-    div_img.appendChild(img);
-
-    var div_content = _div(["middle","aligned","tiny","content"]);
-
-    var div_content_description = _div(["description"], "font-size:10vh;");
-    div_content_description.innerHTML = name;
-
-    var div_content_description_button = _div(["ui", "right", "floated", "secondary", "button"], "background:none;");
-
-    var img_btn = null;
-    if (is_active) {
-      img_btn = _img("asset/action/plus.svg", "height:10vh");
-    }
-    else {
-      img_btn = _img("asset/action/minus.svg", "height:10vh");
-    }
-    img_btn.id = "ui-activity-add_pm-" + activity_id;
-    img_btn.onclick = (function(aid) {
+    img.onclick = (function(aid) {
       return function() {
         ui_clickAddActivity(aid);
         return false;
       };
     })(activity_id);
 
-    div_content_description_button.appendChild(img_btn);
+    div_img.appendChild(img);
 
-    div_content_description.appendChild(div_content_description_button);
+    var div_content = _div(["middle","aligned","tiny","content"]);
 
-    div_content.appendChild(div_content_description);
+    /*
+    var div_content_name = _div(["description"], "font-size:10vh;");
+    div_content_name.id = "ui-activity-add_name-" + activity_id;
+    div_content_name.innerHTML = name;
+    */
+    var div_content_name = document.createElement("div");
+    div_content_name.classList.add("ui");
+    div_content_name.classList.add("transparent");
+    div_content_name.classList.add("input");
+    div_content_name.id = "ui-activity-add_div-name-" + activity_id;
+
+    var input_content_name = document.createElement("input");
+    input_content_name.id = "ui-activity-add_name-" + activity_id;
+    input_content_name.setAttribute("type", 'text');
+    input_content_name.setAttribute("value", name);
+    input_content_name.setAttribute("readonly", "readonly");
+
+    div_content_name.appendChild(input_content_name);
+
+    //div_content_name.innerHTML = name;
+
+    var div_content_name_button = _div(["ui", "right", "floated", "secondary", "button"], "background:none;");
+
+    var img_btn = null;
+
+    if (activity_type != "standard") {
+      img_btn = _img("asset/action/edit.svg", "height:10vh;");
+      img_btn.id = "ui-activity-add_edit-" + activity_id;
+      img_btn.onclick = (function(aid) {
+        return function() {
+          //ui_clickAddActivity(aid);
+          ui_clickAddActivityEdit(aid);
+          return false;
+        };
+      })(activity_id);
+    }
+
+    div_content_name.appendChild(div_content_name_button);
+
+    div_content.appendChild(div_content_name);
 
     item.appendChild(div_img);
     item.appendChild(div_content);
+
+    if (activity_type != "standard") {
+      item.appendChild(img_btn);
+    }
 
     activity_list.appendChild(item);
 
@@ -602,6 +753,7 @@ function resetSlideScrolling(slide) {
 
 function handleSlideScrolling(slide) {
   if (slide.scrollHeight >= g_slideHeight) {
+
     slide.classList.add('scrollable-slide');
     var ele = document.getElementById('slide-container');
     ele.style.width = '100%';
@@ -614,6 +766,7 @@ Reveal.addEventListener('ready', function (event) {
 });
 
 Reveal.addEventListener('slidechanged', function (event) {
+  Reveal.sync();
   if (event.previousSlide) {
     resetSlideScrolling(event.previousSlide);
   }
@@ -622,7 +775,8 @@ Reveal.addEventListener('slidechanged', function (event) {
   var x = event.currentSlide;
 
   // timeline
-  if (event.indexh == 3) {
+  //
+  if (event.indexh == uiData.pageIndex["ui-timeline"]) {
     setupTimeline();
   }
 });
@@ -793,6 +947,8 @@ function _div(_class, _style) {
 function _img(_src,_style) {
   return _ele("img", {"src":_src, "style":_style});
 }
+
+//function _input(_class, _style) { }
 
 
 function _text(v) {
@@ -1281,7 +1437,7 @@ function _setup_callbacks() {
       (function(x) {
         return function() {
           setTimeout( function() {
-            g_ctx.calendar.refresh();
+            uiData.calendar.refresh();
             Reveal.slide( uiData.pageIndex["ui-calendar"] );
           }, 20);
         };
@@ -1325,7 +1481,6 @@ function _setup_callbacks() {
 }
 
 function uiTimeline(f) {
-  console.log(">>>", f);
   var x = document.getElementById("ui-timeline_start-end-display");
 
   if (uiData.timeline.display) {
@@ -1337,10 +1492,58 @@ function uiTimeline(f) {
     uiData.timeline.display = true;
   }
 
+  Reveal.sync();
+  handleSlideScrolling(Reveal.getCurrentSlide());
 }
 
-function db_init() {
-  g_ctx.calendar.refresh();
+function populateTestDB() {
+}
+
+function populateDefaultDB() {
+  var db = appData.db_ctx.db;
+
+  var icons = appData.icon.activity;
+  for (var icon_id in icons) {
+    var vals = [ icons[icon_id].activity_id, icons[icon_id].name, icons[icon_id].icon_id , icons[icon_id].type];
+    db.run("insert into activity (activity_id, name, icon_id, type) values (?, ?, ?, ?)", vals);
+  }
+
+  saveActivityOptionToDB();
+}
+
+function loadDBData() {
+  var db = appData.db_ctx.db;
+  var query_str = "select activity_id, icon_id, name, id from activity_convenient order by id asc";
+  var ent = db.exec(query_str);
+
+  if (ent.length==0) {
+    console.log("ERROR: loadDBData: could not get activity_convenient");
+    return;
+  }
+
+  appData.data.activity_option = [];
+  for (var ii=0; ii<ent[0].values.length; ii++) {
+    var act_id = ent[0].values[ii][0];
+    var ico_id = ent[0].values[ii][1];
+    var act_name = ent[0].values[ii][2];
+    appData.data.activity_option.push({"activity_id":act_id, "icon_id":ico_id, "name":act_name});
+  }
+
+  populateActivityGrid(undefined, appData.data.activity_option);
+  populateAddActivity();
+}
+
+function db_init(db_ctx) {
+
+  appData.db_ctx = db_ctx;
+  uiData.calendar.refresh();
+
+  if (db_ctx.db_init) {
+    console.log("db was init");
+    populateDefaultDB();
+  }
+
+  loadDBData();
 }
 
 function ui_init() {
@@ -1378,9 +1581,14 @@ function ui_init() {
     var f = ul_fn.files[0];
     var r = new FileReader();
     r.onload = function() {
+      var ctx = appData.db_ctx;
+      if (!ctx) {
+        console.log("ERROR: DB import: could not find DB ctx");
+        return;
+      }
       var ab = new Uint8Array(r.result);
-      var db = new g_ctx.SQL.Database(ab);
-      g_ctx.db = db;
+      var db = new ctx.SQL.Database(ab);
+      ctx.db = db;
     };
     r.readAsArrayBuffer(f);
   };
@@ -1390,7 +1598,7 @@ function ui_init() {
   var cal = new jsCalendar("#ui-calendar_calendar");
   cal.onDateRender( calendarDayCallback );
   cal.onDateClick( calendarDayClickCallback );
-  g_ctx.calendar = cal;
+  uiData.calendar = cal;
 
   var cal = new jsCalendar("#ui-timeline_start-calendar");
   cal.onDateClick( function(ele, date, info) {
@@ -1402,7 +1610,7 @@ function ui_init() {
     appData.data.timeline.start = ymd;
     setupTimeline();
   });
-  g_ctx.calendar_timeline_start = cal;
+  uiData.calendar_timeline_start = cal;
 
   var cal = new jsCalendar("#ui-timeline_end-calendar");
   cal.onDateClick( function(ele, date, info) {
@@ -1414,7 +1622,7 @@ function ui_init() {
     appData.data.timeline.end = ymd;
     setupTimeline();
   });
-  g_ctx.calendar_timeline_end = cal;
+  uiData.calendar_timeline_end = cal;
 
 }
 

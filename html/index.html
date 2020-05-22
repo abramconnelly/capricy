@@ -32,9 +32,9 @@
 
   </head>
 
-  <body>
+  <body id='ui-body'>
 
-    <div class="reveal">
+    <div class="reveal" id='ui-reveal'>
       <div class="slides" style='width:100%;' id='slide-container'>
 
        <!--
@@ -255,30 +255,40 @@
 
           <div style='width:95vw;'>
 
+            <!--
             <div class='ui three column grid'>
               <div class='row'>
 
+                <div class='column'>
+                </div>
+                <div class='column'> </div>
+
+              </div>
+            </div>
+            -->
+
+            <div class='ui three column grid'>
+
+              <div class='row'>
                 <div class='column'>
                   <img
                     id='ui-activity-add_back'
                     src='asset/noun_back_1394897.svg'
                     style='opacity:0.3; width:3vw;' >
-                </div>
-                <div class='column'> </div>
-                <div class='column'> </div>
+                  </div>
 
-              </div>
-            </div>
-
-            <div class='ui centered grid'>
-
-              <div class='row'>
                 <div class='center aligned column'>
                   <div class='title' style='font-size:8vh; opacity:0.9;'>Add Activity Option</div>
                 </div>
+
+                <div class='column'> </div>
+
               </div>
 
+              <div class="ui divider"></div>
+            </div>
 
+            <div class='ui centered grid'>
               <div class='row' >
                 <div class='left aligned column'>
                   <div class='ui divided items' id='ui-activity-add-activity-grid'>
@@ -595,39 +605,79 @@
               </div>
             </div>
 
+            <div class='ui divider'></div>
+
             <div class='ui centered grid'>
-              <p>
-                This is a free/libre/open source mood tracking application.
-              </p>
+              <div class='row'>
+                <div class='one wide column'></div>
+                <div class='ten wide column'>
+                  <p>
+                    This is a free/libre/open source mood tracking application.
+                  </p>
+                </div>
+                <div class='one wide column'></div>
+              </div>
 
-              <p>
-                You can use this application to track your mood.
-                Each entry can have notes attached or pictographic indicators of what you did that day or event.
-              </p>
-
-              <p>
-                With enough entries, you have the potential to see trends and analize what else might have caused
-                your mood to change.
-              </p>
-
-              <p>
-                Data is kept completely on your local machine.
-                You can export your data to a SQLite database any time through the config menu.
-                You can import your data as well.
-              </p>
-
-              <p>
-                Source code available under an AGPLv3 license. <br>
-                <a href='https://github.com/abramconnelly/capricy'>
-                  <img
-                    id='ui-about_code'
-                    src='asset/code_branch.svg'
-                    style='opacity:0.5; height:5vw;' >
-                </a>
-              </p>
+              <div class='row'>
+                <div class='one wide column'></div>
+                <div class='ten wide column'>
+                  <p>
+                    You can use this application to track your mood.
+                    Each entry can have notes attached or pictographic indicators of what you did that day or event.
+                  </p>
+                </div>
+                <div class='one wide column'></div>
+              </div>
 
 
+              <div class='row'>
+                <div class='one wide column'></div>
+                <div class='ten wide column'>
+                  <p>
+                    With enough entries, you have the potential to see trends and analize what else might have caused
+                    your mood to change.
+                  </p>
+                </div>
+                <div class='one wide column'></div>
+              </div>
 
+              <div class='row'>
+                <div class='one wide column'></div>
+                <div class='ten wide column'>
+                  <p>
+                    Data is kept completely on your local machine.
+                    You can export your data to a SQLite database any time through the config menu.
+                    You can import your data as well.
+                  </p>
+                </div>
+                <div class='one wide column'></div>
+              </div>
+
+
+              <div class='row'>
+                <div class='one wide column'></div>
+                <div class='ten wide column'>
+                  <p>
+                    Source code available under an AGPLv3 license.
+                  </p>
+                </div>
+                <div class='one wide column'></div>
+              </div>
+
+              <div class='row'>
+                <div class='seven wide column'></div>
+                <div class='two wide column'>
+                  <p>
+                    <a href='https://github.com/abramconnelly/capricy'>
+                      <img
+                        id='ui-about_code'
+                        src='asset/code_branch.svg'
+                        style='opacity:0.5; height:5vw;' >
+                    </a>
+                  </p>
+                </div>
+                <div class='seven wide column'></div>
+              </div>
 
             </div>
 
