@@ -1228,7 +1228,10 @@ function calendarDayCallback(date, ele, info) {
 }
 
 function calendarDayClickCallback(event, date) {
-  //console.log("calendar dateclick:", event, date);
+  var start_img = "<img id='ui-timeline_end' src='asset/start.svg' style='opacity:0.5; width:3vw;' >"
+  var end_img = "<img id='ui-timeline_end' src='asset/end.svg' style='opacity:0.5; width:3vw;' >"
+
+
 
   var dt_iso = date.toISOString();
   var dt_a = iso_date_tokenize(dt_iso);
@@ -1238,10 +1241,10 @@ function calendarDayClickCallback(event, date) {
   appData.data.timeline.end = ymd;
 
   var x = document.getElementById("ui-timeline_start-display");
-  x.innerHTML = ymd;
+  x.innerHTML = " <div style='font-size:4vh; opacity:0.8;'>" + ymd + "</div>";
 
   var x = document.getElementById("ui-timeline_end-display");
-  x.innerHTML = ymd;
+  x.innerHTML = "<div style='font-size:4vh; opacity:0.8;'>" + ymd + "</div> ";
 
   setTimeout( function() {
     Reveal.slide( uiData.pageIndex["ui-timeline"] );
@@ -1602,11 +1605,15 @@ function ui_init() {
 
   var cal = new jsCalendar("#ui-timeline_start-calendar");
   cal.onDateClick( function(ele, date, info) {
+    var start_img = "<img id='ui-timeline_end' src='asset/start.svg' style='opacity:0.5; width:3vw;' >"
+
     var dt_iso = date.toISOString();
     var dt_a = iso_date_tokenize(dt_iso);
     var ymd = dt_a[0] + "-" + dt_a[1] + "-" + dt_a[2];
     var x = document.getElementById("ui-timeline_start-display");
-    x.innerHTML = ymd;
+    //x.innerHTML = ymd;
+    x.innerHTML = " <div style='font-size:4vh; opacity:0.8;'>" + ymd + "</div>";
+
     appData.data.timeline.start = ymd;
     setupTimeline();
   });
@@ -1614,11 +1621,16 @@ function ui_init() {
 
   var cal = new jsCalendar("#ui-timeline_end-calendar");
   cal.onDateClick( function(ele, date, info) {
+    var end_img = "<img id='ui-timeline_end' src='asset/end.svg' style='opacity:0.5; width:3vw;' >"
+
     var dt_iso = date.toISOString();
     var dt_a = iso_date_tokenize(dt_iso);
     var ymd = dt_a[0] + "-" + dt_a[1] + "-" + dt_a[2];
     var x = document.getElementById("ui-timeline_end-display");
-    x.innerHTML = ymd;
+    //x.innerHTML = ymd;
+    //x.innerHTML = " <div class='title' style='font-size:4vh; opacity:0.8;'>" + ymd + " " + end_img + "</div>";
+    x.innerHTML = " <div style='font-size:4vh; opacity:0.8;'>" + ymd + " </div>";
+
     appData.data.timeline.end = ymd;
     setupTimeline();
   });

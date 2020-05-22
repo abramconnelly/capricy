@@ -20,3 +20,5 @@ Noun Project Icons
 | about | about | https://thenounproject.com/search/?q=about&i=3330263 | CC-BY | about by Jae Deasigner from the Noun Project | ... |
 | code | code branch | https://thenounproject.com/search/?q=git&i=1918506 | CC-BY | Git Branch by icon 54 from the Noun Project | ... |
 | pencil | pencil | https://thenounproject.com/term/edit/2753905/ | CC-BY | edit by Bismillah from the Noun Project | ... |
+| start | start | https://thenounproject.com/term/start/70455/ | CC-BY | start by iconsmind.com from the Noun Project | ... |
+| end | end | https://thenounproject.com/term/end/70427/ | CC-BY | end by iconsmind.com from the Noun Project | ... |
