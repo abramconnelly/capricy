@@ -19,6 +19,7 @@
   height: 100%;
   overflow-y: auto !important;
 }
+
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -45,15 +46,17 @@
   text-align:center;
 }
 
+/*
 .face-mood-0 {
   background-image: url("/asset/mood/face-horrible-color.svg");
   background-size: 6vh;
   background-repeat: no-repeat;
   background-position: center;
   opacity: 0.5;
-  /* background-size: cover; */
 
 }
+*/
+  /* background-size: cover; */
 
 .calpicker {
   padding: 5px 5px;

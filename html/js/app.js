@@ -62,6 +62,20 @@ var uiData = {
     "end" : null
   },
 
+  "chart":{
+    "weekday_average":{},
+    "weekday_single_average":{},
+    "month_average":{}
+  },
+
+  "mood-color": {
+    "mood-0":'#214969',
+    'mood-1':'#387db3',
+    'mood-2':'#d6c33f',
+    'mood-3':'#61cb9b',
+    'mood-4':'#ff7f7a'
+  },
+
   "activeEntry": {
     "ui_moodId": null,
     "ui_activityId": null
@@ -1500,6 +1514,50 @@ function uiTimeline(f) {
 }
 
 function populateTestDB() {
+  var today = moment().format("YYYY-MM-DD");
+  var tok = today.split("-");
+  var today_yr = parseInt(tok[0]);
+  var today_mo = parseInt(tok[1]);
+  var today_dy = parseInt(tok[2]);
+
+  var db = appData.db_ctx.db;
+
+  var mood_choice = ["mood-0", "mood-1", "mood-2", "mood-3", "mood-4"];
+  var activity_choice = [];
+  for (var icon_id in appData.icon.activity) {
+    activity_choice.push(appData.icon.activity[icon_id].activity_id);
+  }
+
+
+  console.log(today);
+  for (var mo=1; mo<=today_mo; mo++) {
+    var max_day = 28;
+    if (mo == today_mo) { max_day = today_dy; }
+
+    for (var dy=1; dy<=max_day; dy++) {
+
+      var uuid = uuidv4();
+      var mood = mood_choice[ Math.floor(Math.random()*(mood_choice.length)) ];
+      var n_a = Math.floor(Math.random()*5);
+      var activity_ids = [];
+      for (var jj=0; jj<n_a; jj++) {
+        activity_ids.push(activity_choice[ Math.floor(Math.random()*activity_choice.length) ]);
+      }
+      var note = "test " + mo + "_" + dy;
+
+      var str_mo = "" + mo;
+      if (mo < 10) { str_mo = "0" + mo; }
+      var str_day = "" + dy;
+      if (dy < 10) { str_day = "0" + dy; }
+      var dt = today_yr + "-" + str_mo + "-" + str_day;
+
+      db.run("insert into entry (mood, activity, note, entry_date, uuid) values(?,?,?,?,?)",
+          [ mood, activity_ids.join(","), note, dt, uuid ]);
+
+    }
+  }
+
+  saveDBToLocalStorage( appData.db_ctx.db_name, appData.db_ctx.db );
 }
 
 function populateDefaultDB() {
@@ -1548,6 +1606,141 @@ function db_init(db_ctx) {
 
   loadDBData();
 }
+
+function ui_clickCreateEntry() {
+  console.log("click create");
+}
+
+//---
+
+function ui_chartWeek( filter_mood ) {
+
+  var filter_str = "";
+  if (typeof filter_mood !== "undefined") {
+    filter_str = " where mood in ('" + filter_mood.join("','") +  "') ";
+  }
+  var sqlstr = 
+    "select mood mood, strftime('%w', entry_date) dow, count(uuid) from entry " + filter_str + " group by mood, dow";
+
+  console.log(">>", sqlstr);
+
+  var db = appData.db_ctx.db;
+  //var res = db.exec("select mood mood, strftime('%w', entry_date) dow, count(uuid) from entry " + filter_str + " group by mood, dow");
+  var res = db.exec(sqlstr);
+  if ((!res) || (res.length==0)) { return; }
+
+  console.log(res);
+
+  var ds = [];
+
+  var hash_data = {};
+  for (var ii=0; ii<res[0].values.length; ii++) {
+    var mood_id = res[0].values[ii][0];
+    var dow = res[0].values[ii][1];
+    var freq = res[0].values[ii][2];
+
+    if (!(mood_id in hash_data)) { hash_data[mood_id] = {}; }
+    if (!(dow in hash_data[mood_id])) { hash_data[mood_id][dow] = 0; }
+    hash_data[mood_id][dow] += freq;
+  }
+ 
+  var ui_chart = uiData.chart.weekday_average;
+  var chart_data = ui_chart.data;
+
+  var bgc = [
+    uiData["mood-color"]['mood-0'] + "a7",
+    uiData["mood-color"]['mood-1'] + "a7",
+    uiData["mood-color"]['mood-2'] + "a7",
+    uiData["mood-color"]['mood-3'] + "a7",
+    uiData["mood-color"]['mood-4'] + "a7"
+  ];
+
+  var mood_label = [
+    "horrible",
+    "bad",
+    "ok",
+    "good",
+    "awesome"
+  ];
+
+  chart_data.labels = ["S", "M", "T", "W", "R", "F", "S"];
+  chart_data.datasets = [];
+
+  for (var mood_idx=0; mood_idx<5; mood_idx++) {
+    var mood_id = "mood-" + mood_idx;
+    if (!(mood_id in hash_data)) { continue; }
+    var dat = {
+      "label": mood_label[mood_idx],
+      backgroundColor: bgc[mood_idx],
+      data : []
+    };
+
+    for (var dow_idx=0; dow_idx<7; dow_idx++) {
+      dat.data.push(hash_data[mood_id][dow_idx]);
+    }
+
+    chart_data.datasets.push(dat);
+
+    console.log("pushing:", dat);
+
+  }
+  ui_chart.update();
+}
+
+function ui_chartMonth() {
+}
+
+function ui_chartInit() {
+  var ele, ctx, ui_chart;
+
+  ele = _gebi("ui-chart_week-average");
+  ctx = ele.getContext('2d');
+  ui_chart = new Chart(ctx, {
+    type: 'bar',
+    'min':0,
+    data: {
+      labels: ["S", "M", "T", "W", "R", "F", "S"],
+      datasets: [
+      {
+        label: '0',
+        data: [2, 1, 3, 2, 1, 3, 9],
+        backgroundColor: 'rgba(99, 99, 255, 0.5)',
+      },
+      {
+        label: '1',
+        data: [0, 9, 13, 8, 6, 5, 3],
+        backgroundColor: 'rgba(99, 99, 132, 0.5)',
+      },
+      {
+        label: '2',
+        data: [1, 12, 10, 3, 3, 9, 10],
+        backgroundColor: 'rgba(255, 99, 200, 0.5)',
+      },
+      {
+        label: '3',
+        data: [5, 9, 13, 15, 9, 4, 3],
+        backgroundColor: 'rgba(99, 255, 99, 0.5)',
+      },
+      {
+        label: '4',
+        data: [12, 19, 3, 5, 2, 3, 5],
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      } ]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: { beginAtZero: true }
+        }]
+      }
+    }
+
+  });
+  uiData.chart.weekday_average = ui_chart;
+
+}
+
+//---
 
 function ui_init() {
 
