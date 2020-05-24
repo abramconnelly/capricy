@@ -1605,6 +1605,8 @@ function db_init(db_ctx) {
   }
 
   loadDBData();
+
+  ui_chartInit();
 }
 
 function ui_clickCreateEntry() {
@@ -1613,7 +1615,73 @@ function ui_clickCreateEntry() {
 
 //---
 
-function ui_chartWeek( filter_mood ) {
+function ui_chartMoodAverage(start_date,end_date) {
+
+  var filter_str = " where 1 ";
+  var filter_vals = [];
+  if (typeof start_date !== "undefined") {
+    filter_str += " and entry_date >= ? ";
+    filter_vals.push(start_date);
+  }
+
+  if (typeof end_date !== "undefined") {
+    filter_str += " and entry_date <= ? ";
+    filter_vals.push(end_date);
+  }
+
+  var sqlstr = 
+    "select mood mood, count(uuid) from entry " + filter_str + " group by mood";
+
+  console.log(sqlstr);
+
+  var db = appData.db_ctx.db;
+  var res = db.exec(sqlstr, filter_vals);
+  if ((!res) || (res.length==0)) { return; }
+
+  console.log(res);
+
+  var hash_data = {};
+  for (var ii=0; ii<res[0].values.length; ii++) {
+    var mood_id = res[0].values[ii][0];
+    var freq = res[0].values[ii][1];
+    hash_data[mood_id] = freq;
+  }
+
+  console.log(hash_data);
+ 
+  var ui_chart = uiData.chart.mood_average;
+  var chart_data = ui_chart.data;
+
+  var bgc = [
+    uiData["mood-color"]['mood-0'] + "a7",
+    uiData["mood-color"]['mood-1'] + "a7",
+    uiData["mood-color"]['mood-2'] + "a7",
+    uiData["mood-color"]['mood-3'] + "a7",
+    uiData["mood-color"]['mood-4'] + "a7"
+  ];
+
+  var labels = [ "horrible", "bad", "average", "good", "awesome" ];
+
+  chart_data.datasets = [];
+
+  var dat = [];
+  var dat_bgc = [];
+  var dat_label = [];
+  for (var mood_idx=0; mood_idx<5; mood_idx++) {
+    var mood_id = "mood-" + mood_idx;
+    if (!(mood_id in hash_data)) { continue; }
+    dat.push(hash_data[mood_id]);
+    dat_bgc.push(bgc[mood_idx]);
+    dat_label.push(labels[mood_idx]);
+  }
+  chart_data.datasets.push({"data":dat, "backgroundColor":dat_bgc});
+  chart_data.lables = dat_label;
+
+  ui_chart.update();
+
+}
+
+function ui_chartWeekdayAverage( filter_mood ) {
 
   var filter_str = "";
   if (typeof filter_mood !== "undefined") {
@@ -1685,6 +1753,7 @@ function ui_chartWeek( filter_mood ) {
 
   }
   ui_chart.update();
+
 }
 
 function ui_chartMonth() {
@@ -1738,6 +1807,67 @@ function ui_chartInit() {
   });
   uiData.chart.weekday_average = ui_chart;
 
+  //--
+
+  ele = _gebi("ui-chart_mood-average");
+  ctx = ele.getContext('2d');
+  ui_chart = new Chart(ctx, {
+    type: 'doughnut',
+    'min':0,
+    data: {
+      datasets: [{}],
+    },
+    options: {
+      responsive: true,
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Chart.js Doughnut Chart'
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  });
+  uiData.chart.mood_average = ui_chart;
+
+
+  //--
+
+  ele = _gebi("ui-chart_related-activity");
+  ctx = ele.getContext('2d');
+  ui_chart = new Chart(ctx, {
+    type: 'doughnut',
+    'min':0,
+    data: {
+      datasets: [{}],
+    },
+    options: {
+      responsive: true,
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Chart.js Doughnut Chart'
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  });
+  uiData.chart.mood_average = ui_chart;
+
+
+  // update charts
+  //
+
+  ui_chartWeekdayAverage();
+  ui_chartMoodAverage();
 }
 
 //---
