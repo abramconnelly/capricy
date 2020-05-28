@@ -1675,12 +1675,14 @@ function ui_chartMoodAverage(start_date,end_date) {
     dat_label.push(labels[mood_idx]);
   }
   chart_data.datasets.push({"data":dat, "backgroundColor":dat_bgc});
-  chart_data.lables = dat_label;
+  chart_data.labels = dat_label;
 
   ui_chart.update();
 
 }
 
+// Mood averaged over weekday (M,T,W,R,F,S,S)
+//
 function ui_chartWeekdayAverage( filter_mood ) {
 
   var filter_str = "";
@@ -1756,6 +1758,99 @@ function ui_chartWeekdayAverage( filter_mood ) {
 
 }
 
+function ui_chartMoodActivity(activities,start_date,end_date) {
+  var filter_str = " where 1 ";
+  var filter_vals = [];
+  if (typeof start_date !== "undefined") {
+    filter_str += " and entry_date >= ? ";
+    filter_vals.push(start_date);
+  }
+
+  if (typeof end_date !== "undefined") {
+    filter_str += " and entry_date <= ? ";
+    filter_vals.push(end_date);
+  }
+
+  var sqlstr = 
+    "select mood mood, activity from entry " + filter_str + " ";
+
+  var db = appData.db_ctx.db;
+  var res = db.exec(sqlstr, filter_vals);
+  if ((!res) || (res.length==0)) { return; }
+
+
+  var moodval_lookup = { "mood-0":0, "mood-1":1, "mood-2":2, "mood-3":3, "mood-4":4 };
+
+  var h_activity_rating = {};
+  for (var ii=0; ii<res[0].values.length; ii++) {
+    var mood_id = res[0].values[ii][0];
+    var activity_str = res[0].values[ii][1];
+    var act = activity_str.split(",");
+
+    if (activity_str == "") {
+      act = ["_"];
+    }
+
+
+
+    for (var jj=0; jj<act.length; jj++) {
+      if (!(act[jj] in h_activity_rating)) {
+        h_activity_rating[act[jj]] = [];
+      }
+      h_activity_rating[act[jj]].push( moodval_lookup[mood_id] );
+    }
+  }
+
+  console.log(h_activity_rating);
+
+  var activity_score = [];
+  var labels = [];
+  for (var activity in h_activity_rating) {
+    var s = bayesian_approximation(h_activity_rating[activity]);
+    var u = bayesian_approximation_uncertainty(h_activity_rating[activity]);
+    activity_score.push({"activity_id":activity, "score":s, "u":u});
+    labels.push(activity);
+  }
+  console.log(activity_score);
+
+
+  var ui_chart = uiData.chart.mood_average;
+  var chart_data = ui_chart.data;
+
+  return;
+
+  /*
+  var bgc = [
+    uiData["mood-color"]['mood-0'] + "a7",
+    uiData["mood-color"]['mood-1'] + "a7",
+    uiData["mood-color"]['mood-2'] + "a7",
+    uiData["mood-color"]['mood-3'] + "a7",
+    uiData["mood-color"]['mood-4'] + "a7"
+  ];
+  */
+
+  //var labels = [ "horrible", "bad", "average", "good", "awesome" ];
+
+  chart_data.datasets = [];
+
+  var dat = [];
+  var dat_bgc = [];
+  var dat_label = [];
+  for (var mood_idx=0; mood_idx<5; mood_idx++) {
+    var mood_id = "mood-" + mood_idx;
+    if (!(mood_id in hash_data)) { continue; }
+    dat.push(hash_data[mood_id]);
+    dat_bgc.push(bgc[mood_idx]);
+    dat_label.push(labels[mood_idx]);
+  }
+  chart_data.datasets.push({"data":dat, "backgroundColor":dat_bgc});
+  chart_data.labels = dat_label;
+
+  ui_chart.update();
+
+
+}
+
 function ui_chartMonth() {
 }
 
@@ -1769,32 +1864,7 @@ function ui_chartInit() {
     'min':0,
     data: {
       labels: ["S", "M", "T", "W", "R", "F", "S"],
-      datasets: [
-      {
-        label: '0',
-        data: [2, 1, 3, 2, 1, 3, 9],
-        backgroundColor: 'rgba(99, 99, 255, 0.5)',
-      },
-      {
-        label: '1',
-        data: [0, 9, 13, 8, 6, 5, 3],
-        backgroundColor: 'rgba(99, 99, 132, 0.5)',
-      },
-      {
-        label: '2',
-        data: [1, 12, 10, 3, 3, 9, 10],
-        backgroundColor: 'rgba(255, 99, 200, 0.5)',
-      },
-      {
-        label: '3',
-        data: [5, 9, 13, 15, 9, 4, 3],
-        backgroundColor: 'rgba(99, 255, 99, 0.5)',
-      },
-      {
-        label: '4',
-        data: [12, 19, 3, 5, 2, 3, 5],
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      } ]
+      datasets: [ ]
     },
     options: {
       scales: {
@@ -1815,7 +1885,7 @@ function ui_chartInit() {
     type: 'doughnut',
     'min':0,
     data: {
-      datasets: [{}],
+      datasets: [],
     },
     options: {
       responsive: true,
@@ -1824,7 +1894,7 @@ function ui_chartInit() {
       },
       title: {
         display: true,
-        text: 'Chart.js Doughnut Chart'
+        text: 'Average Mood'
       },
       animation: {
         animateScale: true,
@@ -1837,30 +1907,22 @@ function ui_chartInit() {
 
   //--
 
-  ele = _gebi("ui-chart_related-activity");
+  ele = _gebi("ui-chart_mood-activity");
   ctx = ele.getContext('2d');
   ui_chart = new Chart(ctx, {
-    type: 'doughnut',
+    type: 'bar',
     'min':0,
-    data: {
-      datasets: [{}],
-    },
+    data: { labels: [], datasets: [] },
     options: {
-      responsive: true,
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Chart.js Doughnut Chart'
-      },
-      animation: {
-        animateScale: true,
-        animateRotate: true
+      scales: {
+        yAxes: [{
+          ticks: { beginAtZero: true }
+        }]
       }
     }
+
   });
-  uiData.chart.mood_average = ui_chart;
+  uiData.chart.mood_activity = ui_chart;
 
 
   // update charts
@@ -1868,6 +1930,7 @@ function ui_chartInit() {
 
   ui_chartWeekdayAverage();
   ui_chartMoodAverage();
+  ui_chartMoodActivity()
 }
 
 //---

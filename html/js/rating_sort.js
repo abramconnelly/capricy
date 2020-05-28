@@ -39,8 +39,13 @@ function randn_bm() {
 
 // https://www.evanmiller.org/how-not-to-sort-by-average-rating.html
 //
+// n_up   - total 'up' votes
+// n_tot  - total votes
+// conf   - confidence (default 0.95)
+//
 function ci_lower_bound(n_up, n_tot, conf) {
   if (n_tot==0) { return 0.0; }
+  conf = ((typeof conf === "undefined") ? 0.95 : conf);
 
   var z = pnormaldist(1.0 - ((1.0 - conf)/2.0) );
   var phat = (n_up / n_tot);
@@ -57,18 +62,23 @@ function ci_lower_bound(n_up, n_tot, conf) {
 
 // https://www.evanmiller.org/ranking-items-with-star-ratings.html
 //
-function bayesian_approximation(rating, conf, point_val) {
-  var N = 0, K = rating.length;
+// rating     - array of ratings, each position holds 'star' rating. 0 lowest, (len-1) highest
+// conf       - confidence interval (default to 0.95)
+// point_n    - number of different ratings
+// point_val  - weightings of ratings (default to linear, starting at 1)
+//
+function bayesian_approximation(rating, conf, point_n, point_val) {
+  var N = 0, K = 5;
 
-  for (var ii=0; ii<rating.length; ii++) {
-    N += rating[ii];
-  }
+  conf = ((typeof conf === "undefined") ? 0.95 : conf);
+  K = ((typeof point_n === "undefined") ? 5 : point_n);
+  N = rating.length;
 
   var z = pnormaldist(1.0 - ((1.0 - conf)/2.0) );
   var v = [];
   if (typeof point_val === "undefined") {
     for (var ii=0; ii<K; ii++) {
-      v.push(ii+1);
+      v.push(ii);
     }
   }
   else {
@@ -77,14 +87,22 @@ function bayesian_approximation(rating, conf, point_val) {
     }
   }
 
+  var freq = {};
+  for (var ii=0; ii<K; ii++) { freq[ii] = 1; }
+  for (var ii=0; ii<rating.length; ii++) {
+    freq[ rating[ii] ]++;
+  }
+
+  //console.log("N", N, "K", K, "v", v, freq);
+
   var term0 = 0.0;
   var ss = 0.0;
   var s2 = 0.0;
   for (var ii=0; ii<K; ii++) {
-    term0 += v[ii]*(rating[ii] + 1) / (N+K);
+    term0 += v[ii]*(freq[ii]) / (N+K);
 
-    ss += v[ii]*v[ii]*(rating[ii] + 1)/(N+K);
-    s2 += v[ii]*(rating[ii] + 1)/(N+K);
+    ss += v[ii]*v[ii]*(freq[ii])/(N+K);
+    s2 += v[ii]*(freq[ii])/(N+K);
   }
 
   s2*=s2;
@@ -93,6 +111,58 @@ function bayesian_approximation(rating, conf, point_val) {
 
   return res;
 
+}
+
+// https://www.evanmiller.org/ranking-items-with-star-ratings.html
+// return the width of the interval (related to variance)
+//
+// rating     - array of ratings, each position holds 'star' rating
+// conf       - confidence interval (default to 0.95)
+// point_n    - number of different values (default 5)
+// point_val  - weightings of ratings (default to linear, starting at 1)
+//
+function bayesian_approximation_uncertainty(rating, conf, point_n, point_val) {
+  var N = 0, K = 5;
+
+  conf = ((typeof conf === "undefined") ? 0.95 : conf);
+  K = ((typeof point_n === "undefined") ? 5 : point_n);
+  N = rating.length;
+
+  var z = pnormaldist(1.0 - ((1.0 - conf)/2.0) );
+  var v = [];
+  if (typeof point_val === "undefined") {
+    for (var ii=0; ii<K; ii++) {
+      v.push(ii);
+    }
+  }
+  else {
+    for (var ii=0; ii<point_val.length; ii++) {
+      v.push(point_val[ii]);
+    }
+  }
+
+  var freq = {};
+  for (var ii=0; ii<K; ii++) { freq[ii] = 1; }
+  for (var ii=0; ii<rating.length; ii++) {
+    freq[ rating[ii] ]++;
+  }
+
+  //console.log("N", N, "K", K, "v", v, freq);
+
+  var term0 = 0.0;
+  var ss = 0.0;
+  var s2 = 0.0;
+  for (var ii=0; ii<K; ii++) {
+    term0 += v[ii]*(freq[ii]) / (N+K);
+
+    ss += v[ii]*v[ii]*(freq[ii])/(N+K);
+    s2 += v[ii]*(freq[ii])/(N+K);
+  }
+
+  s2*=s2;
+
+  var res = 2*z*Math.sqrt( (ss - s2)/(N+K+1) );
+  return res;
 }
 
 /*
@@ -115,6 +185,7 @@ for (var n=1; n<100; n+=1) {
 }
 */
 
+/*
 var rating_info = {};
 
 var fs = require('fs');
@@ -142,5 +213,7 @@ for (var ii=0; ii<a.length; ii++) {
 
 for (var movie_id in rating_info) {
   var ord = bayesian_approximation(rating_info[movie_id], 0.95);
-  console.log(movie_id, ord);
+  var unc = bayesian_approximation_uncertainty(rating_info[movie_id], 0.95);
+  console.log(unc, ord);
 }
+*/
